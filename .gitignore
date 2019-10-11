@@ -8,3 +8,8 @@ log/
 *.iws
 *.iml
 *.ipr
+/out/
+
+#node,npm
+node_modules/
+dist/
