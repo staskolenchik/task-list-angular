@@ -65,14 +65,12 @@ export class TaskComponent implements OnInit{
 
     addTask(task: Task) {
         this.httpService.addTask(task).subscribe(
-            (data: Task) => {this.recievedTask = data},
+            (createdTask: Task) => {
+                this.task = new Task();
+                this.tasks.push(createdTask);
+            },
             error => console.log(error)
         );
-
-        if (this.recievedTask) {
-            this.task = new Task();
-            this.tasks.push(this.recievedTask);
-        }
     }
 
     fillForm(task: Task) {
