@@ -1,8 +1,15 @@
-import { Component} from '@angular/core';
+import {Component} from '@angular/core';
+import {TaskService} from "./modules/tasks/task.service"
 
 @Component({
     selector: 'my-app',
-    template: `<h2>New App</h2>`
+    template:`
+        <div>
+            <task-component></task-component>
+        </div>
+    `,
+    providers: [TaskService]
 })
 
-export class AppComponent {}
+export class AppComponent {
+}
