@@ -6,12 +6,12 @@ import {map} from "rxjs/operators";
 
 @Injectable()
 export class TaskService{
-
+    url = 'http://localhost:8081/dev/tasks';
     constructor(private http: HttpClient){ }
 
     getTasks() : Observable<Task[]> {
         return this.http
-            .get('http://localhost:8081/dev/tasks', {responseType: "json"},)
+            .get(this.url, {responseType: "json"},)
             .pipe(map(data => {
                 let tasks = [].concat(data);
                 return tasks.map(function(task: any) {
@@ -22,5 +22,10 @@ export class TaskService{
                     }
                 })
             }))
+    }
+
+    addTask(task: Task) {
+        return this.http
+            .post(this.url, task, {});
     }
 }

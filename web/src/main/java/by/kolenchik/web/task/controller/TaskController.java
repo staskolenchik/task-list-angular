@@ -1,8 +1,6 @@
 package by.kolenchik.web.task.controller;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
 
@@ -28,8 +26,17 @@ public class TaskController {
         }});
     }};
 
+    private long count = tasks.size();
+
     @GetMapping
     public List<Map<String, String>> getTasks() {
         return tasks;
+    }
+
+    @PostMapping
+    public Map<String, String> addTask(@RequestBody Map<String, String> task) {
+        task.put("id", String.valueOf(++count));
+        tasks.add(task);
+        return task;
     }
 }
