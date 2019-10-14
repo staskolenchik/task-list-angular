@@ -18,12 +18,10 @@ module.exports = {
     },
     devServer: {
         contentBase: './dist',
-        proxy: {
-            '/api': {
-                target: 'localhost:8080',
-                pathRewrite: {'^/api': ''}
-            }
-        },
+        proxy: [{
+            context: ['/dev/tasks', '/dev/user'],
+            target: 'http://localhost:8080',
+        }],
         hot: true
     },
     resolve: {
