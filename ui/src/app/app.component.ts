@@ -5,6 +5,7 @@ import {TaskService} from "./modules/tasks/task.service"
     selector: 'my-app',
     template:`
         <div>
+            <username-menu></username-menu>
             <task-component></task-component>
         </div>
     `,
