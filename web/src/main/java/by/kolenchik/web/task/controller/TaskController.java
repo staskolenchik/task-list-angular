@@ -1,5 +1,6 @@
 package by.kolenchik.web.task.controller;
 
+import by.kolenchik.web.task.exceptions.TaskNotFoundException;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
@@ -38,5 +39,18 @@ public class TaskController {
         task.put("id", String.valueOf(++count));
         tasks.add(task);
         return task;
+    }
+
+    @DeleteMapping("/{id}")
+    public void deleteTask(@PathVariable String id) {
+        if (tasks.size() > 0) {
+            Map<String, String> match = tasks.stream()
+                    .filter(task -> task.get("id").equals(id))
+                    .findFirst()
+                    .orElseThrow(TaskNotFoundException::new);
+            tasks.remove(match);
+        } else {
+            throw new TaskNotFoundException();
+        }
     }
 }

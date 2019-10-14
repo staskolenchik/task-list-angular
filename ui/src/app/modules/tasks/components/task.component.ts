@@ -21,6 +21,7 @@ import {TaskService} from "../task.service";
             <li *ngFor="let task of tasks" class="task">
                 <h4>{{task.subject}}</h4>
                 <p>{{task.description}}</p>
+                <button (click)="deleteTask(task)">Delete</button>
             </li>
         </ul>
     `,
@@ -57,6 +58,14 @@ export class TaskComponent implements OnInit{
         if (this.recievedTask) {
             this.task = new Task();
             this.tasks.push(this.recievedTask);
+        }
+    }
+
+    deleteTask(task: Task) {
+        this.httpService.deleteTask(task.id).subscribe();
+        if (this.httpService.isDeleted) {
+            let index = this.tasks.indexOf(task);
+            this.tasks.splice(index, 1);
         }
     }
 }
