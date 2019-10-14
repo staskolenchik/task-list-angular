@@ -10,23 +10,23 @@ import java.util.*;
 @RequestMapping("/dev/tasks")
 public class TaskController {
 
-    private List<Map<String, String>> tasks = Arrays.asList(
-            new HashMap<String, String>(){{
-                put("id", "1");
-                put("subject", "The first subject");
-                put("description", "description of the subject one");
-            }},
-            new HashMap<String, String>(){{
-                put("id", "2");
-                put("subject", "The second subject");
-                put("description", "description of the subject two");
-            }},
-            new HashMap<String, String>(){{
-                put("id", "3");
-                put("subject", "The third subject");
-                put("description", "description of the subject three");
-            }}
-    );
+    private List<Map<String, String>> tasks = new ArrayList<Map<String, String>>() {{
+        add(new HashMap<String, String>() {{
+            put("id", "1");
+            put("subject", "The first subject");
+            put("description", "description of the subject one");
+        }});
+        add(new HashMap<String, String>() {{
+            put("id", "2");
+            put("subject", "The second subject");
+            put("description", "description of the subject two");
+        }});
+        add(new HashMap<String, String>() {{
+            put("id", "3");
+            put("subject", "The third subject");
+            put("description", "description of the subject three");
+        }});
+    }};
 
     @GetMapping
     public List<Map<String, String>> getTasks() {
