@@ -53,4 +53,14 @@ public class TaskController {
             throw new TaskNotFoundException();
         }
     }
+
+    @PutMapping("/{id}")
+    public Map<String, String> updateTask(@PathVariable String id, @RequestBody Map<String, String> newTask) {
+        Map<String, String> taskFromDB = tasks.stream()
+                .filter(task -> id.equals(task.get("id")))
+                .findFirst()
+                .orElseThrow(TaskNotFoundException::new);
+        taskFromDB.putAll(newTask);
+        return taskFromDB;
+    }
 }

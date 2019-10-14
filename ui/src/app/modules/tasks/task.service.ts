@@ -51,6 +51,15 @@ export class TaskService{
             .post(this.url, task, {});
     }
 
+    updateTask(task: Task) {
+        let objectObservable = this.http
+            .put(`${this.url}/${task.id}`, task, {}).pipe(
+                catchError(this.handleError)
+            );
+        console.log(objectObservable);
+        return objectObservable;
+    }
+
     deleteTask(id: string) {
         return this.http.delete(`${this.url}/${id}`, {}).pipe(
             catchError(this.handleError)

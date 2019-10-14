@@ -11,9 +11,9 @@ import {TaskService} from "../task.service";
             <input name="subject" [(ngModel)]="task.subject"/>
             <br>
             <label>Task Description: </label>
-            <input name="description" [(ngModel)]="task.description"/>
+            <textarea name="description" cols="40" rows="5" [(ngModel)]="task.description"></textarea>
             <div>
-                <button (click)="addTask()">Add</button>
+                <button (click)="saveTask()">Save</button>
             </div>
         </div>
         <h3>Task List</h3>
@@ -21,7 +21,10 @@ import {TaskService} from "../task.service";
             <li *ngFor="let task of tasks" class="task">
                 <h4>{{task.subject}}</h4>
                 <p>{{task.description}}</p>
-                <button (click)="deleteTask(task)">Delete</button>
+                <div>
+                    <button (click)="fillForm(task)">Update</button>
+                    <button (click)="deleteTask(task)">Delete</button>
+                </div>
             </li>
         </ul>
     `,
@@ -40,7 +43,9 @@ export class TaskComponent implements OnInit{
     tasks: Task[] = [];
     task: Task = new Task();
 
-    recievedTask: Task;
+    recievedTask: Task = null;
+
+    updatable: boolean = false;
 
     constructor (private httpService: TaskService) {
     }
@@ -49,8 +54,17 @@ export class TaskComponent implements OnInit{
         this.httpService.getTasks().subscribe((data => this.tasks = data));
     }
 
-    addTask() {
-        this.httpService.addTask(this.task).subscribe(
+    saveTask() {
+        if (this.updatable) {
+            this.updateTask(this.task);
+            this.updatable = false;
+        } else {
+            this.addTask(this.task);
+        }
+    }
+
+    addTask(task: Task) {
+        this.httpService.addTask(task).subscribe(
             (data: Task) => {this.recievedTask = data},
             error => console.log(error)
         );
@@ -59,6 +73,22 @@ export class TaskComponent implements OnInit{
             this.task = new Task();
             this.tasks.push(this.recievedTask);
         }
+    }
+
+    fillForm(task: Task) {
+        this.task = task;
+        this.updatable = true;
+    }
+
+    updateTask(task: Task) {
+        this.httpService.updateTask(task).subscribe(
+            (updatedTask: Task) => {
+                let index: number = this.tasks.indexOf(this.task);
+                this.task = new Task();
+                this.tasks.splice(index, 1, updatedTask);
+            },
+            updateError => console.log(updateError)
+        );
     }
 
     deleteTask(task: Task) {
