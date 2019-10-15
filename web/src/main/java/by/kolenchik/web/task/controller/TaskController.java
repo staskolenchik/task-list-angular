@@ -30,19 +30,19 @@ public class TaskController {
     private long count = tasks.size();
 
     @GetMapping
-    public List<Map<String, String>> getTasks() {
+    public List<Map<String, String>> get() {
         return tasks;
     }
 
     @PostMapping
-    public Map<String, String> addTask(@RequestBody Map<String, String> task) {
+    public Map<String, String> add(@RequestBody Map<String, String> task) {
         task.put("id", String.valueOf(++count));
         tasks.add(task);
         return task;
     }
 
     @DeleteMapping("/{id}")
-    public void deleteTask(@PathVariable String id) {
+    public void delete(@PathVariable String id) {
         if (tasks.size() > 0) {
             Map<String, String> match = tasks.stream()
                     .filter(task -> task.get("id").equals(id))
@@ -55,7 +55,7 @@ public class TaskController {
     }
 
     @PutMapping("/{id}")
-    public Map<String, String> updateTask(@PathVariable String id, @RequestBody Map<String, String> newTask) {
+    public Map<String, String> update(@PathVariable String id, @RequestBody Map<String, String> newTask) {
         Map<String, String> taskFromDB = tasks.stream()
                 .filter(task -> id.equals(task.get("id")))
                 .findFirst()
