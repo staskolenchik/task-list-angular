@@ -47,10 +47,10 @@ public class TaskController {
             Map<String, String> match = tasks.stream()
                     .filter(task -> task.get("id").equals(id))
                     .findFirst()
-                    .orElseThrow(TaskNotFoundException::new);
+                    .orElseThrow(() -> new TaskNotFoundException("Task with id=%s was not found", id));
             tasks.remove(match);
         } else {
-            throw new TaskNotFoundException();
+            throw new TaskNotFoundException("Task with id=%s was not found", id);
         }
     }
 
@@ -59,7 +59,7 @@ public class TaskController {
         Map<String, String> taskFromDB = tasks.stream()
                 .filter(task -> id.equals(task.get("id")))
                 .findFirst()
-                .orElseThrow(TaskNotFoundException::new);
+                .orElseThrow(() -> new TaskNotFoundException("Task with id=%s was not found", id));
         taskFromDB.putAll(newTask);
         return taskFromDB;
     }
