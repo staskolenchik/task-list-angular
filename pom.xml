@@ -17,11 +17,13 @@
 
     <modules>
         <module>web</module>
+        <module>core</module>
     </modules>
 
     <properties>
         <java.version>1.8</java.version>
         <org.projectlombok.version>1.18.8</org.projectlombok.version>
+        <org.postgresql.version>42.2.6</org.postgresql.version>
     </properties>
 
 
@@ -32,6 +34,12 @@
                 <artifactId>lombok</artifactId>
                 <version>${org.projectlombok.version}</version>
                 <scope>provided</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.postgresql</groupId>
+                <artifactId>postgresql</artifactId>
+                <version>${org.postgresql.version}</version>
+                <scope>runtime</scope>
             </dependency>
         </dependencies>
     </dependencyManagement>

@@ -1,3 +1,8 @@
 application:
     name: task-list
     version: 1.0.1-SNAPSHOT
+
+datasource:
+    url: jdbc:postgresql://localhost:5444/tasklist
+    username: postgres
+    password: IamRoot
