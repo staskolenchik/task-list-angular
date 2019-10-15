@@ -29,7 +29,7 @@ export class TaskService{
 
     get() {
         return this.http
-            .get(this.url, {responseType: "json"},)
+            .get(this.url)
             .pipe(map(data => {
                     let tasks = [].concat(data);
                     return tasks.map(function(task: any) {
@@ -47,7 +47,7 @@ export class TaskService{
 
     add(task: Task) : Observable<Task>{
         return this.http
-            .post<Task>(this.url, task, {})
+            .post<Task>(this.url, task)
             .pipe(
                 retry(3),
                 catchError(this.handleError)
@@ -56,7 +56,7 @@ export class TaskService{
 
     update(task: Task) {
         return this.http
-            .put(`${this.url}/${task.id}`, task, {})
+            .put(`${this.url}/${task.id}`, task)
             .pipe(
                 retry(3),
                 catchError(this.handleError)
@@ -64,7 +64,7 @@ export class TaskService{
     }
 
     delete(id: string) {
-        return this.http.delete(`${this.url}/${id}`, {})
+        return this.http.delete(`${this.url}/${id}`)
             .pipe(
                 retry(3),
                 catchError(this.handleError)
