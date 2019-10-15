@@ -101,6 +101,8 @@ export class TaskComponent implements OnInit{
         if (this.taskService.isDeleted) {
             let index = this.tasks.indexOf(task);
             this.tasks.splice(index, 1);
+        } else {
+            this.taskService.isDeleted = false;
         }
     }
 }
