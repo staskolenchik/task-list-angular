@@ -2,7 +2,19 @@ application:
     name: task-list
     version: 1.0.1-SNAPSHOT
 
-datasource:
-    url: jdbc:postgresql://localhost:5444/tasklist
-    username: postgres
-    password: IamRoot
+spring:
+    datasource:
+        url: jdbc:postgresql://localhost:5444/tasklist
+        username: postgres
+        password: IamRoot
+
+    jpa:
+        generate-ddl: false
+
+
+logging:
+    level:
+        org:
+            hibernate:
+                SQL: DEBUG
+                type.descriptor.sql.BasicBinder: TRACE
