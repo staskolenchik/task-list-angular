@@ -10,6 +10,11 @@ spring:
 
     jpa:
         generate-ddl: false
+        properties:
+            hibernate:
+                jdbc:
+                    lob:
+                        non_contextual_creation: true
 
     liquibase:
         change-log: classpath:/db/changelog/master.xml
