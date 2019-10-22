@@ -11,6 +11,9 @@ spring:
     jpa:
         generate-ddl: false
 
+    liquibase:
+        change-log: classpath:/db/changelog/master.xml
+
 
 logging:
     level:
