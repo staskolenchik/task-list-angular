@@ -1,3 +1,28 @@
 application:
     name: task-list
     version: 1.0.1-SNAPSHOT
+
+spring:
+    datasource:
+        url: jdbc:postgresql://localhost:5444/tasklist
+        username: postgres
+        password: IamRoot
+
+    jpa:
+        generate-ddl: false
+        properties:
+            hibernate:
+                jdbc:
+                    lob:
+                        non_contextual_creation: true
+
+    liquibase:
+        change-log: classpath:/db/changelog/master.xml
+
+
+logging:
+    level:
+        org:
+            hibernate:
+                SQL: DEBUG
+                type.descriptor.sql.BasicBinder: TRACE
