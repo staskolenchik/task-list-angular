@@ -1,66 +1,41 @@
 package by.kolenchik.web.task.controller;
 
-import by.kolenchik.web.task.exceptions.TaskNotFoundException;
+import by.kolenchik.core.task.Task;
+import by.kolenchik.core.task.service.TaskService;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.*;
+import java.util.List;
 
 @RestController
 @RequestMapping("/dev/tasks")
 public class TaskController {
 
-    private List<Map<String, String>> tasks = new ArrayList<Map<String, String>>() {{
-        add(new HashMap<String, String>() {{
-            put("id", "1");
-            put("subject", "The first subject");
-            put("description", "description of the subject one");
-        }});
-        add(new HashMap<String, String>() {{
-            put("id", "2");
-            put("subject", "The second subject");
-            put("description", "description of the subject two");
-        }});
-        add(new HashMap<String, String>() {{
-            put("id", "3");
-            put("subject", "The third subject");
-            put("description", "description of the subject three");
-        }});
-    }};
+    private TaskService taskService;
 
-    private long count = tasks.size();
+    public TaskController(TaskService taskService) {
+        this.taskService = taskService;
+    }
 
     @GetMapping
-    public List<Map<String, String>> get() {
-        return tasks;
+    public List<Task> get() {
+        return taskService.get();
     }
 
     @PostMapping
-    public Map<String, String> add(@RequestBody Map<String, String> task) {
-        task.put("id", String.valueOf(++count));
-        tasks.add(task);
-        return task;
+    public Task add(@RequestBody Task task) {
+        return taskService.add(task);
     }
 
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable String id) {
-        if (tasks.size() > 0) {
-            Map<String, String> match = tasks.stream()
-                    .filter(task -> task.get("id").equals(id))
-                    .findFirst()
-                    .orElseThrow(() -> new TaskNotFoundException("Task with id=%s was not found", id));
-            tasks.remove(match);
-        } else {
-            throw new TaskNotFoundException("Task with id=%s was not found", id);
-        }
+    public void delete(@PathVariable("id") Task task) {
+        taskService.delete(task);
     }
 
     @PutMapping("/{id}")
-    public Map<String, String> update(@PathVariable String id, @RequestBody Map<String, String> newTask) {
-        Map<String, String> taskFromDB = tasks.stream()
-                .filter(task -> id.equals(task.get("id")))
-                .findFirst()
-                .orElseThrow(() -> new TaskNotFoundException("Task with id=%s was not found", id));
-        taskFromDB.putAll(newTask);
-        return taskFromDB;
+    public Task update(
+            @PathVariable("id") Long id,
+            @RequestBody Task task
+    ) {
+        return taskService.update(id, task);
     }
 }
