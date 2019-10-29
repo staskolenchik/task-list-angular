@@ -1,0 +1,3 @@
+CREATE TABLE IF NOT EXISTS task_review(
+    id BIGINT REFERENCES comment(id) PRIMARY KEY
+)

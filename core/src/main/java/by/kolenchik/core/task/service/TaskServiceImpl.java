@@ -1,6 +1,7 @@
 package by.kolenchik.core.task.service;
 
 import by.kolenchik.core.task.Task;
+import by.kolenchik.core.task.dto.TaskAddDto;
 import by.kolenchik.core.task.repository.TaskRepository;
 import org.springframework.stereotype.Service;
 
@@ -16,7 +17,8 @@ class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public Task add(Task task) {
+    public Task add(TaskAddDto taskAddDto) {
+        Task task = new Task();
         return taskRepository.save(task);
     }
 
