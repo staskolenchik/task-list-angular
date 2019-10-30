@@ -25,8 +25,12 @@ class TaskServiceImpl implements TaskService {
     private ManagerService managerService;
     private ModelMapper modelMapper;
 
-    public TaskServiceImpl(TaskRepository taskRepository, EmployeeService employeeService,
-                           ManagerService managerService, ModelMapper modelMapper) {
+    public TaskServiceImpl(
+            TaskRepository taskRepository,
+            EmployeeService employeeService,
+            ManagerService managerService,
+            ModelMapper modelMapper
+    ) {
         this.taskRepository = taskRepository;
         this.employeeService = employeeService;
         this.managerService = managerService;
@@ -35,27 +39,19 @@ class TaskServiceImpl implements TaskService {
 
     @Override
     public Task add(TaskAddDto taskAddDto) {
-
         Manager manager = createManager();
         Employee employee = createEmployeeUnderManager(manager);
-
-
         Task task = setupAndGetIssueTask(taskAddDto, manager, employee);
 
         return taskRepository.save(task);
     }
 
     private Task setupAndGetIssueTask(TaskAddDto taskAddDto, Manager manager, Employee employee) {
-        System.out.println(taskAddDto);
         Task task = modelMapper.map(taskAddDto, IssueTask.class);
-
-
         task.setCreationDateTime(LocalDateTime.now());
         task.setCreatedBy(manager);
         task.setAssignee(employee);
         task.setTaskStatus(TaskStatus.TODO);
-
-        System.out.println(task);
 
         return task;
     }
@@ -63,6 +59,7 @@ class TaskServiceImpl implements TaskService {
     private Manager createManager() {
         Manager manager = new Manager();
         setupUserInfo(manager);
+
         return managerService.add(manager);
     }
 
@@ -70,14 +67,16 @@ class TaskServiceImpl implements TaskService {
         Employee employee = new Employee();
         setupUserInfo(employee);
         employee.setManager(manager);
+
         return employeeService.add(employee);
     }
 
     private void setupUserInfo(User user) {
+        long index = Math.round(Math.random() * Math.random() * 100000);
+
         user.setName("Vasia");
         user.setSurname("Beliy");
         user.setBirthDate(LocalDate.now());
-        long index = Math.round(Math.random() * Math.random() * 100000);
         user.setEmail("test" + index +"@gmail.com");
         user.setPassword("12345678");
     }

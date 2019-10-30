@@ -13,7 +13,6 @@ import java.time.LocalDateTime;
 @Entity
 @Inheritance
 @DiscriminatorColumn(name = "task_type")
-@TypeDef(name = "task_status", typeClass = TaskStatus.class)
 @Data
 @Table(name = "task")
 public abstract class Task {
@@ -42,7 +41,4 @@ public abstract class Task {
     @ManyToOne
     @JoinColumn(name = "assignee",nullable = false)
     private Employee assignee;
-
-    public Task() {
-    }
 }

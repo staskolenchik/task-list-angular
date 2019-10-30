@@ -11,7 +11,5 @@ import javax.persistence.*;
 @Data
 @EqualsAndHashCode(callSuper = true)
 public class Manager extends User {
-
-
 }
 

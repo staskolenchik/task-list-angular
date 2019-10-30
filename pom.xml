@@ -29,7 +29,6 @@
         <hibernate-types.version>2.7.1</hibernate-types.version>
     </properties>
 
-
     <dependencyManagement>
         <dependencies>
             <dependency>
@@ -56,6 +55,4 @@
             </dependency>
         </dependencies>
     </dependencyManagement>
-
-
 </project>

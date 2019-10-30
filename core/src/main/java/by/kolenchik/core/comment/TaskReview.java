@@ -11,5 +11,4 @@ import javax.persistence.Entity;
 @Data
 @EqualsAndHashCode(callSuper = true)
 public class TaskReview extends Comment {
-
 }
