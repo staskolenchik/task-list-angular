@@ -1,0 +1,1 @@
+ALTER TABLE task ADD COLUMN assignee BIGINT NOT NULL REFERENCES employee(id)

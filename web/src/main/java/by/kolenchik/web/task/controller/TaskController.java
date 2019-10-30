@@ -1,6 +1,7 @@
 package by.kolenchik.web.task.controller;
 
 import by.kolenchik.core.task.Task;
+import by.kolenchik.core.task.dto.TaskAddDto;
 import by.kolenchik.core.task.service.TaskService;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,8 +23,8 @@ public class TaskController {
     }
 
     @PostMapping
-    public Task add(@RequestBody Task task) {
-        return taskService.add(task);
+    public Task add(@RequestBody TaskAddDto taskAddDto) {
+        return taskService.add(taskAddDto);
     }
 
     @DeleteMapping("/{id}")
