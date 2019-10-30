@@ -12,4 +12,12 @@ import javax.persistence.Entity;
 @Data
 @EqualsAndHashCode(callSuper = true)
 public class IssueTask extends Task {
+
+    public IssueTask() {
+    }
+
+    @Override
+    public String toString() {
+        return "IssueTask{} " + super.toString();
+    }
 }

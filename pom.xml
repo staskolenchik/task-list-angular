@@ -25,6 +25,8 @@
         <org.projectlombok.version>1.18.8</org.projectlombok.version>
         <org.postgresql.version>42.2.6</org.postgresql.version>
         <org.liquibase.version>3.6.3</org.liquibase.version>
+        <org.modelmapper.version>2.3.5</org.modelmapper.version>
+        <hibernate-types.version>2.7.1</hibernate-types.version>
     </properties>
 
 
@@ -46,6 +48,11 @@
                 <groupId>org.liquibase</groupId>
                 <artifactId>liquibase-core</artifactId>
                 <version>${org.liquibase.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.modelmapper</groupId>
+                <artifactId>modelmapper</artifactId>
+                <version>${org.modelmapper.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

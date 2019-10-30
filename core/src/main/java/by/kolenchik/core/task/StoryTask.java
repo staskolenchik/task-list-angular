@@ -13,4 +13,6 @@ import javax.persistence.Table;
 @Data
 @EqualsAndHashCode(callSuper = true)
 public class StoryTask extends Task {
+    public StoryTask() {
+    }
 }
