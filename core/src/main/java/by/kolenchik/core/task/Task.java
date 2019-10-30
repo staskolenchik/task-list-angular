@@ -1,5 +1,6 @@
 package by.kolenchik.core.task;
 
+import by.kolenchik.core.comment.Comment;
 import by.kolenchik.core.user.employee.Employee;
 import by.kolenchik.core.user.manager.Manager;
 import lombok.Data;
@@ -9,6 +10,7 @@ import org.hibernate.annotations.TypeDef;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.Set;
 
 @Entity
 @Inheritance
@@ -40,4 +42,7 @@ public abstract class Task {
     @ManyToOne
     @JoinColumn(name = "assignee",nullable = false)
     private Employee assignee;
+
+    @OneToMany(mappedBy = "task", orphanRemoval = true)
+    private Set<Comment> comment;
 }
