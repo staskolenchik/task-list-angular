@@ -28,7 +28,6 @@ public abstract class Task {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "task_status", nullable = false)
-    @Type(type = "task_status")
     private TaskStatus taskStatus;
 
     @Column(name = "creation_timestamp", nullable = false)
