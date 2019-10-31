@@ -44,6 +44,8 @@
         <sqlFile path="v1.0.1/2019-10-29-comment-review-table.sql" relativeToChangelogFile="true" splitStatements="false" />
     </changeSet>
 
-
+    <changeSet id="11" author="stanislav.kolenchik">
+        <sqlFile path="v1.0.1/2019-10-31-rename-comment-author-column.sql" relativeToChangelogFile="true" splitStatements="false" />
+    </changeSet>
 
 </databaseChangeLog>

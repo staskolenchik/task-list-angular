@@ -10,6 +10,7 @@ import org.hibernate.annotations.TypeDef;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -44,5 +45,5 @@ public abstract class Task {
     private Employee assignee;
 
     @OneToMany(mappedBy = "task", orphanRemoval = true)
-    private Set<Comment> comment;
+    private List<Comment> comment;
 }
