@@ -5,6 +5,7 @@ import {TaskService} from "../task.service";
 @Component({
     selector: "task-component",
     template: `
+        <username-menu></username-menu>
         <div>
             <h4>Create task</h4>
             <label>Task Subject: </label>
