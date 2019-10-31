@@ -45,5 +45,5 @@ public abstract class Task {
     private Employee assignee;
 
     @OneToMany(mappedBy = "task", orphanRemoval = true)
-    private List<Comment> comment;
+    private Set<Comment> comment;
 }
