@@ -7,7 +7,7 @@ import {catchError, map, retry} from "rxjs/operators";
 @Injectable()
 export class TaskService{
 
-    private url = 'http://localhost:8081/dev/tasks';
+    private url: string = 'http://localhost:8081/dev/tasks';
 
     isDeleted: boolean = true;
 
