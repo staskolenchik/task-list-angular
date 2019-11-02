@@ -19,7 +19,7 @@ module.exports = {
     devServer: {
         contentBase: './dist',
         proxy: [{
-            context: ['/dev/tasks', '/dev/user'],
+            context: ['/dev/tasks', '/dev/employees'],
             target: 'http://localhost:8080',
         }],
         hot: true
