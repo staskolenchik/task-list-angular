@@ -1,21 +1,25 @@
-package by.kolenchik.web.user;
+package by.kolenchik.web.user.employee;
 
+import by.kolenchik.core.user.employee.dto.AddEmployeeDto;
 import by.kolenchik.core.user.employee.dto.EmployeeInfoDto;
 import by.kolenchik.core.user.employee.service.EmployeeService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/dev/employees")
-public class UserController {
+public class EmployeeController {
 
     private EmployeeService employeeService;
 
-    public UserController(EmployeeService employeeService) {
+    public EmployeeController(EmployeeService employeeService) {
         this.employeeService = employeeService;
+    }
+
+    @PostMapping
+    public EmployeeInfoDto add(@RequestBody AddEmployeeDto addEmployeeDto) {
+        return employeeService.add(addEmployeeDto);
     }
 
     @GetMapping

@@ -1,7 +1,8 @@
 import {Injectable} from "@angular/core";
 import {HttpClient, HttpErrorResponse} from "@angular/common/http";
 import {catchError, map, retry} from "rxjs/operators";
-import {throwError} from "rxjs";
+import {Observable, throwError} from "rxjs";
+import {Employee} from "../../shared/models/employee";
 
 @Injectable()
 export class EmployeeService {
@@ -23,7 +24,7 @@ export class EmployeeService {
             'Something bad happened; please try again later.');
     };
 
-    getAll() {
+    getAll() : Observable<Employee[]>{ //added observable!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         return this.http
             .get(this.url)
             .pipe(map(data => {
@@ -32,15 +33,27 @@ export class EmployeeService {
                         return {
                             id: employee.id,
                             email: employee.email,
+                            password: null,
                             name: employee.name,
                             surname: employee.surname,
                             patronymic: employee.patronymic,
-                            birthDate: employee.birthDate
+                            birthDate: employee.birthDate,
+                            managerId: employee.managerId
                         }
                     })
                 }),
                 retry(3),
                 catchError(this.handleError)
             );
+    }
+
+    add(employee: Employee) : Observable<Employee> {
+        console.log(employee);
+        return this.http
+            .post<Employee>(this.url, employee)
+            .pipe(
+                retry(3),
+                catchError(this.handleError)
+            )
     }
 }
