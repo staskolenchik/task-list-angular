@@ -7,6 +7,8 @@ import by.kolenchik.core.task.dto.TaskAddDto;
 import by.kolenchik.core.task.repository.TaskRepository;
 import by.kolenchik.core.user.User;
 import by.kolenchik.core.user.employee.Employee;
+import by.kolenchik.core.user.employee.dto.AddEmployeeDto;
+import by.kolenchik.core.user.employee.dto.EmployeeInfoDto;
 import by.kolenchik.core.user.employee.service.EmployeeService;
 import by.kolenchik.core.user.manager.Manager;
 import by.kolenchik.core.user.manager.service.ManagerService;
@@ -64,11 +66,13 @@ class TaskServiceImpl implements TaskService {
     }
 
     private Employee createEmployeeUnderManager(Manager manager) {
-        Employee employee = new Employee();
-        setupUserInfo(employee);
-        employee.setManager(manager);
+        Employee newEmployee = new Employee();
+        setupUserInfo(newEmployee);
+        newEmployee.setManager(manager);
+        AddEmployeeDto addEmployeeDto = modelMapper.map(newEmployee, AddEmployeeDto.class);
+        EmployeeInfoDto employeeInfoDto = employeeService.add(addEmployeeDto);
 
-        return employeeService.add(employee);
+        return modelMapper.map(employeeInfoDto, Employee.class);
     }
 
     private void setupUserInfo(User user) {

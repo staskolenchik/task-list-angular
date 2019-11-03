@@ -8,7 +8,7 @@ import {TaskService} from "./modules/tasks/task.service"
             <h1>Angular Router</h1>
             <nav>
                 <ul>
-                <li><a routerLink="/" >Tasks</a></li>
+                    <li><a routerLink="/" >Tasks</a></li>
                     <li><a routerLink="/employees" >Employees</a></li>
                 </ul>
             </nav>

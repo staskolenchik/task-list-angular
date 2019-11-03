@@ -1,6 +1,7 @@
 package by.kolenchik.core.user.employee.service;
 
 import by.kolenchik.core.user.employee.Employee;
+import by.kolenchik.core.user.employee.dto.AddEmployeeDto;
 import by.kolenchik.core.user.employee.dto.EmployeeInfoDto;
 import by.kolenchik.core.user.employee.repository.EmployeeRepository;
 import org.modelmapper.ModelMapper;
@@ -21,8 +22,12 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public Employee add(Employee employee) {
-        return employeeRepository.save(employee);
+    public EmployeeInfoDto add(AddEmployeeDto addEmployeeDto) {
+        Employee employee = modelMapper.map(addEmployeeDto, Employee.class);
+
+        Employee employeeFromDB = employeeRepository.save(employee);
+
+        return modelMapper.map(employeeFromDB, EmployeeInfoDto.class);
     }
 
     @Override

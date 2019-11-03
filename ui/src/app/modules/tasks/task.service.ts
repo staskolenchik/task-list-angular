@@ -46,6 +46,7 @@ export class TaskService{
     }
 
     add(task: Task) : Observable<Task>{
+        console.log(task);
         return this.http
             .post<Task>(this.url, task)
             .pipe(

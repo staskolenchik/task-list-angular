@@ -6,8 +6,8 @@ import {HttpClientModule} from "@angular/common/http";
 import {TaskModule} from "./modules/tasks/task.module";
 import {RouterModule, Routes} from "@angular/router";
 import {TaskComponent} from "./modules/tasks/components/task.component";
-import {EmployeeComponent} from "./modules/employees/components/employee.component";
 import {EmployeeModule} from "./modules/employees/employee.module";
+import {EmployeeComponent} from "./modules/employees/components/employee.component";
 
 const appRoutes: Routes = [
     {path: '', component: TaskComponent},
