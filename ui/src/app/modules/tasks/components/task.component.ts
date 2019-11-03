@@ -42,7 +42,7 @@ import {TaskService} from "../task.service";
 export class TaskComponent implements OnInit{
 
     private tasks: Task[] = [];
-    private task: Task = new Task();
+    private task: Task = {} as Task;
 
     private updatable: boolean = false;
 
@@ -69,7 +69,7 @@ export class TaskComponent implements OnInit{
             .add(task)
             .subscribe(
                 (createdTask: Task) => {
-                    this.task = new Task();
+                    this.task = {} as Task;
                     this.tasks.push(createdTask);
                 },
                 addError => console.log(addError)
@@ -87,7 +87,7 @@ export class TaskComponent implements OnInit{
             .subscribe(
                 (updatedTask: Task) => {
                     let index: number = this.tasks.indexOf(this.task);
-                    this.task = new Task();
+                    this.task = {} as Task;
                     this.tasks.splice(index, 1, updatedTask);
                 },
                 updateError => console.log(updateError)

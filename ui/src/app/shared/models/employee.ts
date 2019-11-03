@@ -6,3 +6,4 @@ export interface Employee {
     patronymic: string;
     birthDate: string;
 }
+
