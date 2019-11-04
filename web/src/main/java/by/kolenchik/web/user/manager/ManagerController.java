@@ -40,4 +40,9 @@ public class ManagerController {
     ) {
         return managerService.update(id, updateManagerDto);
     }
+
+    @GetMapping("/{id}")
+    public ManagerInfoDto findById(@PathVariable Long id) {
+        return managerService.findById(id);
+    }
 }

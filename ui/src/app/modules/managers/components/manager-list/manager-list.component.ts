@@ -9,20 +9,21 @@ import {Manager} from "../../../../shared/models/manager";
             <h3>Manager List</h3>
             <table border="1" cellpadding="2">
                 <thead>
-                    <tr>
-                        <td>Email</td>
-                        <td>Full name</td>
-                        <td>Birth date</td>
-                    </tr>
+                <tr>
+                    <td>Email</td>
+                    <td>Full name</td>
+                    <td>Birth date</td>
+                </tr>
                 </thead>
                 <tbody>
-                    <tr *ngFor="let manager of managers">
-                        <td>{{manager.email}}</td>
-                        <td>{{manager.name}} {{manager.surname}} {{manager.patronymic}}</td>
-                        <td>{{manager.birthDate}}</td>
-                        <button (click)="onUpdate(manager)">Update</button>
-                        <button (click)="onDelete(manager)">Delete</button>
-                    </tr>
+                <tr *ngFor="let manager of managers">
+                    <td>{{manager.email}}</td>
+                    <td>{{manager.name}} {{manager.surname}} {{manager.patronymic}}</td>
+                    <td>{{manager.birthDate}}</td>
+                    <button (click)="onUpdate(manager)">Update</button>
+                    <button (click)="onDelete(manager)">Delete</button>
+                    <button (click)="openProfile(manager)">Profile</button>
+                </tr>
                 </tbody>
             </table>
         </ng-template>
@@ -35,6 +36,7 @@ export class ManagerListComponent {
 
     @Output() delete: EventEmitter<Manager> = new EventEmitter();
     @Output() updateForm: EventEmitter<Manager> = new EventEmitter();
+    @Output() showProfile: EventEmitter<Manager> = new EventEmitter();
 
     onDelete(manager: Manager) {
         this.delete.emit(manager);
@@ -42,5 +44,9 @@ export class ManagerListComponent {
 
     onUpdate(manager:Manager) {
         this.updateForm.emit(manager);
+    }
+
+    openProfile(manager: Manager) {
+        this.showProfile.emit(manager);
     }
 }

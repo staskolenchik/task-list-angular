@@ -13,7 +13,9 @@ import {Manager} from "../../../shared/models/manager";
         <manager-list-component [managers]="managers" 
                                 (delete)="delete($event)"
                                 (updateForm)="updateForm($event)"
+                                (showProfile)="showProfile($event)"
         ></manager-list-component>
+        <manager-profile-component [manager]="profile"></manager-profile-component>
     `,
     styles: [],
     providers: [ManagerService]
@@ -22,6 +24,7 @@ import {Manager} from "../../../shared/models/manager";
 export class ManagerComponent implements OnInit{
     private managers: Manager[] = [];
     private manager: Manager;
+    private profile: Manager;
 
     constructor(private managerService: ManagerService) {
     }
@@ -61,6 +64,14 @@ export class ManagerComponent implements OnInit{
             .subscribe(updatedManager => {
                 let index = this.managers.indexOf(manager);
                 this.managers.splice(index, 1, updatedManager);
+            })
+    }
+
+    showProfile(manager: Manager) {
+        this.managerService
+            .get(manager)
+            .subscribe(manager => {
+                this.profile = manager;
             })
     }
 }

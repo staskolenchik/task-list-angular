@@ -56,4 +56,11 @@ public class ManagerServiceImpl implements ManagerService {
 
         return modelMapper.map(savedManager, ManagerInfoDto.class);
     }
+
+    @Override
+    public ManagerInfoDto findById(Long id) {
+        Manager managerFromDb = managerRepository.getOne(id);
+
+        return modelMapper.map(managerFromDb, ManagerInfoDto.class);
+    }
 }

@@ -15,4 +15,6 @@ public interface ManagerService {
     void deleteById(Long id);
 
     ManagerInfoDto update(Long id, UpdateManagerDto updateManagerDto);
+
+    ManagerInfoDto findById(Long id);
 }

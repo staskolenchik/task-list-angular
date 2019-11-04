@@ -74,4 +74,14 @@ export class ManagerService {
                 catchError(this.handleError)
             );
     }
+
+    get(manager: Manager): Observable<Manager> {
+        const url: string = `${this.url}/${manager.id}`;
+        return this.http
+            .get<Manager>(url)
+            .pipe(
+                retry(3),
+                catchError(this.handleError)
+            );
+    }
 }
