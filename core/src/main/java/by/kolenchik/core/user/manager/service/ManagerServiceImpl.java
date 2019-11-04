@@ -1,6 +1,7 @@
 package by.kolenchik.core.user.manager.service;
 
 import by.kolenchik.core.user.manager.Manager;
+import by.kolenchik.core.user.manager.dto.AddManagerDto;
 import by.kolenchik.core.user.manager.dto.ManagerInfoDto;
 import by.kolenchik.core.user.manager.repository.ManagerRepository;
 import org.modelmapper.ModelMapper;
@@ -21,8 +22,12 @@ public class ManagerServiceImpl implements ManagerService {
     }
 
     @Override
-    public Manager add(Manager manager) {
-        return managerRepository.save(manager);
+    public ManagerInfoDto add(AddManagerDto addManagerDto) {
+        Manager manager = modelMapper.map(addManagerDto, Manager.class);
+
+        Manager managerFromDb = managerRepository.save(manager);
+
+        return modelMapper.map(managerFromDb, ManagerInfoDto.class);
     }
 
     @Override

@@ -6,6 +6,7 @@ import {Manager} from "../../../shared/models/manager";
 @Component({
     selector: 'manager-component',
     template: `
+        <manager-form-component (add)="add($event)"></manager-form-component>
         <manager-list-component [managers]="managers"></manager-list-component>
     `,
     styles: [],
@@ -24,5 +25,11 @@ export class ManagerComponent implements OnInit{
             .subscribe(managers => this.managers = managers);
     }
 
-
+    add(manager: Manager) {
+        this.managerService
+            .add(manager)
+            .subscribe(manager => {
+                this.managers.push(manager);
+            })
+    }
 }

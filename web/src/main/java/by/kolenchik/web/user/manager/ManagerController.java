@@ -1,10 +1,9 @@
 package by.kolenchik.web.user.manager;
 
+import by.kolenchik.core.user.manager.dto.AddManagerDto;
 import by.kolenchik.core.user.manager.dto.ManagerInfoDto;
 import by.kolenchik.core.user.manager.service.ManagerService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -16,6 +15,11 @@ public class ManagerController {
 
     public ManagerController(ManagerService managerService) {
         this.managerService = managerService;
+    }
+
+    @PostMapping
+    public ManagerInfoDto add(@RequestBody AddManagerDto addManagerDto) {
+        return managerService.add(addManagerDto);
     }
 
     @GetMapping

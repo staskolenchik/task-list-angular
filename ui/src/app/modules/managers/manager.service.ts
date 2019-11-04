@@ -1,8 +1,8 @@
 import {Injectable} from "@angular/core";
 import {Observable, throwError} from "rxjs";
-import {Employee} from "../../shared/models/employee";
 import {catchError, map, retry} from "rxjs/operators";
 import {HttpClient, HttpErrorResponse} from "@angular/common/http";
+import {Manager} from "../../shared/models/manager";
 
 @Injectable()
 export class ManagerService {
@@ -24,24 +24,33 @@ export class ManagerService {
             'Something bad happened; please try again later.');
     };
 
-    getAll() : Observable<Employee[]>{ //added observable!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    getAll() : Observable<Manager[]>{ //added observable!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         return this.http
             .get(this.url)
             .pipe(map(data => {
-                    let employees = [].concat(data);
-                    return employees.map(function (employee: any) {
+                    let managers = [].concat(data);
+                    return managers.map(function (manager: any) {
                         return {
-                            id: employee.id,
-                            email: employee.email,
+                            id: manager.id,
+                            email: manager.email,
                             password: null,
-                            name: employee.name,
-                            surname: employee.surname,
-                            patronymic: employee.patronymic,
-                            birthDate: employee.birthDate,
-                            managerId: employee.managerId
+                            name: manager.name,
+                            surname: manager.surname,
+                            patronymic: manager.patronymic,
+                            birthDate: manager.birthDate,
                         }
                     })
                 }),
+                retry(3),
+                catchError(this.handleError)
+            );
+    }
+
+    add(manager: Manager) : Observable<Manager> {
+        console.log(manager);
+        return this.http
+            .post<Manager>(this.url, manager)
+            .pipe(
                 retry(3),
                 catchError(this.handleError)
             );
