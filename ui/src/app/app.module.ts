@@ -8,10 +8,13 @@ import {RouterModule, Routes} from "@angular/router";
 import {TaskComponent} from "./modules/tasks/components/task.component";
 import {EmployeeModule} from "./modules/employees/employee.module";
 import {EmployeeComponent} from "./modules/employees/components/employee.component";
+import {ManagerComponent} from "./modules/managers/components/manager.component";
+import {ManagerModule} from "./modules/managers/manager.module";
 
 const appRoutes: Routes = [
     {path: '', component: TaskComponent},
-    {path: 'employees', component: EmployeeComponent}
+    {path: 'employees', component: EmployeeComponent},
+    {path: 'managers', component: ManagerComponent}
 ];
 
 @NgModule({
@@ -24,7 +27,8 @@ const appRoutes: Routes = [
         FormsModule,
         HttpClientModule,
         TaskModule,
-        EmployeeModule
+        EmployeeModule,
+        ManagerModule
     ],
     declarations: [AppComponent],
     bootstrap: [AppComponent]

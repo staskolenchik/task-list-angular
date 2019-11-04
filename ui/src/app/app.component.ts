@@ -10,6 +10,7 @@ import {TaskService} from "./modules/tasks/task.service"
                 <ul>
                     <li><a routerLink="/" >Tasks</a></li>
                     <li><a routerLink="/employees" >Employees</a></li>
+                    <li><a routerLink="/managers">Managers</a> </li>
                 </ul>
             </nav>
             <router-outlet></router-outlet>

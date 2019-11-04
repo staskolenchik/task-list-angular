@@ -6,7 +6,7 @@ import {Manager} from "../../../shared/models/manager";
 @Component({
     selector: 'manager-component',
     template: `
-        <manager-list-component></manager-list-component>
+        <manager-list-component [managers]="managers"></manager-list-component>
     `,
     styles: [],
     providers: [ManagerService]
@@ -19,6 +19,10 @@ export class ManagerComponent implements OnInit{
     }
 
     ngOnInit(): void {
-        this.managerService.getAll().subscribe(managers => this.managers = managers);
+        this.managerService
+            .getAll()
+            .subscribe(managers => this.managers = managers);
     }
+
+
 }
