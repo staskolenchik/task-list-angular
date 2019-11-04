@@ -24,7 +24,7 @@ export class ManagerService {
             'Something bad happened; please try again later.');
     };
 
-    getAll() : Observable<Manager[]>{
+    getAll(): Observable<Manager[]>{
         return this.http
             .get(this.url)
             .pipe(map(data => {
@@ -46,7 +46,7 @@ export class ManagerService {
             );
     }
 
-    add(manager: Manager) : Observable<Manager> {
+    add(manager: Manager): Observable<Manager> {
         return this.http
             .post<Manager>(this.url, manager)
             .pipe(
