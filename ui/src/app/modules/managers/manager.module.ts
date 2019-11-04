@@ -1,10 +1,11 @@
 import {NgModule} from "@angular/core";
 import {ManagerComponent} from "./components/manager.component";
+import {ManagerListComponent} from "./components/manager-list/manager-list.component";
 
 @NgModule({
-    declarations: [ManagerComponent],
+    declarations: [ManagerComponent, ManagerListComponent],
     imports: [],
-    exports: [ManagerComponent]
+    exports: [ManagerComponent, ManagerListComponent]
 })
 
 export class ManagerModule {

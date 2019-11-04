@@ -7,7 +7,6 @@ import {EmployeeService} from "../employee.service";
     selector: 'employee-component',
     template: `
         <employee-form-component (add)="add($event)"></employee-form-component>
-        <employee-list-component [employees]="employees"></employee-list-component>
     `,
     styles: [],
     providers:[EmployeeService]
