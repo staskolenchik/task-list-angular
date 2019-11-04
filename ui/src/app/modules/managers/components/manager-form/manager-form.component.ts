@@ -1,64 +1,89 @@
-import {Component, EventEmitter, Output} from "@angular/core";
+import {Component, EventEmitter, Input, Output} from "@angular/core";
 import {Manager} from "../../../../shared/models/manager";
 
 @Component({
     selector: "manager-form-component",
     template: `
         <h3>Manager form</h3>
-        <form class="manager-form" (ngSubmit)="onSubmit()" novalidate>
+        <form class="manager-form" (ngSubmit)="onSubmit()">
             <div>
                 <label for="manager-email">Email: </label>
                 <input id="manager-email"
                        type="text"
                        name="email"
-                       [(ngModel)]="manager.email">
+                       [(ngModel)]="_manager.email">
             </div>
             <div>
                 <label for="manager-password">Password: </label>
                 <input id="manager-password"
                        type="password"
                        name="password"
-                       [(ngModel)]="manager.password">
+                       [(ngModel)]="_manager.password">
             </div>
             <div>
                 <label>First Name: </label>
                 <input type="text"
                        name="name"
-                       [(ngModel)]="manager.name">
+                       [(ngModel)]="_manager.name">
             </div>
             <div>
                 <label>Surname: </label>
                 <input type="text"
                        name="surname"
-                       [(ngModel)]="manager.surname">
+                       [(ngModel)]="_manager.surname">
             </div>
             <div>
                 <label>Patronymic: </label>
                 <input type="text"
                        name="patronymic"
-                       [(ngModel)]="manager.patronymic">
+                       [(ngModel)]="_manager.patronymic">
             </div>
             <div>
                 <label>Birth Date: </label>
                 <input type="text"
                        name="birthDate"
-                       [(ngModel)]="manager.birthDate">
+                       [(ngModel)]="_manager.birthDate">
             </div>
-            <br>
-            <button>Submit</button>
+            <div>
+                <button>Save</button>
+            </div>
+            
+            
         </form>
     `,
     styles: []
 })
 
 export class ManagerFormComponent {
-    private manager: Manager = {} as Manager;
+    private _manager: Manager = {} as Manager;
+    private isUpdated: boolean = false;
 
-    @Output() add: EventEmitter<Manager> = new EventEmitter();
-
-    onSubmit() {
-        this.add.emit(this.manager);
-        this.manager = {} as Manager;
+    @Input()
+    set manager(manager: Manager) {
+        this._manager = manager || {} as Manager;
+        manager ? this.isUpdated = true : this.isUpdated = false;
+        console.log(this.isUpdated);
     }
 
+    @Output() add: EventEmitter<Manager> = new EventEmitter();
+    @Output() update: EventEmitter<Manager> = new EventEmitter();
+
+    onSubmit() {
+        if (this.isUpdated) {
+            this.submitUpdate(this._manager);
+        } else {
+            this.submitAdd(this._manager);
+        }
+    }
+    private submitAdd(manager: Manager) {
+        this.isUpdated = false;
+        this._manager = {} as Manager;
+        this.add.emit(manager);
+    }
+
+    private submitUpdate(manager: Manager) {
+        this.isUpdated = false;
+        this._manager = {} as Manager;
+        this.update.emit(manager)
+    }
 }

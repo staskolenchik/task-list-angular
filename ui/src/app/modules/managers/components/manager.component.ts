@@ -6,8 +6,12 @@ import {Manager} from "../../../shared/models/manager";
 @Component({
     selector: 'manager-component',
     template: `
-        <manager-form-component (add)="add($event)"></manager-form-component>
-        <manager-list-component [managers]="managers" (delete)="delete($event)"></manager-list-component>
+        <manager-form-component [manager]="manager" 
+                                (add)="add($event)"
+                                (update)="update($event)"
+        ></manager-form-component>
+        <manager-list-component [managers]="managers" (delete)="delete($event)"
+                                (updateForm)="updateForm($event)"></manager-list-component>
     `,
     styles: [],
     providers: [ManagerService]
@@ -15,6 +19,7 @@ import {Manager} from "../../../shared/models/manager";
 
 export class ManagerComponent implements OnInit{
     private managers: Manager[] = [];
+    private manager: Manager;
 
     constructor(private managerService: ManagerService) {
     }
@@ -42,6 +47,20 @@ export class ManagerComponent implements OnInit{
                 if (index > -1) {
                     this.managers.splice(index, 1);
                 }
+            })
+    }
+
+    updateForm(manager: Manager) {
+        this.manager = manager;
+    }
+
+    update(manager: Manager) {
+        this.managerService
+            .update(manager)
+            .subscribe(updatedManager => {
+                let index = this.managers.indexOf(manager);
+
+                this.managers.splice(index, 1, updatedManager);
             })
     }
 }

@@ -2,6 +2,7 @@ package by.kolenchik.web.user.manager;
 
 import by.kolenchik.core.user.manager.dto.AddManagerDto;
 import by.kolenchik.core.user.manager.dto.ManagerInfoDto;
+import by.kolenchik.core.user.manager.dto.UpdateManagerDto;
 import by.kolenchik.core.user.manager.service.ManagerService;
 import org.springframework.web.bind.annotation.*;
 
@@ -30,5 +31,13 @@ public class ManagerController {
     @DeleteMapping("/{id}")
     public void deleteById(@PathVariable Long id) {
         managerService.deleteById(id);
+    }
+
+    @PutMapping("/{id}")
+    public ManagerInfoDto update(
+            @PathVariable Long id,
+            @RequestBody UpdateManagerDto updateManagerDto
+    ) {
+        return managerService.update(id, updateManagerDto);
     }
 }

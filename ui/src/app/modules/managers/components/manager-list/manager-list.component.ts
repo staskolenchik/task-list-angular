@@ -20,6 +20,7 @@ import {Manager} from "../../../../shared/models/manager";
                         <td>{{manager.email}}</td>
                         <td>{{manager.name}} {{manager.surname}} {{manager.patronymic}}</td>
                         <td>{{manager.birthDate}}</td>
+                        <button (click)="onUpdate(manager)">Update</button>
                         <button (click)="onDelete(manager)">Delete</button>
                     </tr>
                 </tbody>
@@ -33,8 +34,13 @@ export class ManagerListComponent {
     @Input() managers: Manager[];
 
     @Output() delete: EventEmitter<Manager> = new EventEmitter();
+    @Output() updateForm: EventEmitter<Manager> = new EventEmitter();
 
     onDelete(manager: Manager) {
         this.delete.emit(manager);
+    }
+
+    onUpdate(manager:Manager) {
+        this.updateForm.emit(manager);
     }
 }

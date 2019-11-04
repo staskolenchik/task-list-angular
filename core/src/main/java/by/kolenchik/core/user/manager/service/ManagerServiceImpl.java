@@ -3,8 +3,10 @@ package by.kolenchik.core.user.manager.service;
 import by.kolenchik.core.user.manager.Manager;
 import by.kolenchik.core.user.manager.dto.AddManagerDto;
 import by.kolenchik.core.user.manager.dto.ManagerInfoDto;
+import by.kolenchik.core.user.manager.dto.UpdateManagerDto;
 import by.kolenchik.core.user.manager.repository.ManagerRepository;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -42,5 +44,16 @@ public class ManagerServiceImpl implements ManagerService {
     @Override
     public void deleteById(Long id) {
         managerRepository.deleteById(id);
+    }
+
+    @Override
+    public ManagerInfoDto update(Long id, UpdateManagerDto updateManagerDto) {
+        Manager managerFromDb = managerRepository.getOne(id);
+
+        BeanUtils.copyProperties(updateManagerDto, managerFromDb);
+
+        Manager savedManager = managerRepository.save(managerFromDb);
+
+        return modelMapper.map(savedManager, ManagerInfoDto.class);
     }
 }

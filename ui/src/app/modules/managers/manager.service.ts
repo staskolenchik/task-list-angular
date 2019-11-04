@@ -24,7 +24,7 @@ export class ManagerService {
             'Something bad happened; please try again later.');
     };
 
-    getAll() : Observable<Manager[]>{ //added observable!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    getAll() : Observable<Manager[]>{
         return this.http
             .get(this.url)
             .pipe(map(data => {
@@ -60,6 +60,16 @@ export class ManagerService {
         const url: string = `${this.url}/${manager.id}`;
         return this.http
             .delete(url)
+            .pipe(
+                retry(3),
+                catchError(this.handleError)
+            );
+    }
+
+    update(manager: Manager): Observable<Manager> {
+        const url: string = `${this.url}/${manager.id}`;
+        return this.http
+            .put<Manager>(url, manager)
             .pipe(
                 retry(3),
                 catchError(this.handleError)
