@@ -4,6 +4,8 @@ import by.kolenchik.core.user.manager.Manager;
 import by.kolenchik.core.user.manager.repository.ManagerRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class ManagerServiceImpl implements ManagerService {
 
@@ -16,5 +18,10 @@ public class ManagerServiceImpl implements ManagerService {
     @Override
     public Manager add(Manager manager) {
         return managerRepository.save(manager);
+    }
+
+    @Override
+    public List<Manager> findAll() {
+        return managerRepository.findAll();
     }
 }
