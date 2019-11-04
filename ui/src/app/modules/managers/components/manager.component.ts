@@ -10,8 +10,10 @@ import {Manager} from "../../../shared/models/manager";
                                 (add)="add($event)"
                                 (update)="update($event)"
         ></manager-form-component>
-        <manager-list-component [managers]="managers" (delete)="delete($event)"
-                                (updateForm)="updateForm($event)"></manager-list-component>
+        <manager-list-component [managers]="managers" 
+                                (delete)="delete($event)"
+                                (updateForm)="updateForm($event)"
+        ></manager-list-component>
     `,
     styles: [],
     providers: [ManagerService]
@@ -43,7 +45,6 @@ export class ManagerComponent implements OnInit{
             .delete(manager)
             .subscribe(response => {
                 let index = this.managers.indexOf(manager);
-
                 if (index > -1) {
                     this.managers.splice(index, 1);
                 }
@@ -59,7 +60,6 @@ export class ManagerComponent implements OnInit{
             .update(manager)
             .subscribe(updatedManager => {
                 let index = this.managers.indexOf(manager);
-
                 this.managers.splice(index, 1, updatedManager);
             })
     }

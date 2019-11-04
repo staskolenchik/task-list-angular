@@ -47,8 +47,6 @@ import {Manager} from "../../../../shared/models/manager";
             <div>
                 <button>Save</button>
             </div>
-            
-            
         </form>
     `,
     styles: []

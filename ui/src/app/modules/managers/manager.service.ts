@@ -47,7 +47,6 @@ export class ManagerService {
     }
 
     add(manager: Manager) : Observable<Manager> {
-        console.log(manager);
         return this.http
             .post<Manager>(this.url, manager)
             .pipe(
