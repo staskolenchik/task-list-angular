@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.stream.Collectors;
 
+
 @Service
 public class ManagerServiceImpl implements ManagerService {
 
@@ -62,5 +63,10 @@ public class ManagerServiceImpl implements ManagerService {
         Manager managerFromDb = managerRepository.getOne(id);
 
         return modelMapper.map(managerFromDb, ManagerInfoDto.class);
+    }
+
+    @Override
+    public List<Manager> findAll() {
+        return managerRepository.findAll();
     }
 }

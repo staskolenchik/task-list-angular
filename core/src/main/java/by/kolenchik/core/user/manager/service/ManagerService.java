@@ -6,7 +6,10 @@ import by.kolenchik.core.user.manager.dto.UpdateManagerDto;
 
 import java.util.List;
 
+import java.util.List;
+
 public interface ManagerService {
+
 
     ManagerInfoDto add(AddManagerDto addManagerDto);
 
