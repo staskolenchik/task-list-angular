@@ -11,6 +11,8 @@ import by.kolenchik.core.user.employee.dto.AddEmployeeDto;
 import by.kolenchik.core.user.employee.dto.EmployeeInfoDto;
 import by.kolenchik.core.user.employee.service.EmployeeService;
 import by.kolenchik.core.user.manager.Manager;
+import by.kolenchik.core.user.manager.dto.AddManagerDto;
+import by.kolenchik.core.user.manager.dto.ManagerInfoDto;
 import by.kolenchik.core.user.manager.service.ManagerService;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -61,8 +63,11 @@ class TaskServiceImpl implements TaskService {
     private Manager createManager() {
         Manager manager = new Manager();
         setupUserInfo(manager);
+        AddManagerDto addManagerDto = modelMapper.map(manager, AddManagerDto.class);
 
-        return managerService.add(manager);
+        ManagerInfoDto managerInfoDto = managerService.add(addManagerDto);
+
+        return modelMapper.map(managerInfoDto, Manager.class);
     }
 
     private Employee createEmployeeUnderManager(Manager manager) {
