@@ -1,20 +1,36 @@
 package by.kolenchik.core.user.manager.service;
 
 import by.kolenchik.core.user.manager.Manager;
+import by.kolenchik.core.user.manager.dto.ManagerInfoDto;
 import by.kolenchik.core.user.manager.repository.ManagerRepository;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class ManagerServiceImpl implements ManagerService {
 
     private ManagerRepository managerRepository;
+    private ModelMapper modelMapper;
 
-    public ManagerServiceImpl(ManagerRepository managerRepository) {
+    public ManagerServiceImpl(ManagerRepository managerRepository, ModelMapper modelMapper) {
         this.managerRepository = managerRepository;
+        this.modelMapper = modelMapper;
     }
 
     @Override
     public Manager add(Manager manager) {
         return managerRepository.save(manager);
+    }
+
+    @Override
+    public List<ManagerInfoDto> findAll() {
+        List<Manager> managers = managerRepository.findAll();
+
+        return managers.stream()
+                .map(manager -> modelMapper.map(manager, ManagerInfoDto.class))
+                .collect(Collectors.toList());
     }
 }
