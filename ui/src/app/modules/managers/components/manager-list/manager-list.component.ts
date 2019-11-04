@@ -1,4 +1,4 @@
-import {Component, Input} from "@angular/core";
+import {Component, EventEmitter, Input, Output} from "@angular/core";
 import {Manager} from "../../../../shared/models/manager";
 
 @Component({
@@ -20,6 +20,7 @@ import {Manager} from "../../../../shared/models/manager";
                         <td>{{manager.email}}</td>
                         <td>{{manager.name}} {{manager.surname}} {{manager.patronymic}}</td>
                         <td>{{manager.birthDate}}</td>
+                        <button (click)="onDelete(manager)">Delete</button>
                     </tr>
                 </tbody>
             </table>
@@ -30,4 +31,10 @@ import {Manager} from "../../../../shared/models/manager";
 export class ManagerListComponent {
 
     @Input() managers: Manager[];
+
+    @Output() delete: EventEmitter<Manager> = new EventEmitter();
+
+    onDelete(manager: Manager) {
+        this.delete.emit(manager);
+    }
 }

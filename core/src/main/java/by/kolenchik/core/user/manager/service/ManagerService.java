@@ -10,4 +10,6 @@ public interface ManagerService {
     ManagerInfoDto add(AddManagerDto addManagerDto);
 
     List<ManagerInfoDto> findAll();
+
+    void deleteById(Long id);
 }

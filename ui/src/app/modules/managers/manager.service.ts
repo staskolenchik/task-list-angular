@@ -55,4 +55,14 @@ export class ManagerService {
                 catchError(this.handleError)
             );
     }
+
+    delete(manager: Manager): Observable<{}> {
+        const url: string = `${this.url}/${manager.id}`;
+        return this.http
+            .delete(url)
+            .pipe(
+                retry(3),
+                catchError(this.handleError)
+            );
+    }
 }

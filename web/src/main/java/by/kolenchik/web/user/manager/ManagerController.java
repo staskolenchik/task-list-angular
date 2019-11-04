@@ -26,4 +26,9 @@ public class ManagerController {
     public List<ManagerInfoDto> findAll() {
         return managerService.findAll();
     }
+
+    @DeleteMapping("/{id}")
+    public void deleteById(@PathVariable Long id) {
+        managerService.deleteById(id);
+    }
 }

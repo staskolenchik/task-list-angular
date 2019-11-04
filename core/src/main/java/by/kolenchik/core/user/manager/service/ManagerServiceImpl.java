@@ -38,4 +38,9 @@ public class ManagerServiceImpl implements ManagerService {
                 .map(manager -> modelMapper.map(manager, ManagerInfoDto.class))
                 .collect(Collectors.toList());
     }
+
+    @Override
+    public void deleteById(Long id) {
+        managerRepository.deleteById(id);
+    }
 }
