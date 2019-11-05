@@ -64,9 +64,4 @@ public class ManagerServiceImpl implements ManagerService {
 
         return modelMapper.map(managerFromDb, ManagerInfoDto.class);
     }
-
-    @Override
-    public List<Manager> findAll() {
-        return managerRepository.findAll();
-    }
 }
