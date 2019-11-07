@@ -17,12 +17,15 @@ module.exports = {
         filename: '[name].[hash].js'
     },
     devServer: {
+        historyApiFallback: true,
         contentBase: './dist',
         proxy: [{
-            context: ['/dev/tasks', '/dev/employees', '/dev/managers'],
+            context: ['/dev'],
             target: 'http://localhost:8080',
+            secure: false
         }],
-        hot: true
+        hot: true,
+        open: true,
     },
     resolve: {
         extensions: ['.ts', '.js']

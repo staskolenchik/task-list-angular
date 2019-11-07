@@ -5,14 +5,15 @@ import {TaskService} from "./modules/tasks/task.service"
     selector: 'my-app',
     template:`
         <div>
-            <h1>Angular Router</h1>
-            <nav>
-                <ul>
-                    <li><a routerLink="/" >Tasks</a></li>
-                    <li><a routerLink="/employees" >Employees</a></li>
-                    <li><a routerLink="/managers">Managers</a> </li>
-                </ul>
-            </nav>
+            <header>
+                <nav>
+                    <ul>
+                        <li><a routerLink="/tasks">Tasks</a></li>
+                        <li><a routerLink="/employees">Employees</a></li>
+                        <li><a routerLink="/managers">Managers</a> </li>
+                    </ul>
+                </nav>
+            </header>
             <router-outlet></router-outlet>
         </div>
     `,
