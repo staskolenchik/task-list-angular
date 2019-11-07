@@ -1,5 +1,4 @@
 import {Component} from '@angular/core';
-import {TaskService} from "./modules/tasks/task.service"
 
 @Component({
     selector: 'my-app',
@@ -17,7 +16,7 @@ import {TaskService} from "./modules/tasks/task.service"
             <router-outlet></router-outlet>
         </div>
     `,
-    providers: [TaskService]
+    styleUrls: ['./app.component.css'],
 })
 
 export class AppComponent {
