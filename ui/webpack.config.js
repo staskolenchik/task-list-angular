@@ -8,13 +8,15 @@ module.exports = {
     devtool: 'source-map',
     watch: true,
     entry: {
+        'node_modules/@angular/material/prebuilt-themes/deeppurple-amber': './node_modules/@angular/material/prebuilt-themes/deeppurple-amber.css',
+        'styles': './src/styles.css',
         'polyfills': './src/polyfills.ts',
         'app': './src/main.ts',
     },
     output: {
         path: path.resolve(__dirname, 'dist'),
         publicPath: '/',
-        filename: '[name].[hash].js'
+        filename: '[name].js'
     },
     devServer: {
         historyApiFallback: true,
