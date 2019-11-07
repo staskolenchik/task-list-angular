@@ -6,7 +6,6 @@ import {TaskService} from "./modules/tasks/task.service"
     template:`
         <div>
             <header>
-                <h1>Task List</h1>
                 <nav>
                     <ul>
                         <li><a routerLink="/tasks">Tasks</a></li>

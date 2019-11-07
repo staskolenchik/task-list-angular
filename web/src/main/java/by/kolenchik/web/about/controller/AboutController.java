@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 
 @RestController
-@RequestMapping("about")
+@RequestMapping("/dev/about")
 public class AboutController {
 
     private final ApplicationProperties applicationProperties;

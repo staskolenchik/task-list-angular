@@ -1,5 +1,5 @@
 application:
-    name: task-list
+    name: Tasker
     version: 1.0.1-SNAPSHOT
 
 spring:

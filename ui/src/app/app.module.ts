@@ -7,10 +7,12 @@ import {TaskModule} from "./modules/tasks/task.module";
 import {EmployeeModule} from "./modules/employees/employee.module";
 import {ManagerModule} from "./modules/managers/manager.module";
 import {AppRoutingModule} from "./app-routing.module";
+import {AboutModule} from "./modules/about/about.module";
 
 @NgModule({
     imports:[
         AppRoutingModule,
+        AboutModule,
         BrowserModule,
         FormsModule,
         HttpClientModule,
