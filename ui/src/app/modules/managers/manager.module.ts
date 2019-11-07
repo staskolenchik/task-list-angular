@@ -5,23 +5,25 @@ import {CommonModule} from "@angular/common";
 import {ManagerFormComponent} from "./components/manager-form/manager-form.component";
 import {FormsModule} from "@angular/forms";
 import {ManagerProfileComponent} from "./components/manager-profile/manager-profile.component";
+import {ManagerRoutingModule} from "./manager-routing.module";
 
 @NgModule({
     declarations: [
         ManagerComponent,
         ManagerListComponent,
         ManagerFormComponent,
-        ManagerProfileComponent
+        ManagerProfileComponent,
     ],
     imports: [
+        ManagerRoutingModule,
         CommonModule,
-        FormsModule
+        FormsModule,
     ],
     exports: [
         ManagerComponent,
         ManagerListComponent,
         ManagerFormComponent,
-        ManagerProfileComponent
+        ManagerProfileComponent,
     ]
 })
 
