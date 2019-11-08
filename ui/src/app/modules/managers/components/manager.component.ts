@@ -10,14 +10,17 @@ import {Manager} from "../../../shared/models/manager";
                                 (add)="add($event)"
                                 (update)="update($event)"
         ></manager-form-component>
-        <manager-list-component [managers]="managers" 
-                                (delete)="delete($event)"
-                                (updateForm)="updateForm($event)"
-                                (showProfile)="showProfile($event)"
-        ></manager-list-component>
+        <div class="mat-app-background manager-list">
+            <manager-list-component [managers]="managers"
+                                    (delete)="delete($event)"
+                                    (updateForm)="updateForm($event)"
+                                    (showProfile)="showProfile($event)"
+            >Loading...</manager-list-component>
+        </div>
+        
         <manager-profile-component [manager]="profile"></manager-profile-component>
     `,
-    styles: [],
+    styleUrls: ['./manager.component.css'],
     providers: [ManagerService]
 })
 

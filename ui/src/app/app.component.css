@@ -1,0 +1,7 @@
+.sidenav-container__navigation-list {
+    padding: 0;
+}
+
+.active {
+    background-color: aliceblue;
+}

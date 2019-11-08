@@ -6,6 +6,7 @@ import {ManagerFormComponent} from "./components/manager-form/manager-form.compo
 import {FormsModule} from "@angular/forms";
 import {ManagerProfileComponent} from "./components/manager-profile/manager-profile.component";
 import {ManagerRoutingModule} from "./manager-routing.module";
+import {MatButtonModule, MatCardModule, MatChipsModule, MatIconModule, MatTableModule} from "@angular/material";
 
 @NgModule({
     declarations: [
@@ -18,6 +19,11 @@ import {ManagerRoutingModule} from "./manager-routing.module";
         ManagerRoutingModule,
         CommonModule,
         FormsModule,
+        MatTableModule,
+        MatCardModule,
+        MatButtonModule,
+        MatIconModule,
+        MatChipsModule,
     ],
     exports: [
         ManagerComponent,
