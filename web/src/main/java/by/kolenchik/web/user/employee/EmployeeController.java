@@ -26,4 +26,9 @@ public class EmployeeController {
     public List<EmployeeInfoDto> findAll() {
         return employeeService.findAll();
     }
+
+    @DeleteMapping("/{id}")
+    public void delete(@PathVariable Long id) {
+        employeeService.deleteById(id);
+    }
 }

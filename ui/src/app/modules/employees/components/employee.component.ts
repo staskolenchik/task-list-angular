@@ -7,7 +7,7 @@ import {EmployeeService} from "../employee.service";
     selector: 'employee-component',
     template: `
         <employee-form-component (add)="add($event)"></employee-form-component>
-        <employee-list-component [employees]="employees"></employee-list-component>
+        <employee-list-component [employees]="employees" (delete)="delete($event)"></employee-list-component>
     `,
     styles: [],
     providers:[EmployeeService]
@@ -30,5 +30,12 @@ export class EmployeeComponent implements OnInit{
         this.employeeService.add(employee).subscribe(newEmployee => {
             this.employees.push(newEmployee);
         })
+    }
+
+    delete(employee: Employee) {
+        this.employeeService.delete(employee).subscribe(response => {
+            let index = this.employees.indexOf(employee);
+            this.employees.splice(index, 1);
+        });
     }
 }

@@ -10,4 +10,6 @@ public interface EmployeeService {
     EmployeeInfoDto add(AddEmployeeDto addEmployeeDto);
 
     List<EmployeeInfoDto> findAll();
+
+    void deleteById(Long id);
 }

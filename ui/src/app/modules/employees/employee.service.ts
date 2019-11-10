@@ -24,7 +24,7 @@ export class EmployeeService {
             'Something bad happened; please try again later.');
     };
 
-    getAll() : Observable<Employee[]>{ //added observable!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    getAll() : Observable<Employee[]>{
         return this.http
             .get(this.url)
             .pipe(map(data => {
@@ -48,12 +48,21 @@ export class EmployeeService {
     }
 
     add(employee: Employee) : Observable<Employee> {
-        console.log(employee);
         return this.http
             .post<Employee>(this.url, employee)
             .pipe(
                 retry(3),
                 catchError(this.handleError)
             )
+    }
+
+    delete(employee: Employee) {
+        const url = `${this.url}/${employee.id}`;
+        return this.http
+            .delete(url)
+            .pipe(
+                retry(3),
+                catchError(this.handleError)
+            );
     }
 }
