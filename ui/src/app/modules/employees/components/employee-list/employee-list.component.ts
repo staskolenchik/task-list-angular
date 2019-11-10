@@ -21,7 +21,7 @@ import {Employee} from "../../../../shared/models/employee";
                         <td>{{employee.name}} {{employee.surname}} {{employee.patronymic}}</td>
                         <td>{{employee.birthDate}}</td>
                         <td>
-                            <button>Update</button>
+                            <button (click)="onUpdate(employee)">Update</button>
                             <button (click)="onDelete(employee)">Delete</button>
                         </td>
                     </tr>
@@ -37,8 +37,13 @@ export class EmployeeListComponent {
     @Input() employees: Employee[];
 
     @Output() delete: EventEmitter<Employee> = new EventEmitter();
+    @Output() update: EventEmitter<Employee> = new EventEmitter();
 
     onDelete(employee: Employee) {
         this.delete.emit(employee);
+    }
+
+    onUpdate(employee: Employee) {
+        this.update.emit(employee);
     }
 }

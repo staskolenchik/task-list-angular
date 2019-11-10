@@ -56,6 +56,16 @@ export class EmployeeService {
             )
     }
 
+    update(employee: Employee): Observable<Employee> {
+        let url = `${this.url}/${employee.id}`;
+        return this.http
+            .put<Employee>(url, employee)
+            .pipe(
+                retry(3),
+                catchError(this.handleError)
+            );
+    }
+
     delete(employee: Employee) {
         const url = `${this.url}/${employee.id}`;
         return this.http
