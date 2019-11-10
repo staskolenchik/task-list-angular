@@ -1,5 +1,6 @@
 import {Component, EventEmitter, Input, Output} from "@angular/core";
 import {Employee} from "../../../../shared/models/employee";
+import {Manager} from "../../../../shared/models/manager";
 
 @Component({
     selector: 'employee-form-component',
@@ -44,7 +45,12 @@ import {Employee} from "../../../../shared/models/employee";
                        [(ngModel)]="_employee.birthDate">
             </div>
             <div>
-                <label>Manager: Vasia Beliy</label>
+                <label>Manager select: </label>
+                <select name="managerId" [(ngModel)]="_employee.managerId">
+                    <option name="manager" *ngFor="let manager of _managers" [value]="manager.id">
+                        {{manager.name}} {{manager.surname}} {{manager.patronymic}}
+                    </option>
+                </select>
             </div>
             <br>
             <button>Submit</button>
@@ -55,6 +61,7 @@ import {Employee} from "../../../../shared/models/employee";
 
 export class EmployeeFormComponent {
     private _employee: Employee = {} as Employee;
+    private _managers: Manager[] = [];
 
     @Output() add: EventEmitter<Employee> = new EventEmitter();
     @Output() update: EventEmitter<Employee> = new EventEmitter();
@@ -64,13 +71,16 @@ export class EmployeeFormComponent {
         this._employee = employee ? employee : {} as Employee;
     }
 
+    @Input()
+    set managers(managers: Manager[]) {
+        this._managers = managers;
+    }
+
     onSubmit() {
         if (this._employee.id) {
             this.update.emit(this._employee);
         } else {
-            this._employee.managerId = 1;
             this.add.emit(this._employee);
         }
-        this._employee = {} as Employee;
     }
 }
