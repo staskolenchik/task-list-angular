@@ -6,10 +6,12 @@ import {Manager} from "../../../shared/models/manager";
 @Component({
     selector: 'manager-component',
     template: `
-        <manager-form-component [manager]="manager" 
-                                (add)="add($event)"
-                                (update)="update($event)"
-        ></manager-form-component>
+        <div class="mat-app-background manager-form">
+            <manager-form-component [manager]="manager"
+                                    (add)="add($event)"
+                                    (update)="update($event)"
+            >Loading...</manager-form-component>
+        </div>
         <div class="mat-app-background manager-list">
             <manager-list-component [managers]="managers"
                                     (delete)="delete($event)"
