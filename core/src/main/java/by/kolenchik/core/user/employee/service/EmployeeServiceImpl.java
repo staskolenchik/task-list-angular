@@ -3,8 +3,10 @@ package by.kolenchik.core.user.employee.service;
 import by.kolenchik.core.user.employee.Employee;
 import by.kolenchik.core.user.employee.dto.AddEmployeeDto;
 import by.kolenchik.core.user.employee.dto.EmployeeInfoDto;
+import by.kolenchik.core.user.employee.dto.UpdateEmployeeDto;
 import by.kolenchik.core.user.employee.repository.EmployeeRepository;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -37,5 +39,28 @@ public class EmployeeServiceImpl implements EmployeeService {
         return employees.stream()
                 .map(employee -> modelMapper.map(employee, EmployeeInfoDto.class))
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public EmployeeInfoDto update(Long id, UpdateEmployeeDto updateEmployeeDto) {
+        Employee employeeFromDb = employeeRepository.getOne(id);
+
+        BeanUtils.copyProperties(updateEmployeeDto, employeeFromDb);
+
+        Employee savedEmployee = employeeRepository.save(employeeFromDb);
+
+        return modelMapper.map(savedEmployee, EmployeeInfoDto.class);
+    }
+
+    @Override
+    public void deleteById(Long id) {
+        employeeRepository.deleteById(id);
+    }
+
+    @Override
+    public EmployeeInfoDto findById(Long id) {
+        Employee employee = employeeRepository.getOne(id);
+
+        return modelMapper.map(employee, EmployeeInfoDto.class);
     }
 }

@@ -1,5 +1,6 @@
-import {Component, EventEmitter, Output} from "@angular/core";
+import {Component, EventEmitter, Input, Output} from "@angular/core";
 import {Employee} from "../../../../shared/models/employee";
+import {Manager} from "../../../../shared/models/manager";
 
 @Component({
     selector: 'employee-form-component',
@@ -10,41 +11,46 @@ import {Employee} from "../../../../shared/models/employee";
                 <input id="employee-email"
                        type="text"
                        name="email"
-                       [(ngModel)]="employee.email">
+                       [(ngModel)]="_employee.email">
             </div>
             <div>
                 <label for="employee-password">Password: </label>
                 <input id="employee-password"
                        type="password"
                        name="password"
-                       [(ngModel)]="employee.password">
+                       [(ngModel)]="_employee.password">
             </div>
             <div>
                 <label>First Name: </label>
                 <input type="text" 
                        name="name" 
-                       [(ngModel)]="employee.name">
+                       [(ngModel)]="_employee.name">
             </div>
             <div>
                 <label>Surname: </label>
                 <input type="text" 
                        name="surname" 
-                       [(ngModel)]="employee.surname">
+                       [(ngModel)]="_employee.surname">
             </div>
             <div>
                 <label>Patronymic: </label>
                 <input type="text"
                        name="patronymic" 
-                       [(ngModel)]="employee.patronymic">
+                       [(ngModel)]="_employee.patronymic">
             </div>
             <div>
                 <label>Birth Date: </label>
                 <input type="text" 
                        name="birthDate" 
-                       [(ngModel)]="employee.birthDate">
+                       [(ngModel)]="_employee.birthDate">
             </div>
             <div>
-                <label>Manager: Vasia Beliy</label>
+                <label>Manager select: </label>
+                <select name="managerId" [(ngModel)]="_employee.managerId">
+                    <option name="manager" *ngFor="let manager of _managers" [value]="manager.id">
+                        {{manager.name}} {{manager.surname}} {{manager.patronymic}}
+                    </option>
+                </select>
             </div>
             <br>
             <button>Submit</button>
@@ -54,13 +60,27 @@ import {Employee} from "../../../../shared/models/employee";
 })
 
 export class EmployeeFormComponent {
-    private employee: Employee = {} as Employee;
+    private _employee: Employee = {} as Employee;
+    private _managers: Manager[] = [];
 
     @Output() add: EventEmitter<Employee> = new EventEmitter();
+    @Output() update: EventEmitter<Employee> = new EventEmitter();
+
+    @Input()
+    set employee(employee: Employee) {
+        this._employee = employee ? employee : {} as Employee;
+    }
+
+    @Input()
+    set managers(managers: Manager[]) {
+        this._managers = managers;
+    }
 
     onSubmit() {
-        this.employee.managerId = 1;
-        this.add.emit(this.employee);
-        this.employee = {} as Employee;
+        if (this._employee.id) {
+            this.update.emit(this._employee);
+        } else {
+            this.add.emit(this._employee);
+        }
     }
 }
