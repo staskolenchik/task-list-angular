@@ -4,52 +4,76 @@ import {Manager} from "../../../../shared/models/manager";
 @Component({
     selector: "manager-form-component",
     template: `
-        <h3>Manager form</h3>
-        <form class="manager-form" (ngSubmit)="onSubmit()">
-            <div>
-                <label for="manager-email">Email: </label>
-                <input id="manager-email"
-                       type="text"
-                       name="email"
-                       [(ngModel)]="_manager.email">
-            </div>
-            <div>
-                <label for="manager-password">Password: </label>
-                <input id="manager-password"
-                       type="password"
-                       name="password"
-                       [(ngModel)]="_manager.password">
-            </div>
-            <div>
-                <label>First Name: </label>
-                <input type="text"
-                       name="name"
-                       [(ngModel)]="_manager.name">
-            </div>
-            <div>
-                <label>Surname: </label>
-                <input type="text"
-                       name="surname"
-                       [(ngModel)]="_manager.surname">
-            </div>
-            <div>
-                <label>Patronymic: </label>
-                <input type="text"
-                       name="patronymic"
-                       [(ngModel)]="_manager.patronymic">
-            </div>
-            <div>
-                <label>Birth Date: </label>
-                <input type="text"
-                       name="birthDate"
-                       [(ngModel)]="_manager.birthDate">
-            </div>
-            <div>
-                <button>Save</button>
-            </div>
-        </form>
+        <mat-card class="mat-elevation-z8">
+            <mat-card-title>Manager Form</mat-card-title>
+            <mat-card-content>
+                <form class="manager-form">
+                    <mat-form-field class="manager-form__form-field">
+                        <input matInput
+                               placeholder="Email"
+                               autofocus
+                               name="email"
+                               [(ngModel)]="_manager.email">
+                    </mat-form-field>
+
+                    <mat-form-field class="manager-form__form-field">
+                        <input matInput
+                               placeholder="Password"
+                               type="password"
+                               name="password"
+                               [(ngModel)]="_manager.password">
+                    </mat-form-field>
+
+                    <mat-form-field class="manager-form__form-field">
+                        <input matInput
+                               placeholder="Name"
+                               name="name"
+                               [(ngModel)]="_manager.name">
+                    </mat-form-field>
+                    
+                    <mat-form-field class="manager-form__form-field">
+                        <input matInput
+                               placeholder="Surname"
+                               name="surname"
+                               [(ngModel)]="_manager.surname">
+                    </mat-form-field>
+
+                    <mat-form-field class="manager-form__form-field">
+                        <input matInput
+                               placeholder="Patronymic"
+                               name="patronymic"
+                               [(ngModel)]="_manager.patronymic">
+                    </mat-form-field>
+                    
+                    <mat-form-field class="manager-form__form-field">
+                        <input matInput
+                               [matDatepicker]="picker"
+                               placeholder="Choose a date"
+                               name="birthDate"
+                               [(ngModel)]="_manager.birthDate">
+                        <mat-datepicker-toggle matSuffix [for]="picker">
+                        </mat-datepicker-toggle>
+                        <mat-datepicker #picker></mat-datepicker>
+                    </mat-form-field>
+                </form>
+            </mat-card-content>
+            <mat-card-actions>
+                <button mat-raised-button 
+                        color="primary" 
+                        (click)="onSubmit()"
+                >Save</button>
+                <button mat-raised-button 
+                        color="warn"
+                >Cancel</button>
+            </mat-card-actions>
+        </mat-card>
     `,
-    styles: []
+    styles: [`
+        .manager-form__form-field {
+            display: block;
+            width: 100%;
+        }
+    `]
 })
 
 export class ManagerFormComponent {

@@ -3,34 +3,62 @@ import {Manager} from "../../../../shared/models/manager";
 
 @Component({
     selector: "manager-list-component",
-    template: `
-        <div *ngIf="managers.length === 0; else showManagers">Loading...</div>
-        <ng-template #showManagers>
-            <h3>Manager List</h3>
-            <table border="1" cellpadding="2">
-                <thead>
-                <tr>
-                    <td>Email</td>
-                    <td>Full name</td>
-                    <td>Birth date</td>
-                </tr>
-                </thead>
-                <tbody>
-                <tr *ngFor="let manager of managers">
-                    <td>{{manager.email}}</td>
-                    <td>{{manager.name}} {{manager.surname}} {{manager.patronymic}}</td>
-                    <td>{{manager.birthDate}}</td>
-                    <button (click)="onUpdate(manager)">Update</button>
-                    <button (click)="onDelete(manager)">Delete</button>
-                    <button (click)="openProfile(manager)">Profile</button>
-                </tr>
-                </tbody>
-            </table>
-        </ng-template>
-    `
+    template: `        
+            <mat-card class="mat-elevation-z8">
+                <mat-card-title>Manager List</mat-card-title>
+                <table mat-table [dataSource]="managers"> 
+                    <ng-container matColumnDef="email">
+                        <th mat-header-cell *matHeaderCellDef>Email</th>
+                        <td mat-cell *matCellDef="let manager">{{manager.email}}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="fullName">
+                        <th mat-header-cell *matHeaderCellDef>Full Name</th>
+                        <td mat-cell *matCellDef="let manager">{{manager.name}} {{manager.surname}} {{manager.patronymic}}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="birthDate">
+                        <th mat-header-cell *matHeaderCellDef>Birth Date</th>
+                        <td mat-cell *matCellDef="let manager">{{manager.birthDate}}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="options">
+                        <th mat-header-cell *matHeaderCellDef>Options</th>
+                        <td mat-cell *matCellDef="let manager">
+                            <button mat-button 
+                                    class="manager-list__option-button"
+                                    color="accent" 
+                                    (click)="onUpdate(manager)">
+                                <mat-icon aria-label="Update icon" >
+                                    update
+                                </mat-icon>
+                            </button>
+                            <button mat-button 
+                                    color="warn"  
+                                    (click)="onDelete(manager)">
+                                <mat-icon aria-label="Delete icon">
+                                    delete
+                                </mat-icon>
+                            </button>
+                            <button mat-button
+                                    color="primary"
+                                    (click)="openProfile(manager)">
+                                <mat-icon aria-label="Profile icon">
+                                    info
+                                </mat-icon>
+                            </button>
+                        </td>
+                    </ng-container>
+    
+                    <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
+                    <tr mat-row *matRowDef="let row; columns: columnsToDisplay;"></tr>
+                </table>
+            </mat-card>
+    `,
+    styleUrls: ['./manager-list.component.css']
+
 })
 
 export class ManagerListComponent {
+
+    columnsToDisplay = ['email', 'fullName', 'birthDate', 'options'];
 
     @Input() managers: Manager[];
 
