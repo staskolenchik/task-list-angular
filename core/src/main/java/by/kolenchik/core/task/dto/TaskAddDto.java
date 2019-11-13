@@ -8,4 +8,10 @@ public class TaskAddDto {
     private String subject;
 
     private String description;
+
+    private Long createdById;
+
+    private Long assigneeId;
+
+    private String type;
 }

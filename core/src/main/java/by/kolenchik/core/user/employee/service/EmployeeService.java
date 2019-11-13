@@ -17,4 +17,6 @@ public interface EmployeeService {
     void deleteById(Long id);
 
     EmployeeInfoDto findById(Long id);
+
+    Boolean existsById(Long id);
 }

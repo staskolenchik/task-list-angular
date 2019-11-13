@@ -27,7 +27,7 @@ export class TaskService{
             'Something bad happened; please try again later.');
     };
 
-    get() {
+    getAll(): Observable<Task[]> {
         return this.http
             .get(this.url)
             .pipe(map(data => {
@@ -36,7 +36,12 @@ export class TaskService{
                         return {
                             id: task.id,
                             subject: task.subject,
-                            description: task.description
+                            description: task.description,
+                            taskStatus: task.TaskStatus,
+                            creationDateTime: task.creationDateTime,
+                            createdById: task.createdBy,
+                            assigneeId: task.assignee,
+                            type: task.type,
                         }
                     })
                 }),
@@ -64,8 +69,8 @@ export class TaskService{
             );
     }
 
-    delete(id: string) {
-        return this.http.delete(`${this.url}/${id}`)
+    delete(task: Task) {
+        return this.http.delete(`${this.url}/${task.id}`)
             .pipe(
                 retry(3),
                 catchError(this.handleError)

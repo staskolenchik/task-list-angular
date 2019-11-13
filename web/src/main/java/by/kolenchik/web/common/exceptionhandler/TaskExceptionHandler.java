@@ -1,5 +1,6 @@
 package by.kolenchik.web.common.exceptionhandler;
 
+import by.kolenchik.core.task.exceptions.TaskTypeUndefinedException;
 import by.kolenchik.web.task.exceptions.TaskNotFoundException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -17,5 +18,12 @@ public class TaskExceptionHandler extends ResponseEntityExceptionHandler {
         String responseBody = e.getMessage();
 
         return handleExceptionInternal(e, responseBody, new HttpHeaders(), HttpStatus.NOT_FOUND, request);
+    }
+
+    @ExceptionHandler(TaskTypeUndefinedException.class)
+    public ResponseEntity<Object> handleTypeUndefinedException(RuntimeException e, WebRequest request) {
+        String responseBody = e.getMessage();
+
+        return handleExceptionInternal(e, responseBody, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
     }
 }

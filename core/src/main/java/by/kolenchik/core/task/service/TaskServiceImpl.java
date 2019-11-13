@@ -1,18 +1,22 @@
 package by.kolenchik.core.task.service;
 
 import by.kolenchik.core.task.IssueTask;
+import by.kolenchik.core.task.StoryTask;
 import by.kolenchik.core.task.Task;
 import by.kolenchik.core.task.TaskStatus;
 import by.kolenchik.core.task.dto.TaskAddDto;
+import by.kolenchik.core.task.exceptions.TaskTypeUndefinedException;
 import by.kolenchik.core.task.repository.TaskRepository;
 import by.kolenchik.core.user.User;
 import by.kolenchik.core.user.employee.Employee;
 import by.kolenchik.core.user.employee.dto.AddEmployeeDto;
 import by.kolenchik.core.user.employee.dto.EmployeeInfoDto;
+import by.kolenchik.core.user.employee.exceptions.EmployeeNotFoundException;
 import by.kolenchik.core.user.employee.service.EmployeeService;
 import by.kolenchik.core.user.manager.Manager;
 import by.kolenchik.core.user.manager.dto.AddManagerDto;
 import by.kolenchik.core.user.manager.dto.ManagerInfoDto;
+import by.kolenchik.core.user.manager.exceptions.ManagerNotFoundException;
 import by.kolenchik.core.user.manager.service.ManagerService;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -43,51 +47,39 @@ class TaskServiceImpl implements TaskService {
 
     @Override
     public Task add(TaskAddDto taskAddDto) {
-        Manager manager = createManager();
-        Employee employee = createEmployeeUnderManager(manager);
-        Task task = setupAndGetIssueTask(taskAddDto, manager, employee);
+        validate(taskAddDto);
+
+        Task task;
+
+        if (taskAddDto.getType().equals("issue")) {
+            task = modelMapper.map(taskAddDto, IssueTask.class);
+        } else if (taskAddDto.getType().equals("story")) {
+            task = modelMapper.map(taskAddDto, StoryTask.class);
+        } else {
+            throw new TaskTypeUndefinedException(
+                    "Task has subject \"%s\", createdBy=%d, assignee=%d, but type is neither \"issue\" nor \"story\"",
+                    taskAddDto.getSubject(),
+                    taskAddDto.getCreatedById(),
+                    taskAddDto.getAssigneeId()
+            );
+        }
+
+        task.setTaskStatus(TaskStatus.TODO);
+        task.setCreationDateTime(LocalDateTime.now());
 
         return taskRepository.save(task);
     }
 
-    private Task setupAndGetIssueTask(TaskAddDto taskAddDto, Manager manager, Employee employee) {
-        Task task = modelMapper.map(taskAddDto, IssueTask.class);
-        task.setCreationDateTime(LocalDateTime.now());
-        task.setCreatedBy(manager);
-        task.setAssignee(employee);
-        task.setTaskStatus(TaskStatus.TODO);
+    private void validate(TaskAddDto taskAddDto) {
+        Long managerId = taskAddDto.getCreatedById();
+        Long employeeId = taskAddDto.getAssigneeId();
 
-        return task;
-    }
-
-    private Manager createManager() {
-        Manager manager = new Manager();
-        setupUserInfo(manager);
-        AddManagerDto addManagerDto = modelMapper.map(manager, AddManagerDto.class);
-
-        ManagerInfoDto managerInfoDto = managerService.add(addManagerDto);
-
-        return modelMapper.map(managerInfoDto, Manager.class);
-    }
-
-    private Employee createEmployeeUnderManager(Manager manager) {
-        Employee newEmployee = new Employee();
-        setupUserInfo(newEmployee);
-        newEmployee.setManager(manager);
-        AddEmployeeDto addEmployeeDto = modelMapper.map(newEmployee, AddEmployeeDto.class);
-        EmployeeInfoDto employeeInfoDto = employeeService.add(addEmployeeDto);
-
-        return modelMapper.map(employeeInfoDto, Employee.class);
-    }
-
-    private void setupUserInfo(User user) {
-        long index = Math.round(Math.random() * Math.random() * 100000);
-
-        user.setName("Vasia");
-        user.setSurname("Beliy");
-        user.setBirthDate(LocalDate.now());
-        user.setEmail("test" + index +"@gmail.com");
-        user.setPassword("12345678");
+        if (!managerService.existsById(taskAddDto.getCreatedById())) {
+            throw new ManagerNotFoundException("Manager with id=%d was not found", managerId);
+        }
+        if (!employeeService.existsById(taskAddDto.getAssigneeId())) {
+            throw new EmployeeNotFoundException("Employee with id=%d was not found", employeeId);
+        }
     }
 
     @Override

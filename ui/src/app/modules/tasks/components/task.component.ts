@@ -13,6 +13,12 @@ import {TaskService} from "../task.service";
             <br>
             <label>Task Description: </label>
             <textarea name="description" cols="40" rows="5" [(ngModel)]="task.description"></textarea>
+            <br>
+            <label>Task Type: </label>
+            <select [(ngModel)]="task.type">
+                <option>issue</option>
+                <option>story</option>
+            </select>
             <div>
                 <button (click)="save()">Save</button>
             </div>
@@ -51,11 +57,14 @@ export class TaskComponent implements OnInit{
 
     ngOnInit(): void {
         this.taskService
-            .get()
+            .getAll()
             .subscribe((data => this.tasks = data));
     }
 
     save() {
+        this.task.createdById = 2;
+        this.task.assigneeId = 2;
+        console.log(this.task);
         if (this.updatable) {
             this.update(this.task);
             this.updatable = false;
@@ -96,7 +105,7 @@ export class TaskComponent implements OnInit{
 
     delete(task: Task) {
         this.taskService
-            .delete(task.id)
+            .delete(task)
             .subscribe();
 
         if (this.taskService.isDeleted) {

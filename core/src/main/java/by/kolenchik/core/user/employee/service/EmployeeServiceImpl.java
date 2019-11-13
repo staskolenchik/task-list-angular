@@ -63,4 +63,9 @@ public class EmployeeServiceImpl implements EmployeeService {
 
         return modelMapper.map(employee, EmployeeInfoDto.class);
     }
+
+    @Override
+    public Boolean existsById(Long id) {
+        return employeeRepository.existsById(id);
+    }
 }

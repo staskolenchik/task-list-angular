@@ -64,4 +64,9 @@ public class ManagerServiceImpl implements ManagerService {
 
         return modelMapper.map(managerFromDb, ManagerInfoDto.class);
     }
+
+    @Override
+    public Boolean existsById(Long id) {
+        return managerRepository.existsById(id);
+    }
 }
