@@ -5,24 +5,17 @@ import by.kolenchik.core.task.StoryTask;
 import by.kolenchik.core.task.Task;
 import by.kolenchik.core.task.TaskStatus;
 import by.kolenchik.core.task.dto.TaskAddDto;
-import by.kolenchik.core.task.dto.TaskItemDto;
+import by.kolenchik.core.task.dto.TaskInfoDto;
+import by.kolenchik.core.task.dto.UpdateTaskDto;
 import by.kolenchik.core.task.exceptions.TaskTypeUndefinedException;
 import by.kolenchik.core.task.repository.TaskRepository;
-import by.kolenchik.core.user.User;
-import by.kolenchik.core.user.employee.Employee;
-import by.kolenchik.core.user.employee.dto.AddEmployeeDto;
-import by.kolenchik.core.user.employee.dto.EmployeeInfoDto;
 import by.kolenchik.core.user.employee.exceptions.EmployeeNotFoundException;
 import by.kolenchik.core.user.employee.service.EmployeeService;
-import by.kolenchik.core.user.manager.Manager;
-import by.kolenchik.core.user.manager.dto.AddManagerDto;
-import by.kolenchik.core.user.manager.dto.ManagerInfoDto;
 import by.kolenchik.core.user.manager.exceptions.ManagerNotFoundException;
 import by.kolenchik.core.user.manager.service.ManagerService;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -49,7 +42,7 @@ class TaskServiceImpl implements TaskService {
 
     @Override
     public Task add(TaskAddDto taskAddDto) {
-        validate(taskAddDto);
+        validateAdd(taskAddDto);
 
         Task task;
 
@@ -72,7 +65,7 @@ class TaskServiceImpl implements TaskService {
         return taskRepository.save(task);
     }
 
-    private void validate(TaskAddDto taskAddDto) {
+    private void validateAdd(TaskAddDto taskAddDto) {
         Long managerId = taskAddDto.getCreatedById();
         Long employeeId = taskAddDto.getAssigneeId();
 
@@ -85,33 +78,49 @@ class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public List<TaskItemDto> findAll() {
+    public List<TaskInfoDto> findAll() {
         List<Task> tasks = taskRepository.findAll();
-        List<TaskItemDto> taskItemDtos = new ArrayList<>();
+        List<TaskInfoDto> taskInfoDtos = new ArrayList<>();
 
         for (Task task :
                 tasks) {
-            TaskItemDto taskItemDto = modelMapper.map(task, TaskItemDto.class);
+            TaskInfoDto taskInfoDto = modelMapper.map(task, TaskInfoDto.class);
 
             if (task instanceof IssueTask) {
-                taskItemDto.setType("issue");
+                taskInfoDto.setType("issue");
             } else if (task instanceof StoryTask) {
-                taskItemDto.setType("story");
+                taskInfoDto.setType("story");
             }
 
-            taskItemDtos.add(taskItemDto);
+            taskInfoDtos.add(taskInfoDto);
         }
 
-        return taskItemDtos;
+        return taskInfoDtos;
     }
 
     @Override
-    public Task update(Long id, Task task) {
-        Task one = taskRepository.getOne(id);
-        one.setSubject(task.getSubject());
-        one.setDescription(task.getDescription());
+    public TaskInfoDto update(Long id, UpdateTaskDto updateTaskDto) {
+        validateUpdate(updateTaskDto);
 
-        return taskRepository.save(one);
+        Task one = taskRepository.getOne(id);
+
+        modelMapper.map(updateTaskDto, one);
+
+        Task taskFromDb = taskRepository.save(one);
+
+        return modelMapper.map(taskFromDb, TaskInfoDto.class);
+    }
+
+    private void validateUpdate(UpdateTaskDto updateTaskDto) {
+        Long managerId = updateTaskDto.getCreatedById();
+        Long employeeId = updateTaskDto.getAssigneeId();
+
+        if (!managerService.existsById(managerId)) {
+            throw new ManagerNotFoundException("Manager with id=%d was not found", managerId);
+        }
+        if (!employeeService.existsById(employeeId)) {
+            throw new EmployeeNotFoundException("Employee with id=%d was not found", employeeId);
+        }
     }
 
     @Override

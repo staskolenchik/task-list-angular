@@ -2,7 +2,8 @@ package by.kolenchik.web.task.controller;
 
 import by.kolenchik.core.task.Task;
 import by.kolenchik.core.task.dto.TaskAddDto;
-import by.kolenchik.core.task.dto.TaskItemDto;
+import by.kolenchik.core.task.dto.TaskInfoDto;
+import by.kolenchik.core.task.dto.UpdateTaskDto;
 import by.kolenchik.core.task.service.TaskService;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,7 +20,7 @@ public class TaskController {
     }
 
     @GetMapping
-    public List<TaskItemDto> findAll() {
+    public List<TaskInfoDto> findAll() {
         return taskService.findAll();
     }
 
@@ -34,10 +35,10 @@ public class TaskController {
     }
 
     @PutMapping("/{id}")
-    public Task update(
+    public TaskInfoDto update(
             @PathVariable("id") Long id,
-            @RequestBody Task task
+            @RequestBody UpdateTaskDto updateTaskDto
     ) {
-        return taskService.update(id, task);
+        return taskService.update(id, updateTaskDto);
     }
 }
