@@ -5,6 +5,7 @@ import by.kolenchik.core.task.StoryTask;
 import by.kolenchik.core.task.Task;
 import by.kolenchik.core.task.TaskStatus;
 import by.kolenchik.core.task.dto.TaskAddDto;
+import by.kolenchik.core.task.dto.TaskItemDto;
 import by.kolenchik.core.task.exceptions.TaskTypeUndefinedException;
 import by.kolenchik.core.task.repository.TaskRepository;
 import by.kolenchik.core.user.User;
@@ -23,6 +24,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -83,8 +85,24 @@ class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public List<Task> get() {
-        return taskRepository.findAll();
+    public List<TaskItemDto> findAll() {
+        List<Task> tasks = taskRepository.findAll();
+        List<TaskItemDto> taskItemDtos = new ArrayList<>();
+
+        for (Task task :
+                tasks) {
+            TaskItemDto taskItemDto = modelMapper.map(task, TaskItemDto.class);
+
+            if (task instanceof IssueTask) {
+                taskItemDto.setType("issue");
+            } else if (task instanceof StoryTask) {
+                taskItemDto.setType("story");
+            }
+
+            taskItemDtos.add(taskItemDto);
+        }
+
+        return taskItemDtos;
     }
 
     @Override

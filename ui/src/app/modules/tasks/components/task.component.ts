@@ -1,76 +1,63 @@
 import {Component, OnInit} from "@angular/core";
 import {Task} from "../../../shared/models/task";
 import {TaskService} from "../task.service";
+import {EmployeeService} from "../../employees/employee.service";
+import {Manager} from "../../../shared/models/manager";
+import {Employee} from "../../../shared/models/employee";
 
 @Component({
     selector: "task-component",
     template: `
-        <username-menu></username-menu>
-        <div>
-            <h4>Create task</h4>
-            <label>Task Subject: </label>
-            <input name="subject" [(ngModel)]="task.subject"/>
-            <br>
-            <label>Task Description: </label>
-            <textarea name="description" cols="40" rows="5" [(ngModel)]="task.description"></textarea>
-            <br>
-            <label>Task Type: </label>
-            <select [(ngModel)]="task.type">
-                <option>issue</option>
-                <option>story</option>
-            </select>
-            <div>
-                <button (click)="save()">Save</button>
-            </div>
+        <div class="task-form">
+            <task-form-component [task]="task" 
+                                 [assignees]="employees" 
+                                 (add)="save($event)"
+            >Loading...</task-form-component>
         </div>
-        <h3>Task List</h3>
-        <ul>
-            <li *ngFor="let task of tasks" class="task">
-                <h4>{{task.subject}}</h4>
-                <p>{{task.description}}</p>
-                <div>
-                    <button (click)="fillForm(task)">Update</button>
-                    <button (click)="delete(task)">Delete</button>
-                </div>
-            </li>
-        </ul>
+        <div class="task-list">
+            <task-list-component class="mat-app-background" 
+                                 [tasks]="tasks" (changeStatus)="update($event)">
+                Loading...
+            </task-list-component>
+        </div>
     `,
-    styles: [`
-        .task {
-            background-color: bisque;
-            margin: 10px;
-            padding: 5px;
-        }
-    `],
-    providers:[TaskService]
+    styleUrls: ['./task.component.css'],
+    providers:[TaskService, EmployeeService]
 })
 
 export class TaskComponent implements OnInit{
 
     private tasks: Task[] = [];
     private task: Task = {} as Task;
+    private employees: Employee[];
+    private manager: Manager;
 
     private updatable: boolean = false;
 
-    constructor (private taskService: TaskService) {
-    }
+    constructor (
+        private taskService: TaskService,
+        private employeeService: EmployeeService
+    ) {}
 
     ngOnInit(): void {
+        this.manager = {} as Manager;
+        this.manager.id = 2;
+
         this.taskService
             .getAll()
-            .subscribe((data => this.tasks = data));
+            .subscribe(data => {
+                console.log(data);
+                this.tasks = data;
+            });
+
+        this.employeeService
+            .getEmployeesByManagerId(this.manager)
+            .subscribe(employees => this.employees = employees)
     }
 
-    save() {
-        this.task.createdById = 2;
-        this.task.assigneeId = 2;
-        console.log(this.task);
-        if (this.updatable) {
-            this.update(this.task);
-            this.updatable = false;
-        } else {
-            this.add(this.task);
-        }
+    save(task: Task) {
+        console.log(task);
+        this.add(task);
     }
 
     add(task: Task) {

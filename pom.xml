@@ -27,6 +27,7 @@
         <org.liquibase.version>3.6.3</org.liquibase.version>
         <org.modelmapper.version>2.3.5</org.modelmapper.version>
         <hibernate-types.version>2.7.1</hibernate-types.version>
+        <com.fasterxml.jackson.core.version>2.10.0</com.fasterxml.jackson.core.version>
     </properties>
 
     <dependencyManagement>
@@ -52,6 +53,12 @@
                 <groupId>org.modelmapper</groupId>
                 <artifactId>modelmapper</artifactId>
                 <version>${org.modelmapper.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.fasterxml.jackson.core</groupId>
+                <artifactId>jackson-annotations</artifactId>
+                <version>${com.fasterxml.jackson.core.version}</version>
+                <scope>compile</scope>
             </dependency>
         </dependencies>
     </dependencyManagement>

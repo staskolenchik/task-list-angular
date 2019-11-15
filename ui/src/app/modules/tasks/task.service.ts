@@ -32,26 +32,26 @@ export class TaskService{
             .get(this.url)
             .pipe(map(data => {
                     let tasks = [].concat(data);
+                    console.log(tasks);
                     return tasks.map(function(task: any) {
                         return {
                             id: task.id,
                             subject: task.subject,
                             description: task.description,
-                            taskStatus: task.TaskStatus,
-                            creationDateTime: task.creationDateTime,
-                            createdById: task.createdBy,
-                            assigneeId: task.assignee,
+                            status: task.status,
                             type: task.type,
+                            createdById: task.createdById,
+                            assigneeId: task.assigneeId,
+                            creationDateTime: task.creationDateTime,
                         }
                     })
                 }),
-                retry(3),
+                //retry(3),
                 catchError(this.handleError)
             )
     }
 
     add(task: Task) : Observable<Task>{
-        console.log(task);
         return this.http
             .post<Task>(this.url, task)
             .pipe(
@@ -60,9 +60,9 @@ export class TaskService{
             );
     }
 
-    update(task: Task) {
+    update(task: Task): Observable<Task> {
         return this.http
-            .put(`${this.url}/${task.id}`, task)
+            .put<Task>(`${this.url}/${task.id}`, task)
             .pipe(
                 retry(3),
                 catchError(this.handleError)

@@ -1,5 +1,6 @@
 package by.kolenchik.core.user.employee.service;
 
+import by.kolenchik.core.user.employee.Employee;
 import by.kolenchik.core.user.employee.dto.AddEmployeeDto;
 import by.kolenchik.core.user.employee.dto.EmployeeInfoDto;
 import by.kolenchik.core.user.employee.dto.UpdateEmployeeDto;
@@ -19,4 +20,6 @@ public interface EmployeeService {
     EmployeeInfoDto findById(Long id);
 
     Boolean existsById(Long id);
+
+    List<EmployeeInfoDto> findByManagerId(Long id);
 }

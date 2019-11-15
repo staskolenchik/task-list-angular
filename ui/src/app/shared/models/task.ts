@@ -5,9 +5,9 @@ export interface Task {
     id: number;
     subject: string;
     description: string;
-    taskStatus: TaskStatus;
-    creationDateTime: string;
+    status: TaskStatus;
+    type: TaskType;
     createdById: number;
     assigneeId: number;
-    type: TaskType;
+    creationDateTime: string;
 }

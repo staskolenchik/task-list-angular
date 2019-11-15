@@ -2,6 +2,7 @@ package by.kolenchik.web.task.controller;
 
 import by.kolenchik.core.task.Task;
 import by.kolenchik.core.task.dto.TaskAddDto;
+import by.kolenchik.core.task.dto.TaskItemDto;
 import by.kolenchik.core.task.service.TaskService;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,8 +19,8 @@ public class TaskController {
     }
 
     @GetMapping
-    public List<Task> get() {
-        return taskService.get();
+    public List<TaskItemDto> findAll() {
+        return taskService.findAll();
     }
 
     @PostMapping
