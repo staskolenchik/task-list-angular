@@ -4,6 +4,7 @@ import {TaskService} from "../task.service";
 import {EmployeeService} from "../../employees/employee.service";
 import {Manager} from "../../../shared/models/manager";
 import {Employee} from "../../../shared/models/employee";
+import {TaskSortStatusService} from "../task.sort-status-service";
 
 @Component({
     selector: "task-component",
@@ -16,19 +17,25 @@ import {Employee} from "../../../shared/models/employee";
         </div>
         <div class="task-list">
             <task-list-component class="mat-app-background" 
-                                 [tasks]="tasks" (changeStatus)="update($event)">
-                Loading...
-            </task-list-component>
+                                 (changeStatus)="update($event)" 
+                                 [currentTasks]="currentTasks" 
+                                 [inReviewTasks]="inReviewTasks"
+            >Loading...</task-list-component>
         </div>
     `,
     styleUrls: ['./task.component.css'],
-    providers:[TaskService, EmployeeService]
+    providers:[TaskService, EmployeeService, TaskSortStatusService]
 })
 
 export class TaskComponent implements OnInit{
 
     private tasks: Task[] = [];
+
+    private currentTasks: Task [];
+    private inReviewTasks: Task [];
+
     private task: Task = {} as Task;
+
     private employees: Employee[];
     private manager: Manager;
 
@@ -36,7 +43,8 @@ export class TaskComponent implements OnInit{
 
     constructor (
         private taskService: TaskService,
-        private employeeService: EmployeeService
+        private employeeService: EmployeeService,
+        private taskSortStatusService: TaskSortStatusService,
     ) {}
 
     ngOnInit(): void {
@@ -45,9 +53,9 @@ export class TaskComponent implements OnInit{
 
         this.taskService
             .getAll()
-            .subscribe(data => {
-                console.log(data);
-                this.tasks = data;
+            .subscribe(allTasks => {
+                this.inReviewTasks = this.taskSortStatusService.filterByReviewStatus(allTasks);
+                this.currentTasks = this.taskSortStatusService.filterByTodoOrInProgressStatus(allTasks);
             });
 
         this.employeeService
@@ -56,7 +64,6 @@ export class TaskComponent implements OnInit{
     }
 
     save(task: Task) {
-        console.log(task);
         this.add(task);
     }
 
@@ -82,9 +89,8 @@ export class TaskComponent implements OnInit{
             .update(task)
             .subscribe(
                 (updatedTask: Task) => {
-                    let index: number = this.tasks.indexOf(this.task);
-                    this.task = {} as Task;
-                    this.tasks.splice(index, 1, updatedTask);
+                    this.inReviewTasks = this.taskSortStatusService.updateInReviewTasks(task, updatedTask, this.inReviewTasks);
+                    this.currentTasks = this.taskSortStatusService.updateCurrentTasks(task, updatedTask, this.currentTasks);
                 },
                 updateError => console.log(updateError)
             );

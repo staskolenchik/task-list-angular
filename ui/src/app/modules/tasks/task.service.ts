@@ -43,6 +43,8 @@ export class TaskService{
                             createdById: task.createdById,
                             assigneeId: task.assigneeId,
                             creationDateTime: task.creationDateTime,
+                            assigneeName: task.assigneeName,
+                            assigneeSurname: task.assigneeSurname,
                         }
                     })
                 }),

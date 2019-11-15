@@ -10,4 +10,6 @@ export interface Task {
     createdById: number;
     assigneeId: number;
     creationDateTime: string;
+    assigneeName: string;
+    assigneeSurname: string;
 }
