@@ -8,7 +8,7 @@ import {TaskListComponent} from "./components/task-list/task-list.component";
 import {
     MatButtonModule,
     MatCardModule,
-    MatGridListModule,
+    MatGridListModule, MatIconModule,
     MatInputModule,
     MatRadioModule,
     MatSelectModule,
@@ -34,7 +34,8 @@ import {TaskFormComponent} from "./components/task-form/task-form.component";
         MatInputModule,
         MatRadioModule,
         MatSelectModule,
-        MatButtonModule
+        MatButtonModule,
+        MatIconModule
     ],
     exports: [
         TaskComponent,

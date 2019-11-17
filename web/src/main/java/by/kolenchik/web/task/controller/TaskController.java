@@ -1,6 +1,5 @@
 package by.kolenchik.web.task.controller;
 
-import by.kolenchik.core.task.Task;
 import by.kolenchik.core.task.dto.TaskAddDto;
 import by.kolenchik.core.task.dto.TaskInfoDto;
 import by.kolenchik.core.task.dto.UpdateTaskDto;
@@ -30,8 +29,8 @@ public class TaskController {
     }
 
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable("id") Task task) {
-        taskService.delete(task);
+    public void delete(@PathVariable("id") Long id) {
+        taskService.delete(id);
     }
 
     @PutMapping("/{id}")

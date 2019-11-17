@@ -45,6 +45,19 @@ import {Task} from "../../../../shared/models/task";
                             <td mat-cell *matCellDef="let task">{{task.creationDateTime}}</td>
                         </ng-container>
 
+                        <ng-container matColumnDef="options">
+                            <th mat-header-cell *matHeaderCellDef>Options</th>
+                            <td mat-cell *matCellDef="let task">
+                                <button mat-button
+                                        color="warn"
+                                        (click)="onDelete(task)">
+                                    <mat-icon aria-label="Delete icon">
+                                        delete
+                                    </mat-icon>
+                                </button>
+                            </td>
+                        </ng-container>
+
                         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
                         <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
                     </table>
@@ -90,6 +103,19 @@ import {Task} from "../../../../shared/models/task";
                             <td mat-cell *matCellDef="let task">{{task.creationDateTime}}</td>
                         </ng-container>
 
+                        <ng-container matColumnDef="options">
+                            <th mat-header-cell *matHeaderCellDef>Options</th>
+                            <td mat-cell *matCellDef="let task">
+                                <button mat-button
+                                        color="warn"
+                                        (click)="onDelete(task)">
+                                    <mat-icon aria-label="Delete icon">
+                                        delete
+                                    </mat-icon>
+                                </button>
+                            </td>
+                        </ng-container>
+
                         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
                         <tr mat-row *matRowDef="let row; columns: displayedColumns;">
                     </table>
@@ -118,14 +144,19 @@ import {Task} from "../../../../shared/models/task";
 })
 
 export class TaskListComponent {
-    private displayedColumns = ['subject', 'assignee', 'status', 'type', 'creationDateTime'];
+    private displayedColumns = ['subject', 'assignee', 'status', 'type', 'creationDateTime', 'options'];
 
     @Input() private currentTasks: Task[];
     @Input() private inReviewTasks: Task[];
 
     @Output() changeStatus: EventEmitter<Task> = new EventEmitter();
+    @Output() delete: EventEmitter<Task> = new EventEmitter();
 
     onChangeStatus(task: Task) {
         this.changeStatus.emit(task);
+    }
+
+    onDelete(task: Task) {
+        this.delete.emit(task);
     }
 }

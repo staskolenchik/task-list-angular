@@ -1,7 +1,7 @@
 package by.kolenchik.web.common.exceptionhandler;
 
+import by.kolenchik.core.task.exceptions.TaskNotFoundException;
 import by.kolenchik.core.task.exceptions.TaskTypeUndefinedException;
-import by.kolenchik.web.task.exceptions.TaskNotFoundException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

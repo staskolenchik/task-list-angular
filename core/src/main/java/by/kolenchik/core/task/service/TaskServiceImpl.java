@@ -7,6 +7,7 @@ import by.kolenchik.core.task.TaskStatus;
 import by.kolenchik.core.task.dto.TaskAddDto;
 import by.kolenchik.core.task.dto.TaskInfoDto;
 import by.kolenchik.core.task.dto.UpdateTaskDto;
+import by.kolenchik.core.task.exceptions.TaskNotFoundException;
 import by.kolenchik.core.task.exceptions.TaskTypeUndefinedException;
 import by.kolenchik.core.task.repository.TaskRepository;
 import by.kolenchik.core.user.employee.exceptions.EmployeeNotFoundException;
@@ -142,7 +143,14 @@ class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public void delete(Task task) {
-        taskRepository.delete(task);
+    public void delete(Long id) {
+        validateDelete(id);
+        taskRepository.deleteById(id);
+    }
+
+    private void validateDelete(Long id) {
+        if (!taskRepository.existsById(id)) {
+            throw new TaskNotFoundException("Task with id=%d doesn't exist", id);
+        }
     }
 }

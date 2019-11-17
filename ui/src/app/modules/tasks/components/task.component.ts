@@ -17,7 +17,8 @@ import {TaskSortStatusService} from "../task.sort-status-service";
         </div>
         <div class="task-list">
             <task-list-component class="mat-app-background" 
-                                 (changeStatus)="update($event)" 
+                                 (changeStatus)="update($event)"
+                                 (delete)="delete($event)"
                                  [currentTasks]="currentTasks" 
                                  [inReviewTasks]="inReviewTasks"
             >Loading...</task-list-component>
@@ -99,13 +100,9 @@ export class TaskComponent implements OnInit{
     delete(task: Task) {
         this.taskService
             .delete(task)
-            .subscribe();
-
-        if (this.taskService.isDeleted) {
-            let index = this.tasks.indexOf(task);
-            this.tasks.splice(index, 1);
-        } else {
-            this.taskService.isDeleted = false;
-        }
+            .subscribe(response => {
+                this.currentTasks = this.taskSortStatusService.removeTask(task, this.currentTasks);
+                this.inReviewTasks = this.taskSortStatusService.removeTask(task, this.inReviewTasks);
+            });
     }
 }

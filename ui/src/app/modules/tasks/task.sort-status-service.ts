@@ -25,7 +25,7 @@ export class TaskSortStatusService {
 
 
     updateInReviewTasks(task: Task, updatedTask: Task, tasks: Task[]): Task[] {
-        tasks = this.removeOldTask(task, tasks);
+        tasks = this.removeTask(task, tasks);
         let updatedTasks: Task[] = tasks;
 
         if (updatedTask.status === TaskStatus.INREVIEW) {
@@ -36,7 +36,7 @@ export class TaskSortStatusService {
     }
 
     updateCurrentTasks(task: Task, updatedTask: Task, tasks: Task[]) {
-        tasks = this.removeOldTask(task, tasks);
+        tasks = this.removeTask(task, tasks);
         let updatedTasks: Task[] = tasks;
 
         if (updatedTask.status === TaskStatus.TODO || updatedTask.status === TaskStatus.INPROGRESS) {
@@ -46,7 +46,7 @@ export class TaskSortStatusService {
         return updatedTasks;
     }
 
-    private removeOldTask(task: Task, tasks: Task[]): Task[] {
+    public removeTask(task: Task, tasks: Task[]): Task[] {
         let index: number = tasks.indexOf(task);
         let updatedTasks = [].concat(tasks);
 
