@@ -11,6 +11,7 @@ import {TaskSortStatusService} from "../task.sort-status-service";
     template: `
         <div class="task-form">
             <task-form-component [task]="task" 
+                                 [updatable]="updatable"
                                  [assignees]="employees" 
                                  (add)="save($event)"
             >Loading...</task-form-component>
@@ -18,6 +19,7 @@ import {TaskSortStatusService} from "../task.sort-status-service";
         <div class="task-list">
             <task-list-component class="mat-app-background" 
                                  (changeStatus)="update($event)"
+                                 (updateForm)="updateForm($event)"
                                  (delete)="delete($event)"
                                  [currentTasks]="currentTasks" 
                                  [inReviewTasks]="inReviewTasks"
@@ -65,7 +67,15 @@ export class TaskComponent implements OnInit{
     }
 
     save(task: Task) {
-        this.add(task);
+        console.log(task);
+
+        if (this.updatable) {
+            this.update(task);
+        } else {
+            this.add(task);
+        }
+
+        this.updatable = false;
     }
 
     add(task: Task) {
@@ -80,7 +90,7 @@ export class TaskComponent implements OnInit{
             );
     }
 
-    fillForm(task: Task) {
+    updateForm(task: Task) {
         this.task = task;
         this.updatable = true;
     }

@@ -113,21 +113,11 @@ class TaskServiceImpl implements TaskService {
     public TaskInfoDto update(Long id, UpdateTaskDto updateTaskDto) {
         validateUpdate(updateTaskDto);
 
-        Task one = taskRepository.getOne(id);
+        Task taskFromDb = taskRepository.getOne(id);
+        modelMapper.map(updateTaskDto, taskFromDb);
+        Task updatedTask = taskRepository.save(taskFromDb);
 
-        modelMapper.map(updateTaskDto, one);
-
-        Task taskFromDb = taskRepository.save(one);
-
-        TaskInfoDto taskInfoDto = modelMapper.map(taskFromDb, TaskInfoDto.class);
-
-        if (taskFromDb instanceof IssueTask) {
-            taskInfoDto.setType("issue");
-        } else if (taskFromDb instanceof StoryTask) {
-            taskInfoDto.setType("story");
-        }
-
-        return taskInfoDto;
+        return modelMapper.map(updatedTask, TaskInfoDto.class);
     }
 
     private void validateUpdate(UpdateTaskDto updateTaskDto) {

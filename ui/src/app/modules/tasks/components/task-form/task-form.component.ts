@@ -29,7 +29,8 @@ import {Employee} from "../../../../shared/models/employee";
                     <mat-radio-group aria-labelledby="task-type-label"
                                      class="task-form__radio-button-group"
                                      name="taskType"
-                                     [(ngModel)]="task.type">
+                                     [(ngModel)]="task.type" 
+                                     [disabled]="updatable">
                         <mat-radio-button *ngFor="let type of taskTypes"
                                           class="task-form__radio-button"
                                           [value]="type"
@@ -38,7 +39,9 @@ import {Employee} from "../../../../shared/models/employee";
 
                     <mat-form-field class="task-form__form-field">
                         <mat-label>Assignee</mat-label>
-                        <mat-select name="assignee" [(ngModel)]="task.assigneeId">
+                        <mat-select name="assignee" 
+                                    [(ngModel)]="task.assigneeId" 
+                                    [disabled]="updatable">
                             <mat-option *ngFor="let assignee of assignees" [value]="assignee.id">
                                 {{assignee.name}} {{assignee.surname}} {{assignee.patronymic}}
                             </mat-option>
@@ -81,6 +84,7 @@ export class TaskFormComponent {
 
     @Input() private assignees: Employee[];
     @Input() private task: Task;
+    @Input() private updatable: boolean;
 
     @Output() add: EventEmitter<Task> = new EventEmitter();
 

@@ -66,7 +66,6 @@ export class TaskService{
         return this.http
             .put<Task>(`${this.url}/${task.id}`, task)
             .pipe(
-                retry(3),
                 catchError(this.handleError)
             );
     }

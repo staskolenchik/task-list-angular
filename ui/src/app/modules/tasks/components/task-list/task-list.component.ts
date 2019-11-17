@@ -49,6 +49,14 @@ import {Task} from "../../../../shared/models/task";
                             <th mat-header-cell *matHeaderCellDef>Options</th>
                             <td mat-cell *matCellDef="let task">
                                 <button mat-button
+                                        class="manager-list__option-button"
+                                        color="accent"
+                                        (click)="onUpdate(task)">
+                                    <mat-icon aria-label="Update icon" >
+                                        update
+                                    </mat-icon>
+                                </button>
+                                <button mat-button
                                         color="warn"
                                         (click)="onDelete(task)">
                                     <mat-icon aria-label="Delete icon">
@@ -107,6 +115,14 @@ import {Task} from "../../../../shared/models/task";
                             <th mat-header-cell *matHeaderCellDef>Options</th>
                             <td mat-cell *matCellDef="let task">
                                 <button mat-button
+                                        class="manager-list__option-button"
+                                        color="accent"
+                                        (click)="onUpdate(task)">
+                                    <mat-icon aria-label="Update icon" >
+                                        update
+                                    </mat-icon>
+                                </button>
+                                <button mat-button
                                         color="warn"
                                         (click)="onDelete(task)">
                                     <mat-icon aria-label="Delete icon">
@@ -151,9 +167,14 @@ export class TaskListComponent {
 
     @Output() changeStatus: EventEmitter<Task> = new EventEmitter();
     @Output() delete: EventEmitter<Task> = new EventEmitter();
+    @Output() updateForm: EventEmitter<Task> = new EventEmitter();
 
     onChangeStatus(task: Task) {
         this.changeStatus.emit(task);
+    }
+
+    onUpdate(task: Task) {
+        this.updateForm.emit(task);
     }
 
     onDelete(task: Task) {
