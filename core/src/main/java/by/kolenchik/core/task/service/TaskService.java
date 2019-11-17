@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface TaskService {
 
-    Task add(TaskAddDto taskAddDto);
+    TaskInfoDto add(TaskAddDto taskAddDto);
 
     List<TaskInfoDto> findAll();
 

@@ -41,7 +41,7 @@ class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public Task add(TaskAddDto taskAddDto) {
+    public TaskInfoDto add(TaskAddDto taskAddDto) {
         validateAdd(taskAddDto);
 
         Task task;
@@ -62,7 +62,17 @@ class TaskServiceImpl implements TaskService {
         task.setTaskStatus(TaskStatus.TODO);
         task.setCreationDateTime(LocalDateTime.now());
 
-        return taskRepository.save(task);
+        Task taskFromDB = taskRepository.save(task);
+
+        TaskInfoDto taskInfoDto = modelMapper.map(taskFromDB, TaskInfoDto.class);
+
+        if (taskFromDB instanceof IssueTask) {
+            taskInfoDto.setType("issue");
+        } else if (taskFromDB instanceof StoryTask) {
+            taskInfoDto.setType("story");
+        }
+
+        return taskInfoDto;
     }
 
     private void validateAdd(TaskAddDto taskAddDto) {
@@ -108,7 +118,15 @@ class TaskServiceImpl implements TaskService {
 
         Task taskFromDb = taskRepository.save(one);
 
-        return modelMapper.map(taskFromDb, TaskInfoDto.class);
+        TaskInfoDto taskInfoDto = modelMapper.map(taskFromDb, TaskInfoDto.class);
+
+        if (taskFromDb instanceof IssueTask) {
+            taskInfoDto.setType("issue");
+        } else if (taskFromDb instanceof StoryTask) {
+            taskInfoDto.setType("story");
+        }
+
+        return taskInfoDto;
     }
 
     private void validateUpdate(UpdateTaskDto updateTaskDto) {

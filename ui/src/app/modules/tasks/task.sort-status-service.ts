@@ -25,7 +25,6 @@ export class TaskSortStatusService {
 
 
     updateInReviewTasks(task: Task, updatedTask: Task, tasks: Task[]): Task[] {
-
         tasks = this.removeOldTask(task, tasks);
         let updatedTasks: Task[] = tasks;
 

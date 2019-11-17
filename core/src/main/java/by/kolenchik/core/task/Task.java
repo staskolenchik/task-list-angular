@@ -44,6 +44,6 @@ public abstract class Task {
     @JoinColumn(name = "assignee",nullable = false)
     private Employee assignee;
 
-    @OneToMany(mappedBy = "task", orphanRemoval = true)
+    @OneToMany(mappedBy = "task")
     private Set<Comment> comment;
 }

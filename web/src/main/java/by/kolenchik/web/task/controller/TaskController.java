@@ -25,7 +25,7 @@ public class TaskController {
     }
 
     @PostMapping
-    public Task add(@RequestBody TaskAddDto taskAddDto) {
+    public TaskInfoDto add(@RequestBody TaskAddDto taskAddDto) {
         return taskService.add(taskAddDto);
     }
 

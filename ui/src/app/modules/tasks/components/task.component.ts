@@ -73,7 +73,7 @@ export class TaskComponent implements OnInit{
             .subscribe(
                 (createdTask: Task) => {
                     this.task = {} as Task;
-                    this.tasks.push(createdTask);
+                    this.currentTasks = [].concat(createdTask).concat(this.currentTasks);
                 },
                 addError => console.log(addError)
             );
