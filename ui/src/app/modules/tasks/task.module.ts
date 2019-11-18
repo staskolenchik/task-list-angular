@@ -1,10 +1,7 @@
 import {NgModule} from "@angular/core";
-import {TaskComponent} from "./components/task.component";
-import {UsernameMenuComponent} from "../../shared/components/username-menu.component";
 import {CommonModule} from "@angular/common";
 import {FormsModule} from "@angular/forms";
 import {TaskRoutingModule} from "./task-routing.module";
-import {TaskListComponent} from "./components/task-list/task-list.component";
 import {
     MatButtonModule,
     MatCardModule,
@@ -15,14 +12,22 @@ import {
     MatTableModule
 } from "@angular/material";
 import {TaskFormComponent} from "./components/task-form/task-form.component";
+import {TaskListEmployeeComponent} from "./components/task-list-employee/task-list-employee.component";
+import {TaskListEmployeeTableComponent} from "./components/task-list-employee/table/task-list-employee-table.component";
+import {TaskListManagerComponent} from "./components/task-list-manager/task-list-manager.component";
+import {TaskListManagerTableComponent} from "./components/task-list-manager/table/task-list-manager-table.component";
+import {TaskDataService} from "./task-data.service";
+import {TaskHttpService} from "./task-http.service";
+import {TaskSortStatusService} from "./task-sort-status.service";
 
 
 @NgModule({
     declarations: [
-        TaskComponent,
-        TaskListComponent,
         TaskFormComponent,
-        UsernameMenuComponent
+        TaskListEmployeeComponent,
+        TaskListEmployeeTableComponent,
+        TaskListManagerComponent,
+        TaskListManagerTableComponent,
     ],
     imports: [
         TaskRoutingModule,
@@ -38,10 +43,16 @@ import {TaskFormComponent} from "./components/task-form/task-form.component";
         MatIconModule
     ],
     exports: [
-        TaskComponent,
-        TaskListComponent,
         TaskFormComponent,
-        UsernameMenuComponent
+        TaskListEmployeeComponent,
+        TaskListEmployeeTableComponent,
+        TaskListManagerComponent,
+        TaskListManagerTableComponent,
+    ],
+    providers: [
+        TaskDataService,
+        TaskHttpService,
+        TaskSortStatusService
     ]
 })
 

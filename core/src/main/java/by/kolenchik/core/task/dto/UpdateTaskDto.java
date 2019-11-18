@@ -16,8 +16,6 @@ public class UpdateTaskDto {
 
     private String status;
 
-    private String type;
-
     private Long createdById;
 
     private Long assigneeId;

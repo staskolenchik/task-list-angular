@@ -37,7 +37,7 @@ import {Component} from '@angular/core';
                 </mat-nav-list>
             </mat-sidenav>
 
-            <mat-sidenav-content>
+            <mat-sidenav-content class="mat-app-background">
                 <router-outlet></router-outlet>
             </mat-sidenav-content>
         </mat-sidenav-container>

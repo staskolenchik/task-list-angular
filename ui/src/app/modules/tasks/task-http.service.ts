@@ -5,7 +5,7 @@ import {Task} from '../../shared/models/task';
 import {catchError, map, retry} from "rxjs/operators";
 
 @Injectable()
-export class TaskService{
+export class TaskHttpService{
 
     private url: string = 'http://localhost:8081/dev/tasks';
 
