@@ -13,6 +13,7 @@ import {TaskDataService} from "../../task-data.service";
                                                     (updateForm)="updateForm($event)"
                                                     (delete)="delete($event)"
                                                     (update)="update($event)"
+                                                    (showInfo)="showInfo($event)"
             >Loading...</task-list-employee-table-component>
         </div>
     `,
@@ -72,5 +73,10 @@ export class TaskListEmployeeComponent {
                     this.currentTasks = this.taskSortStatusService.updateCurrentTasks(task, updatedTask, this.currentTasks);
                 }
             );
+    }
+
+    showInfo(task: Task) {
+        this.taskDataService.setTask(task);
+        this.router.navigate([`tasks/${task.id}`]);
     }
 }

@@ -13,14 +13,16 @@ import {Component} from "@angular/core";
         </div>
         <div class="task-list task-list__outer-card-layer">
                 <task-list-employee-table-component (update)="update($event)"
-                                                  (updateForm)="updateForm($event)"
-                                                  (delete)="delete($event)"
-                                                  [currentTasks]="currentTasks"
+                                                    (updateForm)="updateForm($event)"
+                                                    (delete)="delete($event)"
+                                                    (showInfo)="showInfo($event)"
+                                                    [currentTasks]="currentTasks"
                 ></task-list-employee-table-component>
                 <task-list-manager-table-component (update)="update($event)"
-                                                       (updateForm)="updateForm($event)"
-                                                       (delete)="delete($event)"
-                                                       [inReviewTasks]="inReviewTasks"
+                                                   (updateForm)="updateForm($event)"
+                                                   (delete)="delete($event)"
+                                                   (showInfo)="showInfo($event)"
+                                                   [inReviewTasks]="inReviewTasks"
                 ></task-list-manager-table-component>
         </div>
     `,
@@ -93,4 +95,10 @@ export class TaskListManagerComponent {
                 this.inReviewTasks = this.taskSortStatusService.removeTask(task, this.inReviewTasks);
             });
     }
+
+    showInfo(task: Task) {
+        this.taskDataService.setTask(task);
+        this.router.navigate([`tasks/${task.id}`]);
+    }
 }
+

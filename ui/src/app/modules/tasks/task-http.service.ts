@@ -77,4 +77,13 @@ export class TaskHttpService{
                 catchError(this.handleError)
             );
     }
+
+    get(task: Task): Observable<Task> {
+        let url = `${this.url}/${task.id}`;
+        return this.http
+            .get<Task>(url)
+            .pipe(
+                catchError(this.handleError)
+            );
+    }
 }

@@ -61,6 +61,13 @@ import {Task} from "../../../../../shared/models/task";
                                     delete
                                 </mat-icon>
                             </button>
+                            <button mat-button
+                                    color="primary"
+                                    (click)="onShowInfo(task)">
+                                <mat-icon aria-label="Info icon">
+                                    info
+                                </mat-icon>
+                            </button>
                         </td>
                     </ng-container>
 
@@ -88,6 +95,7 @@ export class TaskListManagerTableComponent {
     @Output() updateForm: EventEmitter<Task> = new EventEmitter();
     @Output() delete: EventEmitter<Task> = new EventEmitter();
     @Output() update: EventEmitter<Task> = new EventEmitter();
+    @Output() showInfo: EventEmitter<Task> = new EventEmitter();
 
     constructor() {}
 
@@ -102,5 +110,9 @@ export class TaskListManagerTableComponent {
 
     onDelete(task: Task) {
         this.delete.emit(task);
+    }
+
+    onShowInfo(task: Task) {
+        this.showInfo.emit(task);
     }
 }

@@ -16,7 +16,7 @@ import {TaskSortStatusService} from "../../task-sort-status.service";
             <mat-card class="mat-elevation-z8">
                 <mat-card-title>Task Form</mat-card-title>
                 <mat-card-content>
-                    <form class="task-form">
+                    <form>
                         <mat-form-field class="task-form__form-field">
                             <input matInput
                                    placeholder="Subject"
@@ -84,6 +84,9 @@ import {TaskSortStatusService} from "../../task-sort-status.service";
         
         .task-form__radio-button {
             padding: 0 10px;
+        }
+        .task-form {
+            padding: 30px;
         }
     `],
     providers: [EmployeeService]

@@ -19,6 +19,8 @@ import {TaskListManagerTableComponent} from "./components/task-list-manager/tabl
 import {TaskDataService} from "./task-data.service";
 import {TaskHttpService} from "./task-http.service";
 import {TaskSortStatusService} from "./task-sort-status.service";
+import {TaskInfoComponent} from "./components/task-info/task-info.component";
+import {RouterModule} from "@angular/router";
 
 
 @NgModule({
@@ -28,8 +30,10 @@ import {TaskSortStatusService} from "./task-sort-status.service";
         TaskListEmployeeTableComponent,
         TaskListManagerComponent,
         TaskListManagerTableComponent,
+        TaskInfoComponent
     ],
     imports: [
+        RouterModule,
         TaskRoutingModule,
         CommonModule,
         FormsModule,
@@ -48,6 +52,7 @@ import {TaskSortStatusService} from "./task-sort-status.service";
         TaskListEmployeeTableComponent,
         TaskListManagerComponent,
         TaskListManagerTableComponent,
+        TaskInfoComponent
     ],
     providers: [
         TaskDataService,
