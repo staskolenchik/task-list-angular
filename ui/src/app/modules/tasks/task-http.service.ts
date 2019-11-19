@@ -2,27 +2,27 @@ import {Injectable} from '@angular/core';
 import {HttpClient, HttpErrorResponse} from '@angular/common/http';
 import {Observable, throwError} from "rxjs";
 import {Task} from '../../shared/models/task';
-import {catchError, map, retry} from "rxjs/operators";
+import {catchError, map} from "rxjs/operators";
+import {MatSnackBar} from "@angular/material";
+import {Urls} from "../../shared/constants/urls";
 
 @Injectable()
 export class TaskHttpService{
 
-    private url: string = 'http://localhost:8081/dev/tasks';
+    private url = Urls.TASK;
 
-    isDeleted: boolean = true;
-
-    constructor(private http: HttpClient){ }
+    constructor(
+        private http: HttpClient,
+        private snackBar: MatSnackBar
+    ){ }
 
     private handleError(error: HttpErrorResponse) {
         if (error.error instanceof ErrorEvent) {
-            console.error('An error occurred:', error.error.message);
-            this.isDeleted = false;
+            this.snackBar.open(error.message, "Close", {duration: 5000});
         } else {
-            console.error(
-                `Backend returned code ${error.status}, ` +
-                `body was: ${error.error}`);
-            this.isDeleted = false;
+            this.snackBar.open(error.message, "Close", {duration: 5000});
         }
+
         return throwError(
             'Something bad happened; please try again later.');
     };
@@ -48,8 +48,7 @@ export class TaskHttpService{
                         }
                     })
                 }),
-                //retry(3),
-                catchError(this.handleError)
+                catchError((error) => this.handleError(error))
             )
     }
 
@@ -57,8 +56,7 @@ export class TaskHttpService{
         return this.http
             .post<Task>(this.url, task)
             .pipe(
-                retry(3),
-                catchError(this.handleError)
+                catchError((error) => this.handleError(error))
             );
     }
 
@@ -66,15 +64,14 @@ export class TaskHttpService{
         return this.http
             .put<Task>(`${this.url}/${task.id}`, task)
             .pipe(
-                catchError(this.handleError)
+                catchError((error) => this.handleError(error))
             );
     }
 
     delete(task: Task) {
         return this.http.delete(`${this.url}/${task.id}`)
             .pipe(
-                retry(3),
-                catchError(this.handleError)
+                catchError((error) => this.handleError(error))
             );
     }
 
@@ -83,7 +80,7 @@ export class TaskHttpService{
         return this.http
             .get<Task>(url)
             .pipe(
-                catchError(this.handleError)
+                catchError((error) => this.handleError(error))
             );
     }
 }

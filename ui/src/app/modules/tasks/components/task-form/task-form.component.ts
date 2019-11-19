@@ -13,6 +13,8 @@ import {FieldLength} from "../../../../shared/constants/field-length";
 import {TaskTypes} from "../../../../shared/constants/task-types";
 import {Errors} from "../../../../shared/constants/errors";
 import {Hints} from "../../../../shared/constants/hints";
+import {MatSnackBar} from "@angular/material";
+import {Messages} from "../../../../shared/constants/messages";
 
 @Component({
     selector: 'task-form-component',
@@ -140,6 +142,7 @@ export class TaskFormComponent implements OnInit{
     private taskTypes = TaskTypes;
     private errors = Errors;
     private hints = Hints;
+    private messages = Messages;
 
     private assignees: Employee[];
     private task: Task;
@@ -152,7 +155,8 @@ export class TaskFormComponent implements OnInit{
         private taskSortStatusService: TaskSortStatusService,
         private employeeService: EmployeeService,
         private router: Router,
-        private location: Location
+        private location: Location,
+        private snackBar: MatSnackBar
     ) {}
 
     ngOnInit(): void {
@@ -175,10 +179,28 @@ export class TaskFormComponent implements OnInit{
         this.tasksHttpService
             .add(task)
             .subscribe(addedTasks => {
-                this.clearTaskFromStore();
-                this.clearUpdatable();
-                this.goToTasks();
+                let snackBarRef = this.snackBar.open(
+                    this.messages.TASK_SAVED,
+                    'Close',
+                    {duration: 2000}
+                );
+
+                snackBarRef.afterDismissed()
+                    .subscribe(() => {
+                            this.operateResponse();
+                        }
+                    );
+                snackBarRef.onAction()
+                    .subscribe(() => {
+                        this.operateResponse();
+                    });
             });
+    }
+
+    operateResponse() {
+        this.clearTaskFromStore();
+        this.clearUpdatable();
+        this.goToTasks();
     }
 
     update(task: Task) {
