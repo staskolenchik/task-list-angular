@@ -4,7 +4,7 @@ import {FormsModule} from "@angular/forms";
 import {TaskRoutingModule} from "./task-routing.module";
 import {
     MatButtonModule,
-    MatCardModule,
+    MatCardModule, MatDialogModule,
     MatGridListModule, MatIconModule,
     MatInputModule,
     MatRadioModule,
@@ -21,6 +21,7 @@ import {TaskHttpService} from "./task-http.service";
 import {TaskSortStatusService} from "./task-sort-status.service";
 import {TaskInfoComponent} from "./components/task-info/task-info.component";
 import {RouterModule} from "@angular/router";
+import {DeletePermissionComponent} from "../../shared/modal-dialogs/delete-permission/delete-permission.component";
 
 
 @NgModule({
@@ -30,7 +31,8 @@ import {RouterModule} from "@angular/router";
         TaskListEmployeeTableComponent,
         TaskListManagerComponent,
         TaskListManagerTableComponent,
-        TaskInfoComponent
+        TaskInfoComponent,
+        DeletePermissionComponent
     ],
     imports: [
         RouterModule,
@@ -44,7 +46,8 @@ import {RouterModule} from "@angular/router";
         MatRadioModule,
         MatSelectModule,
         MatButtonModule,
-        MatIconModule
+        MatIconModule,
+        MatDialogModule,
     ],
     exports: [
         TaskFormComponent,
@@ -52,7 +55,11 @@ import {RouterModule} from "@angular/router";
         TaskListEmployeeTableComponent,
         TaskListManagerComponent,
         TaskListManagerTableComponent,
-        TaskInfoComponent
+        TaskInfoComponent,
+        DeletePermissionComponent
+    ],
+    entryComponents: [
+        DeletePermissionComponent
     ],
     providers: [
         TaskDataService,

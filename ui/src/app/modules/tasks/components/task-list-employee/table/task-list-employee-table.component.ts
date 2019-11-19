@@ -1,5 +1,7 @@
 import {Component, EventEmitter, Input, Output} from "@angular/core";
 import {Task} from "../../../../../shared/models/task";
+import {DeletePermissionComponent} from "../../../../../shared/modal-dialogs/delete-permission/delete-permission.component";
+import {MatDialog} from "@angular/material";
 
 @Component({
     selector: 'task-list-employee-table-component',
@@ -58,7 +60,7 @@ import {Task} from "../../../../../shared/models/task";
                             </button>
                             <button mat-button
                                     color="warn"
-                                    (click)="onDelete(task)">
+                                    (click)="askPermission(task)">
                                 <mat-icon aria-label="Delete icon">
                                     delete
                                 </mat-icon>
@@ -98,7 +100,7 @@ export class TaskListEmployeeTableComponent {
     @Output() update: EventEmitter<Task> = new EventEmitter();
     @Output() showInfo: EventEmitter<Task> = new EventEmitter();
 
-    constructor() {}
+    constructor(private dialog: MatDialog) {}
 
     onUpdate(task: Task) {
         this.update.emit(task);
@@ -110,6 +112,20 @@ export class TaskListEmployeeTableComponent {
 
     onDelete(task: Task) {
         this.delete.emit(task);
+    }
+
+    askPermission(task: Task) {
+        const matDialogRef = this.dialog.open(DeletePermissionComponent, {
+            height: '210px',
+            width: '480px',
+            data: {subject: task.subject}
+        });
+
+        matDialogRef.afterClosed().subscribe(isApproved => {
+            if (isApproved) {
+                this.onDelete(task);
+            }
+        })
     }
 
     onShowInfo(task: Task) {
