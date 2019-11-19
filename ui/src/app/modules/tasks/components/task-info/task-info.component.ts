@@ -17,7 +17,7 @@ import {ChangeDetectorRef} from '@angular/core';
                             <input matInput
                                    placeholder="Subject"
                                    name="subject"
-                                   disabled
+                                   readonly
                                    [value]="task.subject"/>
                         </mat-form-field>
 
@@ -25,19 +25,19 @@ import {ChangeDetectorRef} from '@angular/core';
                             <textarea matInput
                                       placeholder="Description"
                                       name="description"
-                                      disabled
+                                      readonly
                                       [textContent]="task.description"></textarea>
                         </mat-form-field>
 
                         <mat-form-field class="task-form__form-field">
                             <input matInput placeholder="Created At"
-                                   disabled
+                                   readonly
                                    [value]="task.creationDateTime">
                         </mat-form-field>
 
                         <mat-form-field class="task-form__form-field">
                             <input matInput placeholder="Assignee"
-                                   disabled
+                                   readonly
                                    [value]="task.assigneeName + ' ' + task.assigneeSurname">
                         </mat-form-field>
                     </form>
@@ -79,7 +79,8 @@ export class TaskInfoComponent implements OnInit{
     }
 
     getTask() {
-        this.taskDataService.getTask().subscribe(task => {
+        this.taskDataService.getTask()
+            .subscribe(task => {
             if (task.id) {
                 this.task = task;
             } else {
@@ -99,6 +100,7 @@ export class TaskInfoComponent implements OnInit{
     }
 
     goBack() {
+        this.taskDataService.setTask({} as Task);
         this.location.back();
     }
 }
