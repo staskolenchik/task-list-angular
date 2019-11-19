@@ -125,7 +125,7 @@ import {Messages} from "../../../../shared/constants/messages";
                         <button type="button"
                                 mat-raised-button
                                 color="warn"
-                                (click)="goBack()"
+                                (click)="onCancel()"
                         >Cancel</button>
                     </mat-card-actions>
                 </mat-card>
@@ -216,9 +216,17 @@ export class TaskFormComponent implements OnInit{
         this.router.navigate(['/tasks']);
     }
 
-    goBack() {
+    clearForm() {
         this.taskDataService.setTask({} as Task);
+    }
+
+    goBack() {
         this.location.back();
+    }
+
+    onCancel() {
+        this.clearForm();
+        this.goBack();
     }
 
     clearUpdatable() {
