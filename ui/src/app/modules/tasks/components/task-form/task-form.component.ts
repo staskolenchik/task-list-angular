@@ -87,8 +87,7 @@ import {Messages} from "../../../../shared/constants/messages";
                                 {{errors.FIELD_IS_REQUIRED}}
                             </mat-error>
                         </mat-form-field>
-                        <mat-radio-group aria-labelledby="task-type-label"
-                                         required
+                        <mat-radio-group required
                                          class="task-form__radio-button-group"
                                          name="taskType"
                                          #type="ngModel"
