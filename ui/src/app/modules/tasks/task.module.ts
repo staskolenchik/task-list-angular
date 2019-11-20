@@ -8,7 +8,7 @@ import {
     MatGridListModule, MatIconModule,
     MatInputModule,
     MatRadioModule,
-    MatSelectModule,
+    MatSelectModule, MatSortModule,
     MatTableModule
 } from "@angular/material";
 import {TaskFormComponent} from "./components/task-form/task-form.component";
@@ -48,6 +48,7 @@ import {DeletePermissionComponent} from "../../shared/modal-dialogs/delete-permi
         MatButtonModule,
         MatIconModule,
         MatDialogModule,
+        MatSortModule
     ],
     exports: [
         TaskFormComponent,

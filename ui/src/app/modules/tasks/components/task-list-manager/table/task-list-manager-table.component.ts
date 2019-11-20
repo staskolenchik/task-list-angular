@@ -1,7 +1,8 @@
 import {Component, EventEmitter, Input, Output} from "@angular/core";
 import {Task} from "../../../../../shared/models/task";
-import {MatDialog} from "@angular/material";
+import {MatDialog, Sort} from "@angular/material";
 import {DeletePermissionComponent} from "../../../../../shared/modal-dialogs/delete-permission/delete-permission.component";
+import {TaskSortService} from "../../../task-sort.service";
 
 @Component({
     selector: 'task-list-manager-table-component',
@@ -9,21 +10,25 @@ import {DeletePermissionComponent} from "../../../../../shared/modal-dialogs/del
         <div class="task-list__in-review-table-card">
             <mat-card class="mat-elevation-z2 ">
                 <mat-card-title>Manager's table</mat-card-title>
-                <table mat-table [dataSource]="inReviewTasks" class="task-list__in-review-table">
+                <table mat-table 
+                       [dataSource]="sortedTasks" 
+                       matSort 
+                       (matSortChange)="sortData($event)" 
+                       class="task-list__in-review-table">
                     <ng-container matColumnDef="subject">
-                        <th mat-header-cell *matHeaderCellDef>Subject</th>
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header>Subject</th>
                         <td mat-cell *matCellDef="let task">{{task.subject}}</td>
                     </ng-container>
 
                     <ng-container matColumnDef="assignee">
-                        <th mat-header-cell *matHeaderCellDef>Assignee</th>
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header>Assignee</th>
                         <td mat-cell *matCellDef="let task">
                             {{task.assigneeName}} {{task.assigneeSurname}}
                         </td>
                     </ng-container>
 
                     <ng-container matColumnDef="status">
-                        <th mat-header-cell *matHeaderCellDef>Status</th>
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header>Status</th>
                         <td mat-cell *matCellDef="let task">
                             <mat-form-field>
                                 <mat-select [(value)]="task.status" (selectionChange)="onUpdate(task)">
@@ -36,12 +41,12 @@ import {DeletePermissionComponent} from "../../../../../shared/modal-dialogs/del
                     </ng-container>
 
                     <ng-container matColumnDef="type">
-                        <th mat-header-cell *matHeaderCellDef>Type</th>
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header>Type</th>
                         <td mat-cell *matCellDef="let task">{{task.type}}</td>
                     </ng-container>
 
                     <ng-container matColumnDef="creationDateTime">
-                        <th mat-header-cell *matHeaderCellDef>Created at</th>
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header>Created at</th>
                         <td mat-cell *matCellDef="let task">{{task.creationDateTime}}</td>
                     </ng-container>
 
@@ -86,20 +91,28 @@ import {DeletePermissionComponent} from "../../../../../shared/modal-dialogs/del
         .task-list__in-review-table {
             width: 100%;
         }
-    `]
+    `],
+    providers: [TaskSortService]
 })
 export class TaskListManagerTableComponent {
 
     private displayedColumns = ['subject', 'assignee', 'status', 'type', 'creationDateTime', 'options'];
 
-    @Input() private inReviewTasks: Task[];
+    private unsortedTasks: Task[];
+    private sortedTasks: Task[];
+
+    @Input()
+    set inReviewTasks(tasks: Task[]) {
+        this.unsortedTasks = tasks;
+        this.sortedTasks = tasks;
+    }
 
     @Output() updateForm: EventEmitter<Task> = new EventEmitter();
     @Output() delete: EventEmitter<Task> = new EventEmitter();
     @Output() update: EventEmitter<Task> = new EventEmitter();
     @Output() showInfo: EventEmitter<Task> = new EventEmitter();
 
-    constructor(private dialog: MatDialog) {}
+    constructor(private dialog: MatDialog, private taskSortService: TaskSortService) {}
 
     onUpdate(task: Task) {
         this.update.emit(task);
@@ -129,5 +142,9 @@ export class TaskListManagerTableComponent {
 
     onShowInfo(task: Task) {
         this.showInfo.emit(task);
+    }
+
+    sortData(sort: Sort) {
+        this.sortedTasks = this.taskSortService.sortData(sort, this.sortedTasks, this.unsortedTasks);
     }
 }
