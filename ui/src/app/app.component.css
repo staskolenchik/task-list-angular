@@ -5,3 +5,7 @@
 .active {
     background-color: aliceblue;
 }
+
+.content {
+    min-height: 900px;
+}
