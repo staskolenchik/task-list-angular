@@ -1,8 +1,7 @@
-import {Component, EventEmitter, Input, Output} from "@angular/core";
+import {Component, EventEmitter, Input, Output, ViewChild} from "@angular/core";
 import {Task} from "../../../../../shared/models/task";
 import {DeletePermissionComponent} from "../../../../../shared/modal-dialogs/delete-permission/delete-permission.component";
-import {MatDialog, Sort} from "@angular/material";
-import {TaskSortService} from "../../../task-sort.service";
+import {MatDialog, MatSort, MatTableDataSource} from "@angular/material";
 
 @Component({
     selector: 'task-list-employee-table-component',
@@ -11,16 +10,15 @@ import {TaskSortService} from "../../../task-sort.service";
             <mat-card class="mat-elevation-z8">
                 <mat-card-title>Assignee's table</mat-card-title>
                 <table mat-table 
-                       [dataSource]="sortedTasks" 
+                       [dataSource]="taskDataSource" 
                        matSort 
-                       (matSortChange)="sortData($event)"
                        class="task-list__todo-table">
                     <ng-container matColumnDef="subject">
                         <th mat-header-cell *matHeaderCellDef mat-sort-header>Subject</th>
                         <td mat-cell *matCellDef="let task">{{task.subject}}</td>
                     </ng-container>
 
-                    <ng-container matColumnDef="assignee">
+                    <ng-container matColumnDef="assigneeName">
                         <th mat-header-cell *matHeaderCellDef mat-sort-header>Assignee</th>
                         <td mat-cell *matCellDef="let task">
                             {{task.assigneeName}} {{task.assigneeSurname}}
@@ -93,18 +91,19 @@ import {TaskSortService} from "../../../task-sort.service";
             width: 100%;
         }
     `],
-    providers: [TaskSortService]
+    providers: []
 })
 export class TaskListEmployeeTableComponent {
-    private displayedColumns = ['subject', 'assignee', 'status', 'type', 'creationDateTime', 'options'];
+    private displayedColumns = ['subject', 'assigneeName', 'status', 'type', 'creationDateTime', 'options'];
 
-    private unsortedTasks: Task[];
-    private sortedTasks: Task[];
+    private taskDataSource: any;
+
+    @ViewChild(MatSort, {static: true}) sort: MatSort;
 
     @Input()
     set currentTasks(tasks: Task[]) {
-        this.unsortedTasks = tasks;
-        this.sortedTasks = tasks;
+        this.taskDataSource = new MatTableDataSource(tasks);
+        this.taskDataSource.sort = this.sort;
     }
 
     @Output() updateForm: EventEmitter<Task> = new EventEmitter();
@@ -112,7 +111,7 @@ export class TaskListEmployeeTableComponent {
     @Output() update: EventEmitter<Task> = new EventEmitter();
     @Output() showInfo: EventEmitter<Task> = new EventEmitter();
 
-    constructor(private dialog: MatDialog, private taskSortService: TaskSortService) {}
+    constructor(private dialog: MatDialog) {}
 
     onUpdate(task: Task) {
         this.update.emit(task);
@@ -142,9 +141,5 @@ export class TaskListEmployeeTableComponent {
 
     onShowInfo(task: Task) {
         this.showInfo.emit(task);
-    }
-
-    sortData(sort: Sort) {
-        this.sortedTasks = this.taskSortService.sortData(sort, this.sortedTasks, this.unsortedTasks);
     }
 }
