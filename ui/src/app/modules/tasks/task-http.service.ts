@@ -28,31 +28,6 @@ export class TaskHttpService{
             'Something bad happened; please try again later.');
     };
 
-    getAll(): Observable<Task[]> {
-        return this.http
-            .get(this.url)
-            .pipe(map(data => {
-                    let tasks = [].concat(data);
-                    console.log(tasks);
-                    return tasks.map(function(task: any) {
-                        return {
-                            id: task.id,
-                            subject: task.subject,
-                            description: task.description,
-                            status: task.status,
-                            type: task.type,
-                            createdById: task.createdById,
-                            assigneeId: task.assigneeId,
-                            creationDateTime: task.creationDateTime,
-                            assigneeName: task.assigneeName,
-                            assigneeSurname: task.assigneeSurname,
-                        }
-                    })
-                }),
-                catchError((error) => this.handleError(error))
-            )
-    }
-
     add(task: Task) : Observable<Task>{
         return this.http
             .post<Task>(this.url, task)
@@ -69,7 +44,7 @@ export class TaskHttpService{
             );
     }
 
-    delete(task: Task) {
+    delete(task: Task): Observable<any> {
         return this.http.delete(`${this.url}/${task.id}`)
             .pipe(
                 catchError((error) => this.handleError(error))
@@ -85,26 +60,25 @@ export class TaskHttpService{
             );
     }
 
-    findAll(page: Page, filter: any) {
+    findAll(page: Page, filter: any): Observable<any> {
         let params = new HttpParams();
         params = params.set('page', page.number.toString());
         params = params.set('size', page.size.toString());
         params = params.set('statuses', filter.statuses);
 
         return this.http
-            .get(this.url + '/page', {params})
+            .get(this.url, {params})
             .pipe(map((response: any) => {
-                console.log(response);
                 const tasks: Task[] = [].concat(response.content);
-                const number: any = response.number;
-                const size: any = response.size;
-                const totalElements: any = response.totalElements;
+                const page: Page = {
+                    length: response.totalElements,
+                    number: response.number,
+                    size: response.size
+                };
 
                 return {
                     content: tasks,
-                    number: number,
-                    size: size,
-                    totalElements: totalElements,
+                    page: page
                 }
             }))
     }

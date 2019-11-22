@@ -11,8 +11,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RestController
 @RequestMapping("/dev/tasks")
 public class TaskController {
@@ -21,11 +19,6 @@ public class TaskController {
 
     public TaskController(TaskService taskService) {
         this.taskService = taskService;
-    }
-
-    @GetMapping
-    public List<TaskInfoDto> findAll() {
-        return taskService.findAll();
     }
 
     @PostMapping
@@ -46,7 +39,7 @@ public class TaskController {
         return taskService.update(id, updateTaskDto);
     }
 
-    @GetMapping("/page")
+    @GetMapping
     public Page<TaskInfoDto> find(
             TaskFilterDto taskFilterDto,
             @PageableDefault(sort = {"id"}, direction = Sort.Direction.DESC) Pageable pageable

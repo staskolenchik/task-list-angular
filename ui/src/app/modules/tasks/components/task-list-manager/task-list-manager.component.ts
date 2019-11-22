@@ -61,14 +61,11 @@ export class TaskListManagerComponent implements OnInit{
         this.taskHttpService.findAll(page, filter)
             .subscribe((response) => {
                 this.inReviewTasks = response.content;
-                this.page.size = response.size;
-                this.page.number = response.number;
-                this.page.length = response.totalElements;
+                this.page = response.page;
             });
     }
 
     onChangePage(data: any) {
-        console.log(data.changedPage);
         this.findAll(data.changedPage, data.filter);
     }
 
