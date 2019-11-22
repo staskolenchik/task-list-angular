@@ -91,7 +91,7 @@ import {Page} from "../../../../../shared/models/page";
     `,
     styles: [`
         .task-list__todo-table-card {
-            min-width: 900px;
+            min-width: 850px;
         }
         .task-list__todo-table {
             width: 100%;

@@ -3,7 +3,7 @@ import {Router} from "@angular/router";
 import {TaskSortStatusService} from "../../task-sort-status.service";
 import {TaskHttpService} from "../../task-http.service";
 import {TaskDataService} from "../../task-data.service";
-import {Component} from "@angular/core";
+import {Component, OnInit} from "@angular/core";
 import {Page} from "../../../../shared/models/page";
 
 @Component({
@@ -12,27 +12,20 @@ import {Page} from "../../../../shared/models/page";
         <div class="new-task-list-manager__new-task-button">
             <button mat-raised-button color="primary" (click)="openForm()">New Task</button>
         </div>
-        <div class="task-list task-list__outer-card-layer">
-            <task-list-employee-table-component (update)="update($event)"
-                                                (updateForm)="updateForm($event)"
-                                                (delete)="delete($event)"
-                                                (showInfo)="showInfo($event)"
-                                                [currentTasks]="currentTasks"
-                                                [page]="pageCurrentTasks"
-                                                (changePage)="onChangePageCurrentTasks($event)"
-            ></task-list-employee-table-component>
-            <task-list-manager-table-component (update)="update($event)"
+        <div class="task-list__outer-card-layer">
+            <task-list-employee-component></task-list-employee-component>
+            <task-list-manager-table-component class="task-list__manager-table" (update)="update($event)"
                                                (updateForm)="updateForm($event)"
                                                (delete)="delete($event)"
                                                (showInfo)="showInfo($event)"
                                                [inReviewTasks]="inReviewTasks"
-                                               [page]="pageInReviewTasks"
-                                               (changePage)="onChangePageInReveiwTasks($event)"
+                                               [page]="page"
+                                               (changePage)="onChangePage($event)"
             ></task-list-manager-table-component>
         </div>
     `,
     styles: [`
-        .task-list {
+        .task-list__manager-table {
             padding: 30px;
         }
         .task-list__outer-card-layer {
@@ -45,15 +38,10 @@ import {Page} from "../../../../shared/models/page";
         }
     `]
 })
-export class TaskListManagerComponent {
+export class TaskListManagerComponent implements OnInit{
 
-    private currentTasks: Task [];
     private inReviewTasks: Task [];
-    private pageCurrentTasks: Page = {
-        size: 10,
-        number: 0,
-    } as Page;
-    private pageInReviewTasks: Page = {
+    private page: Page = {
         size: 10,
         number: 0,
     } as Page;
@@ -66,49 +54,22 @@ export class TaskListManagerComponent {
     ) {}
 
     ngOnInit(): void {
-        //this.getAll();
-        this.findAll(this.pageCurrentTasks, {statuses: ['TODO', 'IN_PROGRESS']});
-        this.findAllinReviewTasks(this.pageInReviewTasks, {statuses: ['IN_REVIEW']});
+        this.findAll(this.page, {statuses: ['IN_REVIEW']});
     }
 
     findAll(page: Page, filter: any) {
         this.taskHttpService.findAll(page, filter)
             .subscribe((response) => {
-                this.currentTasks = response.content;
-                this.pageCurrentTasks.size = response.size;
-                this.pageCurrentTasks.number = response.number;
-                this.pageCurrentTasks.length = response.totalElements;
-            });
-    }
-
-    findAllinReviewTasks(page: Page, filter: any) {
-        this.taskHttpService.findAll(page, filter)
-            .subscribe((response) => {
                 this.inReviewTasks = response.content;
-                this.pageInReviewTasks.size = response.size;
-                this.pageInReviewTasks.number = response.number;
-                this.pageInReviewTasks.length = response.totalElements;
+                this.page.size = response.size;
+                this.page.number = response.number;
+                this.page.length = response.totalElements;
             });
     }
 
-    onChangePageCurrentTasks(data: any) {
+    onChangePage(data: any) {
         console.log(data.changedPage);
-
         this.findAll(data.changedPage, data.filter);
-    }
-
-    onChangePageInReveiwTasks(data: any) {
-        console.log(data.changedPage);
-        this.findAllinReviewTasks(data.changedPage, data.filter);
-    }
-
-    getAll() {
-        this.taskHttpService
-            .getAll()
-            .subscribe(allTasks => {
-                this.currentTasks = this.taskSortStatusService.filterByTodoOrInProgressStatus(allTasks);
-                this.inReviewTasks = this.taskSortStatusService.filterByReviewStatus(allTasks);
-            });
     }
 
     updateForm(task: Task) {
@@ -127,8 +88,7 @@ export class TaskListManagerComponent {
             .update(task)
             .subscribe(
                 (updatedTask: Task) => {
-                    this.currentTasks = this.taskSortStatusService.updateCurrentTasks(task, updatedTask, this.currentTasks);
-                    this.inReviewTasks = this.taskSortStatusService.updateInReviewTasks(task, updatedTask, this.inReviewTasks);
+                    this.inReviewTasks = this.taskSortStatusService.removeTask(task, this.inReviewTasks);
                 }
             );
     }
@@ -137,7 +97,6 @@ export class TaskListManagerComponent {
         this.taskHttpService
             .delete(task)
             .subscribe(response => {
-                this.currentTasks = this.taskSortStatusService.removeTask(task, this.currentTasks);
                 this.inReviewTasks = this.taskSortStatusService.removeTask(task, this.inReviewTasks);
             });
     }

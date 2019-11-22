@@ -90,7 +90,7 @@ import {Page} from "../../../../../shared/models/page";
     `,
     styles: [`        
         .task-list__in-review-table-card {
-            min-width: 900px;
+            min-width: 850px;
         }
         .task-list__in-review-table {
             width: 100%;
