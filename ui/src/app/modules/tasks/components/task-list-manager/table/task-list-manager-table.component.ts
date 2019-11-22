@@ -1,7 +1,8 @@
 import {Component, EventEmitter, Input, Output, ViewChild} from "@angular/core";
 import {Task} from "../../../../../shared/models/task";
-import {MatDialog, MatSort, MatTableDataSource} from "@angular/material";
+import {MatDialog, MatSort, MatTableDataSource, PageEvent} from "@angular/material";
 import {DeletePermissionComponent} from "../../../../../shared/modal-dialogs/delete-permission/delete-permission.component";
+import {Page} from "../../../../../shared/models/page";
 
 @Component({
     selector: 'task-list-manager-table-component',
@@ -79,6 +80,11 @@ import {DeletePermissionComponent} from "../../../../../shared/modal-dialogs/del
                     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
                     <tr mat-row *matRowDef="let row; columns: displayedColumns;">
                 </table>
+                <mat-paginator [length]="page.length ? page.length : 0"
+                               [pageSizeOptions]="[5, 10, 20]"
+                               [pageSize]="page.size"
+                               (page)="onChangePage($event)"
+                               showFirstLastButtons></mat-paginator>
             </mat-card>
         </div>
     `,
@@ -106,10 +112,13 @@ export class TaskListManagerTableComponent {
         this.taskDataSource.sort = this.sort;
     }
 
+    @Input() private page: Page;
+
     @Output() updateForm: EventEmitter<Task> = new EventEmitter();
     @Output() delete: EventEmitter<Task> = new EventEmitter();
     @Output() update: EventEmitter<Task> = new EventEmitter();
     @Output() showInfo: EventEmitter<Task> = new EventEmitter();
+    @Output() changePage: EventEmitter<any> = new EventEmitter();
 
     constructor(private dialog: MatDialog) {}
 
@@ -141,5 +150,15 @@ export class TaskListManagerTableComponent {
 
     onShowInfo(task: Task) {
         this.showInfo.emit(task);
+    }
+
+    onChangePage(pageEvent: PageEvent) {
+        const changedPage: Page = {
+            length: null,
+            size: pageEvent.pageSize,
+            number: pageEvent.pageIndex,
+        };
+
+        this.changePage.emit({changedPage, filter : {statuses: ['IN_REVIEW']}});
     }
 }

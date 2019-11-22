@@ -6,7 +6,7 @@ import {
     MatButtonModule,
     MatCardModule, MatDialogModule,
     MatGridListModule, MatIconModule,
-    MatInputModule,
+    MatInputModule, MatPaginatorModule,
     MatRadioModule,
     MatSelectModule, MatSortModule,
     MatTableModule
@@ -48,7 +48,8 @@ import {DeletePermissionComponent} from "../../shared/modal-dialogs/delete-permi
         MatButtonModule,
         MatIconModule,
         MatDialogModule,
-        MatSortModule
+        MatSortModule,
+        MatPaginatorModule
     ],
     exports: [
         TaskFormComponent,

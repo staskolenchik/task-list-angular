@@ -1,10 +1,11 @@
 import {Injectable} from '@angular/core';
-import {HttpClient, HttpErrorResponse} from '@angular/common/http';
+import {HttpClient, HttpErrorResponse, HttpParams} from '@angular/common/http';
 import {Observable, throwError} from "rxjs";
 import {Task} from '../../shared/models/task';
 import {catchError, map} from "rxjs/operators";
 import {MatSnackBar} from "@angular/material";
 import {Urls} from "../../shared/constants/urls";
+import {Page} from "../../shared/models/page";
 
 @Injectable()
 export class TaskHttpService{
@@ -82,5 +83,29 @@ export class TaskHttpService{
             .pipe(
                 catchError((error) => this.handleError(error))
             );
+    }
+
+    findAll(page: Page, filter: any) {
+        let params = new HttpParams();
+        params = params.set('page', page.number.toString());
+        params = params.set('size', page.size.toString());
+        params = params.set('statuses', filter.statuses);
+
+        return this.http
+            .get(this.url + '/page', {params})
+            .pipe(map((response: any) => {
+                console.log(response);
+                const tasks: Task[] = [].concat(response.content);
+                const number: any = response.number;
+                const size: any = response.size;
+                const totalElements: any = response.totalElements;
+
+                return {
+                    content: tasks,
+                    number: number,
+                    size: size,
+                    totalElements: totalElements,
+                }
+            }))
     }
 }

@@ -5,6 +5,7 @@ import by.kolenchik.core.task.StoryTask;
 import by.kolenchik.core.task.Task;
 import by.kolenchik.core.task.TaskStatus;
 import by.kolenchik.core.task.dto.TaskAddDto;
+import by.kolenchik.core.task.dto.TaskFilterDto;
 import by.kolenchik.core.task.dto.TaskInfoDto;
 import by.kolenchik.core.task.dto.UpdateTaskDto;
 import by.kolenchik.core.task.exceptions.TaskNotFoundException;
@@ -15,11 +16,14 @@ import by.kolenchik.core.user.employee.service.EmployeeService;
 import by.kolenchik.core.user.manager.exceptions.ManagerNotFoundException;
 import by.kolenchik.core.user.manager.service.ManagerService;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 class TaskServiceImpl implements TaskService {
@@ -150,5 +154,21 @@ class TaskServiceImpl implements TaskService {
         if (!taskRepository.existsById(id)) {
             throw new TaskNotFoundException("Task with id=%d doesn't exist", id);
         }
+    }
+
+    @Override
+    public Page<TaskInfoDto> find(TaskFilterDto taskFilterDto, Pageable pageable) {
+        Page<Task> page = taskRepository.getByStatuses(taskFilterDto.getStatuses(), pageable);
+        return page.map(task -> {
+            TaskInfoDto taskInfoDto = modelMapper.map(task, TaskInfoDto.class);
+
+            if (task instanceof IssueTask) {
+                taskInfoDto.setType("issue");
+            } else if (task instanceof StoryTask) {
+                taskInfoDto.setType("story");
+            }
+
+            return taskInfoDto;
+        });
     }
 }

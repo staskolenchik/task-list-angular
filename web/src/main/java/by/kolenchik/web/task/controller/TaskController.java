@@ -1,9 +1,14 @@
 package by.kolenchik.web.task.controller;
 
 import by.kolenchik.core.task.dto.TaskAddDto;
+import by.kolenchik.core.task.dto.TaskFilterDto;
 import by.kolenchik.core.task.dto.TaskInfoDto;
 import by.kolenchik.core.task.dto.UpdateTaskDto;
 import by.kolenchik.core.task.service.TaskService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -39,5 +44,13 @@ public class TaskController {
             @RequestBody UpdateTaskDto updateTaskDto
     ) {
         return taskService.update(id, updateTaskDto);
+    }
+
+    @GetMapping("/page")
+    public Page<TaskInfoDto> find(
+            TaskFilterDto taskFilterDto,
+            @PageableDefault(sort = {"id"}, direction = Sort.Direction.DESC) Pageable pageable
+    ) {
+        return taskService.find(taskFilterDto, pageable);
     }
 }
