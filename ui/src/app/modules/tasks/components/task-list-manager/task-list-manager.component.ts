@@ -5,6 +5,7 @@ import {TaskHttpService} from "../../task-http.service";
 import {TaskDataService} from "../../task-data.service";
 import {Component, OnInit} from "@angular/core";
 import {Page} from "../../../../shared/models/page";
+import {SelectionModel} from "@angular/cdk/collections";
 
 @Component({
     selector: 'task-list-manager-component',
@@ -14,13 +15,16 @@ import {Page} from "../../../../shared/models/page";
         </div>
         <div class="task-list__outer-card-layer">
             <task-list-employee-component></task-list-employee-component>
-            <task-list-manager-table-component class="task-list__manager-table" (update)="update($event)"
+            <task-list-manager-table-component class="task-list__manager-table" 
+                                               (update)="update($event)"
                                                (updateForm)="updateForm($event)"
                                                (delete)="delete($event)"
+                                               (deleteAll)="deleteAll($event)"
                                                (showInfo)="showInfo($event)"
                                                [inReviewTasks]="inReviewTasks"
                                                [page]="page"
                                                (changePage)="onChangePage($event)"
+                                               [selection]="selection"
             ></task-list-manager-table-component>
         </div>
     `,
@@ -45,6 +49,7 @@ export class TaskListManagerComponent implements OnInit{
         size: 10,
         number: 0,
     } as Page;
+    private selection = new SelectionModel<Task>(true, []);
 
     constructor(
         private taskDataService: TaskDataService,
@@ -62,6 +67,7 @@ export class TaskListManagerComponent implements OnInit{
             .subscribe((response) => {
                 this.inReviewTasks = response.content;
                 this.page = response.page;
+                this.selection.clear();
             });
     }
 
@@ -95,6 +101,14 @@ export class TaskListManagerComponent implements OnInit{
             .delete(task)
             .subscribe(response => {
                 this.inReviewTasks = this.taskSortStatusService.removeTask(task, this.inReviewTasks);
+            });
+    }
+
+    deleteAll(tasks: Task[]) {
+        this.taskHttpService
+            .deleteAll(tasks)
+            .subscribe(() => {
+                this.findAll(this.page, {statuses: ['IN_REVIEW']})
             });
     }
 

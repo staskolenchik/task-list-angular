@@ -5,6 +5,7 @@ import {TaskSortStatusService} from "../../task-sort-status.service";
 import {TaskHttpService} from "../../task-http.service";
 import {TaskDataService} from "../../task-data.service";
 import {Page} from "../../../../shared/models/page";
+import {SelectionModel} from "@angular/cdk/collections";
 
 @Component({
     selector: 'task-list-employee-component',
@@ -13,10 +14,12 @@ import {Page} from "../../../../shared/models/page";
             <task-list-employee-table-component [currentTasks]="currentTasks" 
                                                 (updateForm)="updateForm($event)"
                                                 (delete)="delete($event)"
+                                                (deleteAll)="deleteAll($event)"
                                                 (update)="update($event)"
                                                 (showInfo)="showInfo($event)"
                                                 [page]="page"
                                                 (changePage)="onChangePage($event)"
+                                                [selection]="selection"
             >Loading...</task-list-employee-table-component>
         </div>
     `,
@@ -33,6 +36,7 @@ export class TaskListEmployeeComponent {
         size: 10,
         number: 0,
     } as Page;
+    private selection = new SelectionModel<Task>(true, []);
 
     constructor(
         private taskDataService: TaskDataService,
@@ -50,6 +54,7 @@ export class TaskListEmployeeComponent {
             .subscribe((response) => {
                 this.currentTasks = response.content;
                 this.page = response.page;
+                this.selection.clear();
             });
     }
 
@@ -73,6 +78,14 @@ export class TaskListEmployeeComponent {
             .delete(task)
             .subscribe(response => {
                 this.currentTasks = this.taskSortStatusService.removeTask(task, this.currentTasks);
+            });
+    }
+
+    deleteAll(tasks: Task[]) {
+        this.taskHttpService
+            .deleteAll(tasks)
+            .subscribe(() => {
+                this.findAll(this.page, {statuses: ['TODO', 'IN_PROGRESS']})
             });
     }
 

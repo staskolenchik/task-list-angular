@@ -20,4 +20,6 @@ public interface TaskService {
     void delete(Long id);
 
     Page<TaskInfoDto> find(TaskFilterDto taskFilterDto,Pageable pageable);
+
+    void deleteAll(Long[] ids);
 }

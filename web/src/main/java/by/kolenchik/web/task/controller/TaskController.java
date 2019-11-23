@@ -31,6 +31,11 @@ public class TaskController {
         taskService.delete(id);
     }
 
+    @DeleteMapping
+    public void deleteAll(Long... ids) {
+        taskService.deleteAll(ids);
+    }
+
     @PutMapping("/{id}")
     public TaskInfoDto update(
             @PathVariable("id") Long id,

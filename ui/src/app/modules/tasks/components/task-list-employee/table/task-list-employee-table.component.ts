@@ -3,6 +3,8 @@ import {Task} from "../../../../../shared/models/task";
 import {DeletePermissionComponent} from "../../../../../shared/modal-dialogs/delete-permission/delete-permission.component";
 import {MatDialog, MatSort, MatTableDataSource, PageEvent} from "@angular/material";
 import {Page} from "../../../../../shared/models/page";
+import {SelectionModel} from "@angular/cdk/collections";
+import {DeleteAllPermissionComponent} from "../../../../../shared/modal-dialogs/delete-all-permission/delete-all-permission.component";
 
 @Component({
     selector: 'task-list-employee-table-component',
@@ -14,6 +16,23 @@ import {Page} from "../../../../../shared/models/page";
                        [dataSource]="taskDataSource" 
                        matSort 
                        class="task-list__todo-table">
+                    <ng-container matColumnDef="select">
+                        <th mat-header-cell *matHeaderCellDef>
+                            <mat-checkbox (change)="$event ? masterToggle() : null"
+                                          [checked]="selection.hasValue() && isAllSelected()"
+                                          [indeterminate]="selection.hasValue() && !isAllSelected()"
+                                          [aria-label]="checkboxLabel()">
+                            </mat-checkbox>
+                        </th>
+                        <td mat-cell *matCellDef="let task">
+                            <mat-checkbox (click)="$event.stopPropagation()"
+                                          (change)="$event ? this.selection.toggle(task) : null"
+                                          [checked]="selection.isSelected(task)"
+                                          [aria-label]="checkboxLabel(task)">
+                            </mat-checkbox>
+                        </td>
+                    </ng-container>
+                    
                     <ng-container matColumnDef="subject">
                         <th mat-header-cell *matHeaderCellDef mat-sort-header>Subject</th>
                         <td mat-cell *matCellDef="let task">{{task.subject}}</td>
@@ -81,11 +100,18 @@ import {Page} from "../../../../../shared/models/page";
                     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
                     <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
                 </table>
-                <mat-paginator [length]="page.length ? page.length : 0"
-                               [pageSizeOptions]="[5, 10, 20]" 
-                               [pageSize]="page.size"
-                               (page)="onChangePage($event)"
-                               showFirstLastButtons></mat-paginator>
+                <div class="task-list__footer">
+                    <button mat-raised-button
+                            [disabled]="selection.isEmpty()"
+                            (click)="askDeleteAllPermission()"
+                            color="warn"
+                    >Delete selected</button>
+                    <mat-paginator [length]="page.length ? page.length : 0"
+                                   [pageSizeOptions]="[5, 10, 20]"
+                                   [pageSize]="page.size"
+                                   (page)="onChangePage($event)"
+                                   showFirstLastButtons></mat-paginator>
+                </div>
             </mat-card>
         </div>
     `,
@@ -96,11 +122,17 @@ import {Page} from "../../../../../shared/models/page";
         .task-list__todo-table {
             width: 100%;
         }
+        .task-list__footer {
+            padding: 15px 0 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
     `],
     providers: []
 })
 export class TaskListEmployeeTableComponent {
-    private displayedColumns = ['subject', 'assigneeName', 'status', 'type', 'creationDateTime', 'options'];
+    private displayedColumns = ['select', 'subject', 'assigneeName', 'status', 'type', 'creationDateTime', 'options'];
 
     private taskDataSource: any;
 
@@ -113,12 +145,14 @@ export class TaskListEmployeeTableComponent {
     }
 
     @Input() private page: Page;
+    @Input() private selection: SelectionModel<Task>;
 
     @Output() updateForm: EventEmitter<Task> = new EventEmitter();
     @Output() delete: EventEmitter<Task> = new EventEmitter();
     @Output() update: EventEmitter<Task> = new EventEmitter();
     @Output() showInfo: EventEmitter<Task> = new EventEmitter();
     @Output() changePage: EventEmitter<any> = new EventEmitter();
+    @Output() deleteAll: EventEmitter<Task[]> = new EventEmitter();
 
     constructor(private dialog: MatDialog) {}
 
@@ -132,6 +166,10 @@ export class TaskListEmployeeTableComponent {
 
     onDelete(task: Task) {
         this.delete.emit(task);
+    }
+
+    onDeleteAll(tasks: Task[]) {
+        this.deleteAll.emit(tasks);
     }
 
     askPermission(task: Task) {
@@ -148,6 +186,20 @@ export class TaskListEmployeeTableComponent {
         })
     }
 
+    askDeleteAllPermission() {
+        const matDialogRef = this.dialog.open(DeleteAllPermissionComponent, {
+            height: '210px',
+            width: '480px',
+            data: {count: this.selection.selected.length}
+        });
+
+        matDialogRef.afterClosed().subscribe(isApproved => {
+            if (isApproved) {
+                this.onDeleteAll(this.selection.selected);
+            }
+        })
+    }
+
     onShowInfo(task: Task) {
         this.showInfo.emit(task);
     }
@@ -160,5 +212,25 @@ export class TaskListEmployeeTableComponent {
         };
 
         this.changePage.emit({changedPage, filter : {statuses: ['TODO', 'IN_PROGRESS']}});
+    }
+
+    isAllSelected() {
+        const numSelected = this.selection.selected.length;
+        const numRows = this.taskDataSource.data.length;
+        return numSelected === numRows;
+    }
+
+    masterToggle() {
+        this.isAllSelected() ?
+            this.selection.clear() :
+            this.taskDataSource.data.forEach((row: any) => this.selection.select(row));
+    }
+
+    checkboxLabel(task?: Task): string {
+        if (!task) {
+            return `${this.isAllSelected() ? 'select' : 'deselect'} all`;
+        }
+
+        return `${this.selection.isSelected(task) ? 'deselect' : 'select'} task `;
     }
 }

@@ -4,12 +4,12 @@ import {FormsModule} from "@angular/forms";
 import {TaskRoutingModule} from "./task-routing.module";
 import {
     MatButtonModule,
-    MatCardModule, MatDialogModule,
+    MatCardModule, MatCheckboxModule, MatDialogModule,
     MatGridListModule, MatIconModule,
     MatInputModule, MatPaginatorModule,
     MatRadioModule,
     MatSelectModule, MatSortModule,
-    MatTableModule
+    MatTableModule, MatToolbarModule
 } from "@angular/material";
 import {TaskFormComponent} from "./components/task-form/task-form.component";
 import {TaskListEmployeeComponent} from "./components/task-list-employee/task-list-employee.component";
@@ -22,6 +22,7 @@ import {TaskSortStatusService} from "./task-sort-status.service";
 import {TaskInfoComponent} from "./components/task-info/task-info.component";
 import {RouterModule} from "@angular/router";
 import {DeletePermissionComponent} from "../../shared/modal-dialogs/delete-permission/delete-permission.component";
+import {DeleteAllPermissionComponent} from "../../shared/modal-dialogs/delete-all-permission/delete-all-permission.component";
 
 
 @NgModule({
@@ -32,7 +33,8 @@ import {DeletePermissionComponent} from "../../shared/modal-dialogs/delete-permi
         TaskListManagerComponent,
         TaskListManagerTableComponent,
         TaskInfoComponent,
-        DeletePermissionComponent
+        DeletePermissionComponent,
+        DeleteAllPermissionComponent
     ],
     imports: [
         RouterModule,
@@ -49,7 +51,9 @@ import {DeletePermissionComponent} from "../../shared/modal-dialogs/delete-permi
         MatIconModule,
         MatDialogModule,
         MatSortModule,
-        MatPaginatorModule
+        MatPaginatorModule,
+        MatCheckboxModule,
+        MatToolbarModule
     ],
     exports: [
         TaskFormComponent,
@@ -58,10 +62,12 @@ import {DeletePermissionComponent} from "../../shared/modal-dialogs/delete-permi
         TaskListManagerComponent,
         TaskListManagerTableComponent,
         TaskInfoComponent,
-        DeletePermissionComponent
+        DeletePermissionComponent,
+        DeleteAllPermissionComponent
     ],
     entryComponents: [
-        DeletePermissionComponent
+        DeletePermissionComponent,
+        DeleteAllPermissionComponent
     ],
     providers: [
         TaskDataService,

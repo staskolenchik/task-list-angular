@@ -51,6 +51,21 @@ export class TaskHttpService{
             );
     }
 
+    deleteAll(tasks: Task[]) {
+        const ids: number[] = [];
+        tasks.forEach((task) => {
+            ids.push(task.id);
+        });
+        let params = new HttpParams();
+        params = params.set('ids', ids.toString());
+
+        return this.http
+            .delete(`${this.url}`, {params})
+            .pipe(
+                catchError((error) => this.handleError(error))
+            )
+    }
+
     get(task: Task): Observable<Task> {
         let url = `${this.url}/${task.id}`;
         return this.http
