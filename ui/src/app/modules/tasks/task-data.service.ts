@@ -1,6 +1,7 @@
 import {Injectable} from "@angular/core";
 import {BehaviorSubject, Observable} from "rxjs";
 import {Task} from "../../shared/models/task";
+import {Page} from "../../shared/models/page";
 
 @Injectable()
 export class TaskDataService {
@@ -10,6 +11,15 @@ export class TaskDataService {
 
     private updatableData = new BehaviorSubject<boolean>(false);
     private updatable = this.updatableData.asObservable();
+
+    private pageData = new BehaviorSubject<Page>(
+        {
+            length: 0,
+            size: 10,
+            number: 0,
+        } as Page
+    );
+    private page = this.pageData.asObservable();
 
     constructor() { }
 
@@ -28,5 +38,13 @@ export class TaskDataService {
 
     isUpdatable(): Observable<boolean> {
         return this.updatable;
+    }
+
+    setPage(page: Page) {
+        this.pageData.next(page);
+    }
+
+    getPage(): Observable<Page> {
+        return this.page;
     }
 }

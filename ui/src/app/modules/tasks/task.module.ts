@@ -18,7 +18,6 @@ import {TaskListManagerComponent} from "./components/task-list-manager/task-list
 import {TaskListManagerTableComponent} from "./components/task-list-manager/table/task-list-manager-table.component";
 import {TaskDataService} from "./task-data.service";
 import {TaskHttpService} from "./task-http.service";
-import {TaskSortStatusService} from "./task-sort-status.service";
 import {TaskInfoComponent} from "./components/task-info/task-info.component";
 import {RouterModule} from "@angular/router";
 import {DeletePermissionComponent} from "../../shared/modal-dialogs/delete-permission/delete-permission.component";
@@ -71,8 +70,7 @@ import {DeleteAllPermissionComponent} from "../../shared/modal-dialogs/delete-al
     ],
     providers: [
         TaskDataService,
-        TaskHttpService,
-        TaskSortStatusService
+        TaskHttpService
     ]
 })
 

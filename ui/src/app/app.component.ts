@@ -4,8 +4,8 @@ import {Component} from '@angular/core';
     selector: 'my-app',
     template:`
         <mat-toolbar color="primary">
-            <button mat-raised-button (click)="sidenav.toggle()">
-                Navigation
+            <button  mat-icon-button (click)="sidenav.toggle()">
+                <mat-icon>menu</mat-icon>
             </button>
         </mat-toolbar>
 

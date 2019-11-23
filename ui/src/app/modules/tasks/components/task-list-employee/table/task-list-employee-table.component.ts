@@ -109,6 +109,7 @@ import {DeleteAllPermissionComponent} from "../../../../../shared/modal-dialogs/
                     <mat-paginator [length]="page.length ? page.length : 0"
                                    [pageSizeOptions]="[5, 10, 20]"
                                    [pageSize]="page.size"
+                                   [pageIndex]="page.number"
                                    (page)="onChangePage($event)"
                                    showFirstLastButtons></mat-paginator>
                 </div>
@@ -134,7 +135,7 @@ import {DeleteAllPermissionComponent} from "../../../../../shared/modal-dialogs/
 export class TaskListEmployeeTableComponent {
     private displayedColumns = ['select', 'subject', 'assigneeName', 'status', 'type', 'creationDateTime', 'options'];
 
-    private taskDataSource: any;
+    private taskDataSource: MatTableDataSource<Task>;
 
     @ViewChild(MatSort, {static: true}) sort: MatSort;
 
@@ -149,30 +150,30 @@ export class TaskListEmployeeTableComponent {
 
     @Output() updateForm: EventEmitter<Task> = new EventEmitter();
     @Output() delete: EventEmitter<Task> = new EventEmitter();
+    @Output() deleteAll: EventEmitter<Task[]> = new EventEmitter();
     @Output() update: EventEmitter<Task> = new EventEmitter();
     @Output() showInfo: EventEmitter<Task> = new EventEmitter();
-    @Output() changePage: EventEmitter<any> = new EventEmitter();
-    @Output() deleteAll: EventEmitter<Task[]> = new EventEmitter();
+    @Output() changePage: EventEmitter<Page> = new EventEmitter();
 
     constructor(private dialog: MatDialog) {}
 
-    onUpdate(task: Task) {
+    onUpdate(task: Task): void {
         this.update.emit(task);
     }
 
-    onUpdateForm(task: Task) {
+    onUpdateForm(task: Task): void {
         this.updateForm.emit(task);
     }
 
-    onDelete(task: Task) {
+    onDelete(task: Task): void {
         this.delete.emit(task);
     }
 
-    onDeleteAll(tasks: Task[]) {
+    onDeleteAll(tasks: Task[]): void {
         this.deleteAll.emit(tasks);
     }
 
-    askPermission(task: Task) {
+    askPermission(task: Task): void {
         const matDialogRef = this.dialog.open(DeletePermissionComponent, {
             height: '210px',
             width: '480px',
@@ -186,7 +187,7 @@ export class TaskListEmployeeTableComponent {
         })
     }
 
-    askDeleteAllPermission() {
+    askDeleteAllPermission(): void {
         const matDialogRef = this.dialog.open(DeleteAllPermissionComponent, {
             height: '210px',
             width: '480px',
@@ -200,27 +201,27 @@ export class TaskListEmployeeTableComponent {
         })
     }
 
-    onShowInfo(task: Task) {
+    onShowInfo(task: Task): void {
         this.showInfo.emit(task);
     }
 
-    onChangePage(pageEvent: PageEvent) {
+    onChangePage(pageEvent: PageEvent): void {
         const changedPage: Page = {
             length: null,
             size: pageEvent.pageSize,
             number: pageEvent.pageIndex,
         };
 
-        this.changePage.emit({changedPage, filter : {statuses: ['TODO', 'IN_PROGRESS']}});
+        this.changePage.emit(changedPage);
     }
 
-    isAllSelected() {
+    isAllSelected(): boolean {
         const numSelected = this.selection.selected.length;
         const numRows = this.taskDataSource.data.length;
         return numSelected === numRows;
     }
 
-    masterToggle() {
+    masterToggle(): void {
         this.isAllSelected() ?
             this.selection.clear() :
             this.taskDataSource.data.forEach((row: any) => this.selection.select(row));

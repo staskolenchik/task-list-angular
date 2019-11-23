@@ -1,6 +1,5 @@
 import {Task} from "../../../../shared/models/task";
 import {Router} from "@angular/router";
-import {TaskSortStatusService} from "../../task-sort-status.service";
 import {TaskHttpService} from "../../task-http.service";
 import {TaskDataService} from "../../task-data.service";
 import {Component, OnInit} from "@angular/core";
@@ -21,7 +20,7 @@ import {SelectionModel} from "@angular/cdk/collections";
                                                (delete)="delete($event)"
                                                (deleteAll)="deleteAll($event)"
                                                (showInfo)="showInfo($event)"
-                                               [inReviewTasks]="inReviewTasks"
+                                               [inReviewTasks]="tasks"
                                                [page]="page"
                                                (changePage)="onChangePage($event)"
                                                [selection]="selection"
@@ -44,77 +43,81 @@ import {SelectionModel} from "@angular/cdk/collections";
 })
 export class TaskListManagerComponent implements OnInit{
 
-    private inReviewTasks: Task [];
-    private page: Page = {
-        size: 10,
-        number: 0,
-    } as Page;
+    private tasks: Task [];
+    private page: Page;
     private selection = new SelectionModel<Task>(true, []);
+    private filter = {statuses: ['IN_REVIEW']};
 
     constructor(
         private taskDataService: TaskDataService,
         private taskHttpService: TaskHttpService,
-        private taskSortStatusService: TaskSortStatusService,
         private router: Router
     ) {}
 
     ngOnInit(): void {
-        this.findAll(this.page, {statuses: ['IN_REVIEW']});
+        this.getStoredPage();
+        this.findAll(this.page, this.filter);
     }
 
-    findAll(page: Page, filter: any) {
+    findAll(page: Page, filter: any): void {
         this.taskHttpService.findAll(page, filter)
             .subscribe((response) => {
-                this.inReviewTasks = response.content;
+                this.tasks = response.content;
                 this.page = response.page;
+                this.taskDataService.setPage(this.page);
                 this.selection.clear();
             });
     }
 
-    onChangePage(data: any) {
-        this.findAll(data.changedPage, data.filter);
+    onChangePage(changedPage: Page): void {
+        this.page = changedPage;
+        this.findAll(changedPage, this.filter);
     }
 
-    updateForm(task: Task) {
+    updateForm(task: Task): void {
         this.taskDataService.setTask(task);
         this.taskDataService.setUpdatable(true);
-
         this.openForm();
     }
 
-    openForm() {
+    openForm(): void {
         this.router.navigate(['/tasks/task-form']);
     }
 
-    update(task: Task) {
+    update(task: Task): void {
         this.taskHttpService
             .update(task)
-            .subscribe(
-                (updatedTask: Task) => {
-                    this.inReviewTasks = this.taskSortStatusService.removeTask(task, this.inReviewTasks);
-                }
-            );
+            .subscribe(() => this.findAll(this.page, this.filter));
     }
 
-    delete(task: Task) {
+    delete(task: Task): void {
         this.taskHttpService
             .delete(task)
-            .subscribe(response => {
-                this.inReviewTasks = this.taskSortStatusService.removeTask(task, this.inReviewTasks);
-            });
+            .subscribe(() => this.findAll(this.page, this.filter));
     }
 
-    deleteAll(tasks: Task[]) {
+    deleteAll(tasks: Task[]): void {
         this.taskHttpService
             .deleteAll(tasks)
             .subscribe(() => {
-                this.findAll(this.page, {statuses: ['IN_REVIEW']})
+                this.loadTasksFromStartPage();
             });
     }
 
-    showInfo(task: Task) {
+    showInfo(task: Task): void {
         this.taskDataService.setTask(task);
         this.router.navigate([`tasks/${task.id}`]);
+    }
+
+    getStoredPage(): void {
+        this.taskDataService.getPage().subscribe((page: Page) => {
+            this.page = page;
+        });
+    }
+
+    loadTasksFromStartPage(): void {
+        this.page.number = 0;
+        this.findAll(this.page, this.filter);
     }
 }
 

@@ -6,7 +6,6 @@ import {EmployeeService} from "../../../employees/employee.service";
 import {Router} from "@angular/router";
 import {TaskDataService} from "../../task-data.service";
 import {TaskHttpService} from "../../task-http.service";
-import {TaskSortStatusService} from "../../task-sort-status.service";
 import {Location} from '@angular/common';
 
 import {FieldLength} from "../../../../shared/constants/field-length";
@@ -120,11 +119,10 @@ import {Messages} from "../../../../shared/constants/messages";
                         <button type="submit"
                                 mat-raised-button
                                 color="primary"
-                                [disabled]="form.invalid"
+                                [disabled]="form.invalid || isSending || isSent"
                         >Save</button>
                         <button type="button"
                                 mat-raised-button
-                                color="warn"
                                 (click)="onCancel()"
                         >Cancel</button>
                     </mat-card-actions>
@@ -147,11 +145,12 @@ export class TaskFormComponent implements OnInit{
     private task: Task;
     private updatable: boolean;
     private manager: Manager = {} as Manager;
+    private isSending: boolean = false;
+    private isSent: boolean = false;
 
     constructor(
         private taskDataService: TaskDataService,
         private tasksHttpService: TaskHttpService,
-        private taskSortStatusService: TaskSortStatusService,
         private employeeService: EmployeeService,
         private router: Router,
         private location: Location,
@@ -165,6 +164,7 @@ export class TaskFormComponent implements OnInit{
     }
 
     save(task: Task) {
+        this.isSending = true;
         this.task.createdById = 2;
 
         if (this.updatable) {
@@ -177,7 +177,9 @@ export class TaskFormComponent implements OnInit{
     add(task: Task) {
         this.tasksHttpService
             .add(task)
-            .subscribe(addedTasks => {
+            .subscribe(() => {
+                this.isSending = false;
+                this.isSent = true;
                 let snackBarRef = this.snackBar.open(
                     this.messages.TASK_SAVED,
                     'Close',
@@ -205,7 +207,7 @@ export class TaskFormComponent implements OnInit{
     update(task: Task) {
         this.tasksHttpService
             .update(task)
-            .subscribe(updatedTask => {
+            .subscribe(() => {
                 this.clearTaskFromStore();
                 this.clearUpdatable();
                 this.goToTasks();
