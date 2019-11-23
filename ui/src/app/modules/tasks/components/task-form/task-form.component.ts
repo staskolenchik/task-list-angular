@@ -126,6 +126,7 @@ import {Messages} from "../../../../shared/constants/messages";
                                 (click)="onCancel()"
                         >Cancel</button>
                     </mat-card-actions>
+                    <mat-progress-bar *ngIf="isSending" mode="indeterminate"></mat-progress-bar>
                 </mat-card>
             </form>
         </div>

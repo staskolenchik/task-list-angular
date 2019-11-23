@@ -44,7 +44,6 @@ import {ChangeDetectorRef} from '@angular/core';
                 </mat-card-content>
                 <mat-card-actions>
                     <button mat-raised-button
-                            color="warn"
                             (click)="goBack()"
                     >Cancel</button>
                 </mat-card-actions>

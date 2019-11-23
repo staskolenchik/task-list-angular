@@ -128,6 +128,9 @@ import {DeleteAllPermissionComponent} from "../../../../../shared/modal-dialogs/
             justify-content: space-between;
             align-items: center;
         }
+        .mat-cell {
+            padding: 0 5px;
+        }
     `],
     providers: []
 })

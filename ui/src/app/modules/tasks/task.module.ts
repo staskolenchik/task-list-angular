@@ -9,7 +9,8 @@ import {
     MatInputModule, MatPaginatorModule,
     MatRadioModule,
     MatSelectModule, MatSortModule,
-    MatTableModule, MatToolbarModule
+    MatTableModule, MatToolbarModule,
+    MatProgressBarModule
 } from "@angular/material";
 import {TaskFormComponent} from "./components/task-form/task-form.component";
 import {TaskListEmployeeComponent} from "./components/task-list-employee/task-list-employee.component";
@@ -52,7 +53,8 @@ import {DeleteAllPermissionComponent} from "../../shared/modal-dialogs/delete-al
         MatSortModule,
         MatPaginatorModule,
         MatCheckboxModule,
-        MatToolbarModule
+        MatToolbarModule,
+        MatProgressBarModule
     ],
     exports: [
         TaskFormComponent,

@@ -3,35 +3,32 @@ import {Component} from '@angular/core';
 @Component({
     selector: 'my-app',
     template:`
-        <mat-toolbar color="primary">
+        <mat-toolbar color="primary" class="tool-bar">
             <button  mat-icon-button (click)="sidenav.toggle()">
                 <mat-icon>menu</mat-icon>
             </button>
+            <span class="tool-bar__title"><b><i>Tasker</i></b></span>
         </mat-toolbar>
 
         <mat-sidenav-container>
             <mat-sidenav #sidenav mode="side">
                 <mat-nav-list class="sidenav-container__navigation-list">
                     <a mat-list-item
-                       routerLink="/"
-                       style="cursor: pointer">
+                       routerLink="/">
                         <mat-icon aria-hidden="false"
                                   aria-label="Home icon" color="primary"
                         >home</mat-icon>
                     </a>
                     <a mat-list-item
                        routerLink="/tasks"
-                       style="cursor: pointer"
                        [routerLinkActive]="['active']"
                     >Tasks</a>
                     <a mat-list-item
                        routerLink="/employees"
-                       style="cursor: pointer"
                        [routerLinkActive]="['active']"
                     >Employees</a>
                     <a mat-list-item
                        routerLink="/managers"
-                       style="cursor: pointer"
                        [routerLinkActive]="['active']"
                     >Managers</a>
                 </mat-nav-list>
