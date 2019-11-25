@@ -21,8 +21,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.*;
-import java.util.stream.Collectors;
 
 @Service
 class TaskServiceImpl implements TaskService {
@@ -83,33 +81,12 @@ class TaskServiceImpl implements TaskService {
         Long managerId = taskAddDto.getCreatedById();
         Long employeeId = taskAddDto.getAssigneeId();
 
-        if (!managerService.existsById(taskAddDto.getCreatedById())) {
+        if (!managerService.existsById(managerId)) {
             throw new ManagerNotFoundException("Manager with id=%d was not found", managerId);
         }
-        if (!employeeService.existsById(taskAddDto.getAssigneeId())) {
+        if (!employeeService.existsById(employeeId)) {
             throw new EmployeeNotFoundException("Employee with id=%d was not found", employeeId);
         }
-    }
-
-    @Override
-    public List<TaskInfoDto> findAll() {
-        List<Task> tasks = taskRepository.findAll();
-        List<TaskInfoDto> taskInfoDtos = new ArrayList<>();
-
-        for (Task task :
-                tasks) {
-            TaskInfoDto taskInfoDto = modelMapper.map(task, TaskInfoDto.class);
-
-            if (task instanceof IssueTask) {
-                taskInfoDto.setType("issue");
-            } else if (task instanceof StoryTask) {
-                taskInfoDto.setType("story");
-            }
-
-            taskInfoDtos.add(taskInfoDto);
-        }
-
-        return taskInfoDtos;
     }
 
     @Override
