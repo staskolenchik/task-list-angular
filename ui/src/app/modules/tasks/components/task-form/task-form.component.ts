@@ -73,7 +73,7 @@ import {Messages} from "../../../../shared/constants/messages";
                             </mat-hint>
                         </mat-form-field>
 
-                        <mat-form-field class="task-form__form-field">
+                        <mat-form-field *ngIf="!updatable" class="task-form__form-field">
                             <input matInput
                                    placeholder="Type"
                                    required
@@ -82,28 +82,29 @@ import {Messages} from "../../../../shared/constants/messages";
                             <mat-hint align="start" *ngIf="type.valid || type.untouched">
                                 {{hints.CHOOSE_TASK_TYPE}}
                             </mat-hint>
-                            <mat-error align="start" *ngIf="type.invalid">
+                            <mat-error align="start" *ngIf="type.invalid && type.touched">
                                 {{errors.FIELD_IS_REQUIRED}}
                             </mat-error>
                         </mat-form-field>
+                       
                         <mat-radio-group required
                                          class="task-form__radio-button-group"
                                          name="taskType"
                                          #type="ngModel"
-                                         [(ngModel)]="task.type"
-                                         [disabled]="updatable">
-                            <mat-radio-button *ngFor="let type of taskTypes"
-                                              class="task-form__radio-button"
-                                              [value]="type"
-                            >{{type}}</mat-radio-button>
+                                         [(ngModel)]="task.type">
+                            <div *ngIf="!updatable">
+                                <mat-radio-button *ngFor="let type of taskTypes"
+                                                  class="task-form__radio-button"
+                                                  [value]="type"
+                                >{{type}}</mat-radio-button>
+                            </div>
                         </mat-radio-group>
-
-                        <mat-form-field class="task-form__form-field">
+                        
+                        <mat-form-field *ngIf="!updatable" class="task-form__form-field">
                             <mat-label>Assignee</mat-label>
                             <mat-select name="assignee"
                                         required
-                                        [(ngModel)]="task.assigneeId"
-                                        [disabled]="updatable">
+                                        [(ngModel)]="task.assigneeId">
                                 <mat-option *ngFor="let assignee of assignees" 
                                             [value]="assignee.id">
                                     {{assignee.name}} {{assignee.surname}} {{assignee.patronymic}}
@@ -179,39 +180,38 @@ export class TaskFormComponent implements OnInit{
         this.tasksHttpService
             .add(task)
             .subscribe(() => {
-                this.isSending = false;
-                this.isSent = true;
-                let snackBarRef = this.snackBar.open(
-                    this.messages.TASK_SAVED,
-                    'Close',
-                    {duration: 2000}
-                );
-
-                snackBarRef.afterDismissed()
-                    .subscribe(() => {
-                            this.operateResponse();
-                        }
-                    );
-                snackBarRef.onAction()
-                    .subscribe(() => {
-                        this.operateResponse();
-                    });
+                this.showMessage();
             });
     }
 
-    operateResponse() {
-        this.clearTaskFromStore();
-        this.clearUpdatable();
-        this.goToTasks();
+    showMessage() {
+        this.isSending = false;
+        this.isSent = true;
+        let snackBarRef = this.snackBar.open(
+            this.messages.TASK_SAVED,
+            'Close',
+            {duration: 2000}
+        );
+
+        snackBarRef.afterDismissed()
+            .subscribe(() => {
+                this.clearTaskFromStore();
+                this.clearUpdatable();
+                this.goToTasks();
+            });
+        snackBarRef.onAction()
+            .subscribe(() => {
+                this.clearTaskFromStore();
+                this.clearUpdatable();
+                this.goToTasks();
+            });
     }
 
     update(task: Task) {
         this.tasksHttpService
             .update(task)
             .subscribe(() => {
-                this.clearTaskFromStore();
-                this.clearUpdatable();
-                this.goToTasks();
+                this.showMessage();
             });
     }
 
