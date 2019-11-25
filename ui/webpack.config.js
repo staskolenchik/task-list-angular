@@ -28,6 +28,8 @@ module.exports = {
         }],
         hot: true,
         open: true,
+        stats: 'errors-only',
+        clientLogLevel: 'error'
     },
     resolve: {
         extensions: ['.ts', '.js']
