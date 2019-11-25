@@ -1,25 +1,26 @@
 package by.kolenchik.core.task.service;
 
 import by.kolenchik.core.task.IssueTask;
+import by.kolenchik.core.task.StoryTask;
 import by.kolenchik.core.task.Task;
 import by.kolenchik.core.task.TaskStatus;
 import by.kolenchik.core.task.dto.TaskAddDto;
+import by.kolenchik.core.task.dto.TaskFilterDto;
+import by.kolenchik.core.task.dto.TaskInfoDto;
+import by.kolenchik.core.task.dto.UpdateTaskDto;
+import by.kolenchik.core.task.exceptions.TaskNotFoundException;
+import by.kolenchik.core.task.exceptions.TaskTypeUndefinedException;
 import by.kolenchik.core.task.repository.TaskRepository;
-import by.kolenchik.core.user.User;
-import by.kolenchik.core.user.employee.Employee;
-import by.kolenchik.core.user.employee.dto.AddEmployeeDto;
-import by.kolenchik.core.user.employee.dto.EmployeeInfoDto;
+import by.kolenchik.core.user.employee.exceptions.EmployeeNotFoundException;
 import by.kolenchik.core.user.employee.service.EmployeeService;
-import by.kolenchik.core.user.manager.Manager;
-import by.kolenchik.core.user.manager.dto.AddManagerDto;
-import by.kolenchik.core.user.manager.dto.ManagerInfoDto;
+import by.kolenchik.core.user.manager.exceptions.ManagerNotFoundException;
 import by.kolenchik.core.user.manager.service.ManagerService;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Service
 class TaskServiceImpl implements TaskService {
@@ -42,70 +43,117 @@ class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public Task add(TaskAddDto taskAddDto) {
-        Manager manager = createManager();
-        Employee employee = createEmployeeUnderManager(manager);
-        Task task = setupAndGetIssueTask(taskAddDto, manager, employee);
+    public TaskInfoDto add(TaskAddDto taskAddDto) {
+        validateAdd(taskAddDto);
 
-        return taskRepository.save(task);
-    }
+        Task task;
 
-    private Task setupAndGetIssueTask(TaskAddDto taskAddDto, Manager manager, Employee employee) {
-        Task task = modelMapper.map(taskAddDto, IssueTask.class);
-        task.setCreationDateTime(LocalDateTime.now());
-        task.setCreatedBy(manager);
-        task.setAssignee(employee);
+        if (taskAddDto.getType().equals("issue")) {
+            task = modelMapper.map(taskAddDto, IssueTask.class);
+        } else if (taskAddDto.getType().equals("story")) {
+            task = modelMapper.map(taskAddDto, StoryTask.class);
+        } else {
+            throw new TaskTypeUndefinedException(
+                    "Task has subject \"%s\", createdBy=%d, assignee=%d, but type is neither \"issue\" nor \"story\"",
+                    taskAddDto.getSubject(),
+                    taskAddDto.getCreatedById(),
+                    taskAddDto.getAssigneeId()
+            );
+        }
+
         task.setTaskStatus(TaskStatus.TODO);
+        task.setCreationDateTime(LocalDateTime.now());
 
-        return task;
+        Task taskFromDB = taskRepository.save(task);
+
+        TaskInfoDto taskInfoDto = modelMapper.map(taskFromDB, TaskInfoDto.class);
+
+        if (taskFromDB instanceof IssueTask) {
+            taskInfoDto.setType("issue");
+        } else if (taskFromDB instanceof StoryTask) {
+            taskInfoDto.setType("story");
+        }
+
+        return taskInfoDto;
     }
 
-    private Manager createManager() {
-        Manager manager = new Manager();
-        setupUserInfo(manager);
-        AddManagerDto addManagerDto = modelMapper.map(manager, AddManagerDto.class);
+    private void validateAdd(TaskAddDto taskAddDto) {
+        Long managerId = taskAddDto.getCreatedById();
+        Long employeeId = taskAddDto.getAssigneeId();
 
-        ManagerInfoDto managerInfoDto = managerService.add(addManagerDto);
-
-        return modelMapper.map(managerInfoDto, Manager.class);
-    }
-
-    private Employee createEmployeeUnderManager(Manager manager) {
-        Employee newEmployee = new Employee();
-        setupUserInfo(newEmployee);
-        newEmployee.setManager(manager);
-        AddEmployeeDto addEmployeeDto = modelMapper.map(newEmployee, AddEmployeeDto.class);
-        EmployeeInfoDto employeeInfoDto = employeeService.add(addEmployeeDto);
-
-        return modelMapper.map(employeeInfoDto, Employee.class);
-    }
-
-    private void setupUserInfo(User user) {
-        long index = Math.round(Math.random() * Math.random() * 100000);
-
-        user.setName("Vasia");
-        user.setSurname("Beliy");
-        user.setBirthDate(LocalDate.now());
-        user.setEmail("test" + index +"@gmail.com");
-        user.setPassword("12345678");
+        if (!managerService.existsById(managerId)) {
+            throw new ManagerNotFoundException("Manager with id=%d was not found", managerId);
+        }
+        if (!employeeService.existsById(employeeId)) {
+            throw new EmployeeNotFoundException("Employee with id=%d was not found", employeeId);
+        }
     }
 
     @Override
-    public List<Task> get() {
-        return taskRepository.findAll();
+    public TaskInfoDto update(Long id, UpdateTaskDto updateTaskDto) {
+        validateUpdate(updateTaskDto);
+
+        Task taskFromDb = taskRepository.getOne(id);
+        modelMapper.map(updateTaskDto, taskFromDb);
+        Task updatedTask = taskRepository.save(taskFromDb);
+
+        TaskInfoDto taskInfoDto = modelMapper.map(updatedTask, TaskInfoDto.class);
+
+        if (updatedTask instanceof IssueTask) {
+            taskInfoDto.setType("issue");
+        } else if (updatedTask instanceof StoryTask) {
+            taskInfoDto.setType("story");
+        }
+        
+        return taskInfoDto;
+    }
+
+    private void validateUpdate(UpdateTaskDto updateTaskDto) {
+        Long managerId = updateTaskDto.getCreatedById();
+        Long employeeId = updateTaskDto.getAssigneeId();
+
+        if (!managerService.existsById(managerId)) {
+            throw new ManagerNotFoundException("Manager with id=%d was not found", managerId);
+        }
+        if (!employeeService.existsById(employeeId)) {
+            throw new EmployeeNotFoundException("Employee with id=%d was not found", employeeId);
+        }
     }
 
     @Override
-    public Task update(Long id, Task task) {
-        Task one = taskRepository.getOne(id);
-        one.setSubject(task.getSubject());
-        one.setDescription(task.getDescription());
+    public void delete(Long id) {
+        validateDelete(id);
+        taskRepository.deleteById(id);
+    }
 
-        return taskRepository.save(one);
+    private void validateDelete(Long id) {
+        if (!taskRepository.existsById(id)) {
+            throw new TaskNotFoundException("Task with id=%d doesn't exist", id);
+        }
     }
 
     @Override
-    public void delete(Task task) {
-        taskRepository.delete(task);
+    public Page<TaskInfoDto> find(TaskFilterDto taskFilterDto, Pageable pageable) {
+        Page<Task> page = taskRepository.getByStatuses(taskFilterDto.getStatuses(), pageable);
+        return page.map(task -> {
+            TaskInfoDto taskInfoDto = modelMapper.map(task, TaskInfoDto.class);
+
+            if (task instanceof IssueTask) {
+                taskInfoDto.setType("issue");
+            } else if (task instanceof StoryTask) {
+                taskInfoDto.setType("story");
+            }
+
+            return taskInfoDto;
+        });
+    }
+
+    @Override
+    public void deleteAll(Long[] ids) {
+        for (Long id : ids) {
+            validateDelete(id);
+
+            taskRepository.deleteById(id);
+        }
     }
 }

@@ -18,6 +18,11 @@ public class EmployeeController {
         this.employeeService = employeeService;
     }
 
+    @GetMapping("/managers/{id}")
+    public List<EmployeeInfoDto> findByManagerId(@PathVariable Long id) {
+        return employeeService.findByManagerId(id);
+    }
+
     @PostMapping
     public EmployeeInfoDto add(@RequestBody AddEmployeeDto addEmployeeDto) {
         return employeeService.add(addEmployeeDto);

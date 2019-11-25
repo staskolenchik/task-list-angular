@@ -1,17 +1,21 @@
 package by.kolenchik.core.task.service;
 
-import by.kolenchik.core.task.Task;
 import by.kolenchik.core.task.dto.TaskAddDto;
-
-import java.util.List;
+import by.kolenchik.core.task.dto.TaskFilterDto;
+import by.kolenchik.core.task.dto.TaskInfoDto;
+import by.kolenchik.core.task.dto.UpdateTaskDto;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 public interface TaskService {
 
-    Task add(TaskAddDto taskAddDto);
+    TaskInfoDto add(TaskAddDto taskAddDto);
 
-    List<Task> get();
+    TaskInfoDto update(Long id, UpdateTaskDto updateTaskDto);
 
-    Task update(Long id, Task task);
+    void delete(Long id);
 
-    void delete(Task task);
+    Page<TaskInfoDto> find(TaskFilterDto taskFilterDto,Pageable pageable);
+
+    void deleteAll(Long[] ids);
 }

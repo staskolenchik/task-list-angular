@@ -1,0 +1,19 @@
+.task-form__form-field,
+.task-form__radio-button-group {
+    display: block;
+    padding: 5px 0;
+}
+
+.task-form__radio-button-group {
+    padding: 10px 0;
+}
+
+.task-form__radio-button {
+    padding: 0 10px;
+}
+.task-form {
+    padding: 30px;
+}
+.task-form__description {
+    max-height: 100px;
+}

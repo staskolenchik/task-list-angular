@@ -3,6 +3,7 @@ import {HttpClient, HttpErrorResponse} from "@angular/common/http";
 import {catchError, map, retry} from "rxjs/operators";
 import {Observable, throwError} from "rxjs";
 import {Employee} from "../../shared/models/employee";
+import {Manager} from "../../shared/models/manager";
 
 @Injectable()
 export class EmployeeService {
@@ -74,5 +75,26 @@ export class EmployeeService {
                 retry(3),
                 catchError(this.handleError)
             );
+    }
+
+    getEmployeesByManagerId(manager: Manager) {
+        const url = `${this.url}/managers/${manager.id}`;
+        return this.http
+            .get(url)
+            .pipe(map(data => {
+                let employees = [].concat(data);
+                return employees.map(function (employee: any) {
+                    return {
+                        id: employee.id,
+                        email: employee.email,
+                        password: null,
+                        name: employee.name,
+                        surname: employee.surname,
+                        patronymic: employee.patronymic,
+                        birthDate: employee.birthDate,
+                        managerId: employee.managerId
+                    }
+                })
+            }))
     }
 }

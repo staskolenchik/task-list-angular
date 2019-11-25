@@ -17,4 +17,6 @@ public interface ManagerService {
     ManagerInfoDto update(Long id, UpdateManagerDto updateManagerDto);
 
     ManagerInfoDto findById(Long id);
+
+    Boolean existsById(Long id);
 }

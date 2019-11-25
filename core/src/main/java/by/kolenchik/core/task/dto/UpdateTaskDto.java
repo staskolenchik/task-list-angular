@@ -7,7 +7,10 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 @Data
-public class TaskAddDto {
+public class UpdateTaskDto {
+
+    @NotBlank(message = "Id cannot be empty")
+    private Long id;
 
     @NotBlank(message = "Subject cannot be empty")
     @Length(max = 45, message = "Subject cannot contain more than 45 characters")
@@ -16,12 +19,12 @@ public class TaskAddDto {
     @Length(max = 255, message = "Description cannot contain more than 45 characters")
     private String description;
 
+    @NotBlank(message = "Status cannot be empty")
+    private String status;
+
     @NotNull
     private Long createdById;
 
     @NotNull
     private Long assigneeId;
-
-    @NotBlank(message = "Task type cannot be empty")
-    private String type;
 }

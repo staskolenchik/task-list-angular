@@ -9,6 +9,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -44,7 +45,6 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Override
     public EmployeeInfoDto update(Long id, UpdateEmployeeDto updateEmployeeDto) {
         Employee employeeFromDb = employeeRepository.getOne(id);
-
         BeanUtils.copyProperties(updateEmployeeDto, employeeFromDb);
 
         Employee savedEmployee = employeeRepository.save(employeeFromDb);
@@ -62,5 +62,23 @@ public class EmployeeServiceImpl implements EmployeeService {
         Employee employee = employeeRepository.getOne(id);
 
         return modelMapper.map(employee, EmployeeInfoDto.class);
+    }
+
+    @Override
+    public Boolean existsById(Long id) {
+        return employeeRepository.existsById(id);
+    }
+
+    @Override
+    public List<EmployeeInfoDto> findByManagerId(Long id) {
+        List<Employee> employees = employeeRepository.findByManager_Id(id);
+        List<EmployeeInfoDto> employeeInfoDtos = new ArrayList<>();
+
+        for (Employee employee :
+                employees) {
+            EmployeeInfoDto employeeInfoDto = modelMapper.map(employee, EmployeeInfoDto.class);
+            employeeInfoDtos.add(employeeInfoDto);
+        }
+        return employeeInfoDtos;
     }
 }
