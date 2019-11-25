@@ -11,6 +11,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+
 @RestController
 @RequestMapping("/dev/tasks")
 public class TaskController {
@@ -22,7 +24,7 @@ public class TaskController {
     }
 
     @PostMapping
-    public TaskInfoDto add(@RequestBody TaskAddDto taskAddDto) {
+    public TaskInfoDto add(@Valid @RequestBody TaskAddDto taskAddDto) {
         return taskService.add(taskAddDto);
     }
 
@@ -39,7 +41,7 @@ public class TaskController {
     @PutMapping("/{id}")
     public TaskInfoDto update(
             @PathVariable("id") Long id,
-            @RequestBody UpdateTaskDto updateTaskDto
+            @Valid @RequestBody UpdateTaskDto updateTaskDto
     ) {
         return taskService.update(id, updateTaskDto);
     }
