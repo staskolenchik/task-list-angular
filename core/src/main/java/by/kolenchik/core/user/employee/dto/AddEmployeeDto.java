@@ -12,5 +12,5 @@ public class AddEmployeeDto {
     private String patronymic;
     private String password;
     private LocalDate birthDate;
-    private Long managerId;
+    private Long superior;
 }

@@ -1,6 +1,5 @@
 package by.kolenchik.core.user.employee.service;
 
-import by.kolenchik.core.user.employee.Employee;
 import by.kolenchik.core.user.employee.dto.AddEmployeeDto;
 import by.kolenchik.core.user.employee.dto.EmployeeInfoDto;
 import by.kolenchik.core.user.employee.dto.UpdateEmployeeDto;

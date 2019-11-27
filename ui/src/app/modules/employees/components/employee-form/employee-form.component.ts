@@ -46,7 +46,7 @@ import {Manager} from "../../../../shared/models/manager";
             </div>
             <div>
                 <label>Manager select: </label>
-                <select name="managerId" [(ngModel)]="_employee.managerId">
+                <select name="managerId" [(ngModel)]="_employee.superior">
                     <option name="manager" *ngFor="let manager of _managers" [value]="manager.id">
                         {{manager.name}} {{manager.surname}} {{manager.patronymic}}
                     </option>
