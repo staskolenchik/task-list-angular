@@ -5,9 +5,10 @@ import lombok.Data;
 import javax.persistence.*;
 import java.time.LocalDate;
 
-@MappedSuperclass
+@Entity
+@Table(name = "usr")
 @Data
-public abstract class User  {
+public class User  {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,4 +31,7 @@ public abstract class User  {
 
     @Column(name = "birth_date", nullable = false)
     private LocalDate birthDate;
+
+    @Column(name = "superior_id")
+    private Long superior;
 }

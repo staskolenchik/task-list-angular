@@ -1,16 +1,11 @@
 package by.kolenchik.core.task;
 
 import by.kolenchik.core.comment.Comment;
-import by.kolenchik.core.user.employee.Employee;
-import by.kolenchik.core.user.manager.Manager;
+import by.kolenchik.core.user.User;
 import lombok.Data;
-import lombok.NoArgsConstructor;
-import org.hibernate.annotations.Type;
-import org.hibernate.annotations.TypeDef;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -38,11 +33,11 @@ public abstract class Task {
 
     @ManyToOne
     @JoinColumn(name = "created_by", nullable = false)
-    private Manager createdBy;
+    private User createdBy;
 
     @ManyToOne
     @JoinColumn(name = "assignee",nullable = false)
-    private Employee assignee;
+    private User assignee;
 
     @OneToMany(mappedBy = "task")
     private Set<Comment> comment;

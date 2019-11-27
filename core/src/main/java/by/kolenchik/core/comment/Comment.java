@@ -1,7 +1,7 @@
 package by.kolenchik.core.comment;
 
 import by.kolenchik.core.task.Task;
-import by.kolenchik.core.user.employee.Employee;
+import by.kolenchik.core.user.User;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -25,7 +25,7 @@ public abstract class Comment {
 
     @ManyToOne
     @JoinColumn(name = "author_id",nullable = false)
-    private Employee author;
+    private User author;
 
     @ManyToOne
     @JoinColumn(name = "task_id", nullable = false)

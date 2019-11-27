@@ -6,6 +6,6 @@ export interface Employee {
     surname: string;
     patronymic: string;
     birthDate: string;
-    managerId: number;
+    superior: number;
 }
 

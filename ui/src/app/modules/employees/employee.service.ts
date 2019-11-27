@@ -30,7 +30,7 @@ export class EmployeeService {
             .get(this.url)
             .pipe(map(data => {
                     let employees = [].concat(data);
-                    return employees.map(function (employee: any) {
+                    return employees.map(function (employee: Employee) {
                         return {
                             id: employee.id,
                             email: employee.email,
@@ -39,7 +39,7 @@ export class EmployeeService {
                             surname: employee.surname,
                             patronymic: employee.patronymic,
                             birthDate: employee.birthDate,
-                            managerId: employee.managerId
+                            superior: employee.superior
                         }
                     })
                 }),
@@ -77,13 +77,13 @@ export class EmployeeService {
             );
     }
 
-    getEmployeesByManagerId(manager: Manager) {
+    getEmployeesByManagerId(manager: Manager): Observable<Employee[]> {
         const url = `${this.url}/managers/${manager.id}`;
         return this.http
             .get(url)
             .pipe(map(data => {
                 let employees = [].concat(data);
-                return employees.map(function (employee: any) {
+                return employees.map(function (employee: Employee) {
                     return {
                         id: employee.id,
                         email: employee.email,
@@ -92,7 +92,7 @@ export class EmployeeService {
                         surname: employee.surname,
                         patronymic: employee.patronymic,
                         birthDate: employee.birthDate,
-                        managerId: employee.managerId
+                        superior: employee.superior
                     }
                 })
             }))

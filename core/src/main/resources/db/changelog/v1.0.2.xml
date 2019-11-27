@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+    <changeSet id="1" author="stanislav.kolenchik">
+        <sqlFile path="v1.0.2/2019-11-26-drop-task-assignee-foreign-key-task-table.sql" relativeToChangelogFile="true" splitStatements="false" />
+    </changeSet>
+
+    <changeSet id="2" author="stanislav.kolenchik">
+        <sqlFile path="v1.0.2/2019-11-26-drop-task-created-by-foreign-key-task-table.sql" relativeToChangelogFile="true" splitStatements="false" />
+    </changeSet>
+
+    <changeSet id="3" author="stanislav.kolenchik">
+        <sqlFile path="v1.0.2/2019-11-26-drop-manager-id-fk-employee-table.sql" relativeToChangelogFile="true" splitStatements="false" />
+    </changeSet>
+
+    <changeSet id="4" author="stanislav.kolenchik">
+        <sqlFile path="v1.0.2/2019-11-26-rename-employee-table-to-usr-table.sql" relativeToChangelogFile="true" splitStatements="false" />
+    </changeSet>
+
+    <changeSet id="5" author="stanislav.kolenchik">
+        <sqlFile path="v1.0.2/2019-11-26-drop-manager-table.sql" relativeToChangelogFile="true" splitStatements="false" />
+    </changeSet>
+
+    <changeSet id="6" author="stanislav.kolenchik">
+        <sqlFile path="v1.0.2/2019-11-26-add-task-assignee-foreign-key-task-table.sql" relativeToChangelogFile="true" splitStatements="false" />
+    </changeSet>
+
+    <changeSet id="7" author="stanislav.kolenchik">
+        <sqlFile path="v1.0.2/2019-11-26-add-task-created-by-foreign-key-task-table.sql" relativeToChangelogFile="true" splitStatements="false" />
+    </changeSet>
+
+    <changeSet id="8" author="stanislav.kolenchik">
+        <sqlFile path="v1.0.2/2019-11-26-rename-manager-id-column-to-superior-id-usr-table.sql" relativeToChangelogFile="true" splitStatements="false" />
+    </changeSet>
+
+    <changeSet id="9" author="stanislav.kolenchik">
+        <sqlFile path="v1.0.2/2019-11-26-remove-constraint-from-superior-id-usr-table.sql" relativeToChangelogFile="true" splitStatements="false" />
+    </changeSet>
+
+</databaseChangeLog>

@@ -13,4 +13,5 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
 
     @Query(value = "SELECT task FROM Task task WHERE task.taskStatus IN :statuses")
     Page<Task> getByStatuses(Collection<TaskStatus> statuses, Pageable pageable);
+
 }

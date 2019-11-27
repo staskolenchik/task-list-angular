@@ -13,5 +13,5 @@ public class UpdateEmployeeDto {
     private String surname;
     private String patronymic;
     private LocalDate birthDate;
-    private Long manager_id;
+    private Long superior;
 }
