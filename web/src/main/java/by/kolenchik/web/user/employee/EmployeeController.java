@@ -4,6 +4,7 @@ import by.kolenchik.core.user.employee.dto.AddEmployeeDto;
 import by.kolenchik.core.user.employee.dto.EmployeeInfoDto;
 import by.kolenchik.core.user.employee.dto.UpdateEmployeeDto;
 import by.kolenchik.core.user.employee.service.EmployeeService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -13,9 +14,11 @@ import java.util.List;
 public class EmployeeController {
 
     private EmployeeService employeeService;
+    private BCryptPasswordEncoder passwordEncoder;
 
-    public EmployeeController(EmployeeService employeeService) {
+    public EmployeeController(EmployeeService employeeService, BCryptPasswordEncoder passwordEncoder) {
         this.employeeService = employeeService;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @GetMapping("/managers/{id}")
@@ -25,6 +28,9 @@ public class EmployeeController {
 
     @PostMapping
     public EmployeeInfoDto add(@RequestBody AddEmployeeDto addEmployeeDto) {
+        String encodedPassword = passwordEncoder.encode(addEmployeeDto.getPassword());
+        addEmployeeDto.setPassword(encodedPassword);
+
         return employeeService.add(addEmployeeDto);
     }
 

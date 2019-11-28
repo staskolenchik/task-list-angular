@@ -40,4 +40,27 @@
         <sqlFile path="v1.0.2/2019-11-26-remove-constraint-from-superior-id-usr-table.sql" relativeToChangelogFile="true" splitStatements="false" />
     </changeSet>
 
+    <changeSet id="10" author="stanislav.kolenchik">
+        <sqlFile path="v1.0.2/2019-11-27-role-table.sql" relativeToChangelogFile="true" splitStatements="false" />
+    </changeSet>
+
+    <changeSet id="11" author="stanislav.kolenchik">
+        <sqlFile path="v1.0.2/2019-11-27-add-delete-date-usr-table.sql" relativeToChangelogFile="true" splitStatements="false" />
+    </changeSet>
+
+    <changeSet id="12" author="stanislav.kolenchik">
+        <sqlFile path="v1.0.2/2019-11-27-usr_role-table.sql" relativeToChangelogFile="true" splitStatements="false" />
+    </changeSet>
+
+    <changeSet id="13" author="stanislav.kolenchik">
+        <sqlFile path="v1.0.2/2019-11-27-insert-roles-into-role-table.sql" relativeToChangelogFile="true" splitStatements="false" />
+    </changeSet>
+
+    <changeSet id="14" author="stanislav.kolenchik">
+        <sqlFile path="v1.0.2/2019-11-28-alter-password-usr-table.sql" relativeToChangelogFile="true" splitStatements="false" />
+    </changeSet>
+
+    <changeSet id="15" author="stanislav.kolenchik">
+        <sqlFile path="v1.0.2/2019-11-28-insert-admin.sql" relativeToChangelogFile="true" splitStatements="false" />
+    </changeSet>
 </databaseChangeLog>

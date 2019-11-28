@@ -1,16 +1,21 @@
 package by.kolenchik.core.user.employee.service;
 
+import by.kolenchik.core.user.UserRole;
 import by.kolenchik.core.user.User;
+import by.kolenchik.core.user.UserRoleEnum;
 import by.kolenchik.core.user.employee.dto.AddEmployeeDto;
 import by.kolenchik.core.user.employee.dto.EmployeeInfoDto;
 import by.kolenchik.core.user.employee.dto.UpdateEmployeeDto;
+import by.kolenchik.core.user.repository.RoleRepository;
 import by.kolenchik.core.user.repository.UserRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -18,15 +23,26 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     private UserRepository userRepository;
     private ModelMapper modelMapper;
+    private RoleRepository roleRepository;
 
-    public EmployeeServiceImpl(UserRepository userRepository, ModelMapper modelMapper) {
+    public EmployeeServiceImpl(
+            UserRepository userRepository,
+            ModelMapper modelMapper,
+            RoleRepository roleRepository
+    ) {
         this.userRepository = userRepository;
         this.modelMapper = modelMapper;
+        this.roleRepository = roleRepository;
     }
 
     @Override
     public EmployeeInfoDto add(AddEmployeeDto addEmployeeDto) {
         User employee = modelMapper.map(addEmployeeDto, User.class);
+
+        UserRole employeeUserRole = roleRepository.findByDesignation(UserRoleEnum.EMPLOYEE.name());
+        Set<UserRole> userRoles = new HashSet<>();
+        userRoles.add(employeeUserRole);
+        employee.setRoles(userRoles);
 
         User employeeFromDB = userRepository.save(employee);
 
