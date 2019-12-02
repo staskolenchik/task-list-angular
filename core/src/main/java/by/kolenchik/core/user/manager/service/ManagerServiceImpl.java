@@ -6,7 +6,7 @@ import by.kolenchik.core.user.UserRoleEnum;
 import by.kolenchik.core.user.manager.dto.AddManagerDto;
 import by.kolenchik.core.user.manager.dto.ManagerInfoDto;
 import by.kolenchik.core.user.manager.dto.UpdateManagerDto;
-import by.kolenchik.core.user.repository.RoleRepository;
+import by.kolenchik.core.user.repository.UserRoleRepository;
 import by.kolenchik.core.user.repository.UserRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.BeanUtils;
@@ -23,23 +23,23 @@ public class ManagerServiceImpl implements ManagerService {
 
     private UserRepository userRepository;
     private ModelMapper modelMapper;
-    private RoleRepository roleRepository;
+    private UserRoleRepository userRoleRepository;
 
     public ManagerServiceImpl(
             UserRepository userRepository,
             ModelMapper modelMapper,
-            RoleRepository roleRepository
+            UserRoleRepository userRoleRepository
     ) {
         this.userRepository = userRepository;
         this.modelMapper = modelMapper;
-        this.roleRepository = roleRepository;
+        this.userRoleRepository = userRoleRepository;
     }
 
     @Override
     public ManagerInfoDto add(AddManagerDto addManagerDto) {
         User manager = modelMapper.map(addManagerDto, User.class);
 
-        UserRole managerUserRole = roleRepository.findByDesignation(UserRoleEnum.MANAGER.name());
+        UserRole managerUserRole = userRoleRepository.findByDesignation(UserRoleEnum.MANAGER.name());
         Set<UserRole> userRoles = new HashSet<>();
         userRoles.add(managerUserRole);
         manager.setRoles(userRoles);
@@ -51,7 +51,11 @@ public class ManagerServiceImpl implements ManagerService {
 
     @Override
     public List<ManagerInfoDto> findAll() {
-        List<User> managers = userRepository.findAllBySuperiorIsNull();
+        UserRole managerRole = userRoleRepository.findByDesignation(UserRoleEnum.MANAGER.name());
+        Set<UserRole> roles = new HashSet<>();
+        roles.add(managerRole);
+
+        List<User> managers = userRepository.findAllByRoles(roles);
 
         return managers.stream()
                 .map(manager -> modelMapper.map(manager, ManagerInfoDto.class))

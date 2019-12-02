@@ -6,7 +6,7 @@ import by.kolenchik.core.user.UserRoleEnum;
 import by.kolenchik.core.user.employee.dto.AddEmployeeDto;
 import by.kolenchik.core.user.employee.dto.EmployeeInfoDto;
 import by.kolenchik.core.user.employee.dto.UpdateEmployeeDto;
-import by.kolenchik.core.user.repository.RoleRepository;
+import by.kolenchik.core.user.repository.UserRoleRepository;
 import by.kolenchik.core.user.repository.UserRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.BeanUtils;
@@ -23,23 +23,23 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     private UserRepository userRepository;
     private ModelMapper modelMapper;
-    private RoleRepository roleRepository;
+    private UserRoleRepository userRoleRepository;
 
     public EmployeeServiceImpl(
             UserRepository userRepository,
             ModelMapper modelMapper,
-            RoleRepository roleRepository
+            UserRoleRepository userRoleRepository
     ) {
         this.userRepository = userRepository;
         this.modelMapper = modelMapper;
-        this.roleRepository = roleRepository;
+        this.userRoleRepository = userRoleRepository;
     }
 
     @Override
     public EmployeeInfoDto add(AddEmployeeDto addEmployeeDto) {
         User employee = modelMapper.map(addEmployeeDto, User.class);
 
-        UserRole employeeUserRole = roleRepository.findByDesignation(UserRoleEnum.EMPLOYEE.name());
+        UserRole employeeUserRole = userRoleRepository.findByDesignation(UserRoleEnum.EMPLOYEE.name());
         Set<UserRole> userRoles = new HashSet<>();
         userRoles.add(employeeUserRole);
         employee.setRoles(userRoles);
@@ -51,7 +51,11 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public List<EmployeeInfoDto> findAll() {
-        List<User> employees = userRepository.findAllBySuperiorNotNull();
+        UserRole employeeRole = userRoleRepository.findByDesignation(UserRoleEnum.EMPLOYEE.name());
+        Set<UserRole> roles = new HashSet<>();
+        roles.add(employeeRole);
+
+        List<User> employees = userRepository.findAllByRoles(roles);
 
         return employees.stream()
                 .map(employee -> modelMapper.map(employee, EmployeeInfoDto.class))

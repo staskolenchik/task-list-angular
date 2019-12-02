@@ -41,6 +41,7 @@ public class JwtTokenProvider {
 
         Claims claims = Jwts.claims().setSubject(email);
         claims.put("auth", getRoleNames(roles));
+        claims.put("uid", user.getId());
         claims.put("superior", user.getSuperior());
 
         Date now = new Date();

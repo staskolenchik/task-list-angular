@@ -22,9 +22,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private JwtTokenProvider jwtTokenProvider;
     private UserDetailsService userDetailsService;
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
-
     public SecurityConfig(
             JwtTokenProvider jwtTokenProvider,
             @Qualifier("Jwt") UserDetailsService userDetailsService
@@ -47,26 +44,27 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.POST, "/dev/login").permitAll()
                 .antMatchers(HttpMethod.GET, "/dev/about").permitAll()
 
-                .antMatchers(HttpMethod.GET, "/dev/employees**").permitAll()
-                .antMatchers(HttpMethod.GET, "/dev/employees/**").permitAll()
-                .antMatchers(HttpMethod.POST, "/dev/employees").permitAll()
-                .antMatchers(HttpMethod.DELETE, "/dev/employees").permitAll()
-                .antMatchers(HttpMethod.DELETE, "/dev/employees/*").permitAll()
-                .antMatchers(HttpMethod.PUT, "/dev/employees/*").permitAll()
+                .antMatchers(HttpMethod.GET, "/dev/employees**").hasAuthority(Role.ADMIN.name())
+                .antMatchers(HttpMethod.GET, "/dev/employees/managers/*").hasAuthority(Role.MANAGER.name())
+                .antMatchers(HttpMethod.GET, "/dev/employees/**").hasAuthority(Role.ADMIN.name())
+                .antMatchers(HttpMethod.POST, "/dev/employees").hasAuthority(Role.ADMIN.name())
+                .antMatchers(HttpMethod.DELETE, "/dev/employees").hasAuthority(Role.ADMIN.name())
+                .antMatchers(HttpMethod.DELETE, "/dev/employees/*").hasAuthority(Role.ADMIN.name())
+                .antMatchers(HttpMethod.PUT, "/dev/employees/*").hasAuthority(Role.ADMIN.name())
 
-                .antMatchers(HttpMethod.GET, "/dev/managers*").permitAll()
-                .antMatchers(HttpMethod.GET, "/dev/managers/*").permitAll()
-                .antMatchers(HttpMethod.POST, "/dev/managers").permitAll()
-                .antMatchers(HttpMethod.DELETE, "/dev/managers").permitAll()
-                .antMatchers(HttpMethod.DELETE, "/dev/managers/*").permitAll()
-                .antMatchers(HttpMethod.PUT, "/dev/managers/*").permitAll()
+                .antMatchers(HttpMethod.GET, "/dev/managers*").hasAuthority(Role.ADMIN.name())
+                .antMatchers(HttpMethod.GET, "/dev/managers/*").hasAuthority(Role.ADMIN.name())
+                .antMatchers(HttpMethod.POST, "/dev/managers").hasAuthority(Role.ADMIN.name())
+                .antMatchers(HttpMethod.DELETE, "/dev/managers").hasAuthority(Role.ADMIN.name())
+                .antMatchers(HttpMethod.DELETE, "/dev/managers/*").hasAuthority(Role.ADMIN.name())
+                .antMatchers(HttpMethod.PUT, "/dev/managers/*").hasAuthority(Role.ADMIN.name())
 
-                .antMatchers(HttpMethod.GET, "/dev/tasks**").permitAll()
-                .antMatchers(HttpMethod.GET, "/dev/tasks/**").permitAll()
-                .antMatchers(HttpMethod.POST, "/dev/tasks").permitAll()
-                .antMatchers(HttpMethod.DELETE, "/dev/tasks").permitAll()
-                .antMatchers(HttpMethod.DELETE, "/dev/tasks/*").permitAll()
-                .antMatchers(HttpMethod.PUT, "/dev/tasks/*").permitAll()
+                .antMatchers(HttpMethod.GET, "/dev/tasks**").hasAnyAuthority(Role.EMPLOYEE.name(), Role.MANAGER.name())
+                .antMatchers(HttpMethod.GET, "/dev/tasks/**").hasAnyAuthority(Role.EMPLOYEE.name(), Role.MANAGER.name())
+                .antMatchers(HttpMethod.POST, "/dev/tasks").hasAuthority(Role.MANAGER.name())
+                .antMatchers(HttpMethod.DELETE, "/dev/tasks").hasAuthority(Role.MANAGER.name())
+                .antMatchers(HttpMethod.DELETE, "/dev/tasks/*").hasAuthority(Role.MANAGER.name())
+                .antMatchers(HttpMethod.PUT, "/dev/tasks/*").hasAnyAuthority(Role.EMPLOYEE.name(), Role.MANAGER.name())
 
                 .anyRequest().authenticated();
 
