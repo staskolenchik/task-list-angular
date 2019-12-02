@@ -52,6 +52,8 @@ import {CdkStepperModule} from "@angular/cdk/stepper";
 import {CdkTableModule} from "@angular/cdk/table";
 import {DragDropModule} from "@angular/cdk/drag-drop";
 import {CdkTreeModule} from "@angular/cdk/tree";
+import {LoginComponent} from "./pages/login/login.component";
+import {ForbiddenComponent} from "./pages/forbidden/forbidden.component";
 
 @NgModule({
     imports:[
@@ -107,7 +109,11 @@ import {CdkTreeModule} from "@angular/cdk/tree";
         MatSortModule,
         MatTableModule,
     ],
-    declarations: [AppComponent],
+    declarations: [
+        AppComponent,
+        LoginComponent,
+        ForbiddenComponent
+    ],
     bootstrap: [AppComponent]
 })
 

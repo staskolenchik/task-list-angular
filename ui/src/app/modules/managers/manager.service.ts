@@ -1,7 +1,7 @@
 import {Injectable} from "@angular/core";
 import {Observable, throwError} from "rxjs";
 import {catchError, map, retry} from "rxjs/operators";
-import {HttpClient, HttpErrorResponse} from "@angular/common/http";
+import {HttpClient, HttpErrorResponse, HttpHeaders} from "@angular/common/http";
 import {Manager} from "../../shared/models/manager";
 
 @Injectable()
@@ -25,8 +25,13 @@ export class ManagerService {
     };
 
     getAll(): Observable<Manager[]>{
+        const authorization = 'Bearer_' + sessionStorage.getItem('token');
+        let headers = new HttpHeaders({
+            'Authorization': authorization
+        });
+
         return this.http
-            .get(this.url)
+            .get(this.url, {headers})
             .pipe(map(data => {
                     let managers = [].concat(data);
                     return managers.map(function (manager: any) {
@@ -47,8 +52,13 @@ export class ManagerService {
     }
 
     add(manager: Manager): Observable<Manager> {
+        const authorization = 'Bearer_' + sessionStorage.getItem('token');
+        let headers = new HttpHeaders({
+            'Authorization': authorization
+        });
+
         return this.http
-            .post<Manager>(this.url, manager)
+            .post<Manager>(this.url, manager, {headers})
             .pipe(
                 retry(3),
                 catchError(this.handleError)
@@ -56,9 +66,14 @@ export class ManagerService {
     }
 
     delete(manager: Manager): Observable<{}> {
+        const authorization = 'Bearer_' + sessionStorage.getItem('token');
+        let headers = new HttpHeaders({
+            'Authorization': authorization
+        });
+
         const url: string = `${this.url}/${manager.id}`;
         return this.http
-            .delete(url)
+            .delete(url, {headers})
             .pipe(
                 retry(3),
                 catchError(this.handleError)
@@ -66,9 +81,14 @@ export class ManagerService {
     }
 
     update(manager: Manager): Observable<Manager> {
+        const authorization = 'Bearer_' + sessionStorage.getItem('token');
+        let headers = new HttpHeaders({
+            'Authorization': authorization
+        });
+
         const url: string = `${this.url}/${manager.id}`;
         return this.http
-            .put<Manager>(url, manager)
+            .put<Manager>(url, manager, {headers})
             .pipe(
                 retry(3),
                 catchError(this.handleError)
@@ -76,9 +96,14 @@ export class ManagerService {
     }
 
     get(manager: Manager): Observable<Manager> {
+        const authorization = 'Bearer_' + sessionStorage.getItem('token');
+        let headers = new HttpHeaders({
+            'Authorization': authorization
+        });
+
         const url: string = `${this.url}/${manager.id}`;
         return this.http
-            .get<Manager>(url)
+            .get<Manager>(url, {headers})
             .pipe(
                 retry(3),
                 catchError(this.handleError)

@@ -244,7 +244,7 @@ export class TaskFormComponent implements OnInit{
     }
 
     getEmployees() {
-        this.manager.id = 2;
+        this.manager.id = JSON.parse(sessionStorage.getItem('uid'));
 
         this.employeeService
             .getEmployeesByManagerId(this.manager)

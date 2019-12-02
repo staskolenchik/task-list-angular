@@ -1,0 +1,8 @@
+.forbidden-card{
+    margin: 30px;
+}
+
+.forbidden-card__title {
+    color: red;
+    text-align: center;
+}

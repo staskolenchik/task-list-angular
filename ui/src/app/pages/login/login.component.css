@@ -1,0 +1,16 @@
+.login-page {
+    display: flex;
+    justify-content: center;
+    padding: 100px 0 0;
+}
+
+.login-page__form-field {
+    display: block;
+    padding: 0 0 10px;
+}
+
+.login-page__form {
+    min-width: 370px;
+    min-height: 450px;
+    width: 30%;
+}

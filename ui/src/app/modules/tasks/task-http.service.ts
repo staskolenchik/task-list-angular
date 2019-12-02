@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {HttpClient, HttpErrorResponse, HttpParams} from '@angular/common/http';
+import {HttpClient, HttpErrorResponse, HttpHeaders, HttpParams} from '@angular/common/http';
 import {Observable, throwError} from "rxjs";
 import {Task} from '../../shared/models/task';
 import {catchError, map} from "rxjs/operators";
@@ -29,23 +29,38 @@ export class TaskHttpService{
     };
 
     add(task: Task) : Observable<Task>{
+        const authorization = 'Bearer_' + sessionStorage.getItem('token');
+        let headers = new HttpHeaders({
+            'Authorization': authorization
+        });
+
         return this.http
-            .post<Task>(this.url, task)
+            .post<Task>(this.url, task, {headers})
             .pipe(
                 catchError((error) => this.handleError(error))
             );
     }
 
     update(task: Task): Observable<Task> {
+        const authorization = 'Bearer_' + sessionStorage.getItem('token');
+        let headers = new HttpHeaders({
+            'Authorization': authorization
+        });
+
         return this.http
-            .put<Task>(`${this.url}/${task.id}`, task)
+            .put<Task>(`${this.url}/${task.id}`, task, {headers})
             .pipe(
                 catchError((error) => this.handleError(error))
             );
     }
 
     delete(task: Task): Observable<any> {
-        return this.http.delete(`${this.url}/${task.id}`)
+        const authorization = 'Bearer_' + sessionStorage.getItem('token');
+        let headers = new HttpHeaders({
+            'Authorization': authorization
+        });
+
+        return this.http.delete(`${this.url}/${task.id}`, {headers})
             .pipe(
                 catchError((error) => this.handleError(error))
             );
@@ -56,11 +71,17 @@ export class TaskHttpService{
         tasks.forEach((task) => {
             ids.push(task.id);
         });
+
         let params = new HttpParams();
         params = params.set('ids', ids.toString());
 
+        const authorization = 'Bearer_' + sessionStorage.getItem('token');
+        let headers = new HttpHeaders({
+            'Authorization': authorization
+        });
+
         return this.http
-            .delete(`${this.url}`, {params})
+            .delete(`${this.url}`, {headers, params})
             .pipe(
                 catchError((error) => this.handleError(error))
             )
@@ -68,8 +89,14 @@ export class TaskHttpService{
 
     get(task: Task): Observable<Task> {
         let url = `${this.url}/${task.id}`;
+
+        const authorization = 'Bearer_' + sessionStorage.getItem('token');
+        let headers = new HttpHeaders({
+            'Authorization': authorization
+        });
+
         return this.http
-            .get<Task>(url)
+            .get<Task>(url, {headers})
             .pipe(
                 catchError((error) => this.handleError(error))
             );
@@ -81,8 +108,13 @@ export class TaskHttpService{
         params = params.set('size', page.size.toString());
         params = params.set('statuses', filter.statuses);
 
+        const authorization = 'Bearer_' + sessionStorage.getItem('token');
+        let headers = new HttpHeaders({
+            'Authorization': authorization
+        });
+
         return this.http
-            .get(this.url, {params})
+            .get(this.url, {headers, params})
             .pipe(map((response: any) => {
                 const tasks: Task[] = [].concat(response.content);
                 const page: Page = {
