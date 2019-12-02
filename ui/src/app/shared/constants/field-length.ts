@@ -1,4 +1,8 @@
 export const FieldLength = {
     TASK_SUBJECT: 45,
     TASK_DESCRIPTION: 255,
+
+    USER_MAX_EMAIL: 50,
+    USER_MIN_PASSWORD: 5,
+    USER_MAX_PASSWORD: 20,
 };

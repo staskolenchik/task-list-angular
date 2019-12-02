@@ -26,3 +26,9 @@ logging:
             hibernate:
                 SQL: DEBUG
                 type.descriptor.sql.BasicBinder: TRACE
+
+
+security:
+        jwt:
+            key: secret
+            token.expiredIn: 1800000

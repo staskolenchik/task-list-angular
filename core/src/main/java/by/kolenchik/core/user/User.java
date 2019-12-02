@@ -1,14 +1,34 @@
 package by.kolenchik.core.user;
 
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.Set;
 
 @Entity
 @Table(name = "usr")
-@Data
+@Getter
+@Setter
 public class User  {
+
+    public User() {
+    }
+
+    public <T extends User> User(T user) {
+        id = user.getId();
+        email = user.getEmail();
+        password = user.getPassword();
+        name = user.getName();
+        surname = user.getSurname();
+        patronymic = user.getPatronymic();
+        birthDate = user.getBirthDate();
+        superior = user.getSuperior();
+        deleteDate = user.getDeleteDate();
+        roles = user.getRoles();
+    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,4 +54,15 @@ public class User  {
 
     @Column(name = "superior_id")
     private Long superior;
+
+    @Column(name = "delete_date")
+    private LocalDate deleteDate;
+
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "usr_role",
+            joinColumns = {@JoinColumn(name = "usr_id", referencedColumnName = "id")},
+            inverseJoinColumns = {@JoinColumn(name = "role_id", referencedColumnName = "id")}
+    )
+    private Set<UserRole> roles;
 }

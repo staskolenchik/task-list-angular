@@ -1,6 +1,5 @@
 package by.kolenchik.core.user.manager.service;
 
-import by.kolenchik.core.user.User;
 import by.kolenchik.core.user.manager.dto.AddManagerDto;
 import by.kolenchik.core.user.manager.dto.ManagerInfoDto;
 import by.kolenchik.core.user.manager.dto.UpdateManagerDto;

@@ -4,6 +4,7 @@ import by.kolenchik.core.user.manager.dto.AddManagerDto;
 import by.kolenchik.core.user.manager.dto.ManagerInfoDto;
 import by.kolenchik.core.user.manager.dto.UpdateManagerDto;
 import by.kolenchik.core.user.manager.service.ManagerService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -13,13 +14,18 @@ import java.util.List;
 public class ManagerController {
 
     private ManagerService managerService;
+    private BCryptPasswordEncoder passwordEncoder;
 
-    public ManagerController(ManagerService managerService) {
+    public ManagerController(ManagerService managerService, BCryptPasswordEncoder passwordEncoder) {
         this.managerService = managerService;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @PostMapping
     public ManagerInfoDto add(@RequestBody AddManagerDto addManagerDto) {
+        String encodedPassword = passwordEncoder.encode(addManagerDto.getPassword());
+        addManagerDto.setPassword(encodedPassword);
+
         return managerService.add(addManagerDto);
     }
 

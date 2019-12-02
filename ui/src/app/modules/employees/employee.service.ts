@@ -1,5 +1,5 @@
 import {Injectable} from "@angular/core";
-import {HttpClient, HttpErrorResponse} from "@angular/common/http";
+import {HttpClient, HttpErrorResponse, HttpHeaders} from "@angular/common/http";
 import {catchError, map, retry} from "rxjs/operators";
 import {Observable, throwError} from "rxjs";
 import {Employee} from "../../shared/models/employee";
@@ -26,8 +26,13 @@ export class EmployeeService {
     };
 
     getAll() : Observable<Employee[]>{
+        const authorization = 'Bearer_' + sessionStorage.getItem('token');
+        let headers = new HttpHeaders({
+            'Authorization': authorization
+        });
+
         return this.http
-            .get(this.url)
+            .get(this.url, {headers})
             .pipe(map(data => {
                     let employees = [].concat(data);
                     return employees.map(function (employee: Employee) {
@@ -49,38 +54,55 @@ export class EmployeeService {
     }
 
     add(employee: Employee) : Observable<Employee> {
+        const authorization = 'Bearer_' + sessionStorage.getItem('token');
+        let headers = new HttpHeaders({
+            'Authorization': authorization
+        });
+
         return this.http
-            .post<Employee>(this.url, employee)
+            .post<Employee>(this.url, employee, {headers})
             .pipe(
-                retry(3),
                 catchError(this.handleError)
             )
     }
 
     update(employee: Employee): Observable<Employee> {
+        const authorization = 'Bearer_' + sessionStorage.getItem('token');
+        let headers = new HttpHeaders({
+            'Authorization': authorization
+        });
+
         let url = `${this.url}/${employee.id}`;
         return this.http
-            .put<Employee>(url, employee)
+            .put<Employee>(url, employee, {headers})
             .pipe(
-                retry(3),
                 catchError(this.handleError)
             );
     }
 
     delete(employee: Employee) {
+        const authorization = 'Bearer_' + sessionStorage.getItem('token');
+        let headers = new HttpHeaders({
+            'Authorization': authorization
+        });
+
         const url = `${this.url}/${employee.id}`;
         return this.http
-            .delete(url)
+            .delete(url, {headers})
             .pipe(
-                retry(3),
                 catchError(this.handleError)
             );
     }
 
     getEmployeesByManagerId(manager: Manager): Observable<Employee[]> {
+        const authorization = 'Bearer_' + sessionStorage.getItem('token');
+        let headers = new HttpHeaders({
+            'Authorization': authorization
+        });
+
         const url = `${this.url}/managers/${manager.id}`;
         return this.http
-            .get(url)
+            .get(url, {headers})
             .pipe(map(data => {
                 let employees = [].concat(data);
                 return employees.map(function (employee: Employee) {
