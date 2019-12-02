@@ -1,5 +1,6 @@
-import {Component, EventEmitter, Input, Output} from "@angular/core";
+import {Component} from "@angular/core";
 import {Manager} from "../../../../shared/models/manager";
+import {ManagerService} from "../../manager.service";
 
 @Component({
     selector: "manager-form-component",
@@ -13,7 +14,7 @@ import {Manager} from "../../../../shared/models/manager";
                                placeholder="Email"
                                autofocus
                                name="email"
-                               [(ngModel)]="_manager.email">
+                               [(ngModel)]="manager.email">
                     </mat-form-field>
 
                     <mat-form-field class="manager-form__form-field">
@@ -21,28 +22,28 @@ import {Manager} from "../../../../shared/models/manager";
                                placeholder="Password"
                                type="password"
                                name="password"
-                               [(ngModel)]="_manager.password">
+                               [(ngModel)]="manager.password">
                     </mat-form-field>
 
                     <mat-form-field class="manager-form__form-field">
                         <input matInput
                                placeholder="Name"
                                name="name"
-                               [(ngModel)]="_manager.name">
+                               [(ngModel)]="manager.name">
                     </mat-form-field>
                     
                     <mat-form-field class="manager-form__form-field">
                         <input matInput
                                placeholder="Surname"
                                name="surname"
-                               [(ngModel)]="_manager.surname">
+                               [(ngModel)]="manager.surname">
                     </mat-form-field>
 
                     <mat-form-field class="manager-form__form-field">
                         <input matInput
                                placeholder="Patronymic"
                                name="patronymic"
-                               [(ngModel)]="_manager.patronymic">
+                               [(ngModel)]="manager.patronymic">
                     </mat-form-field>
                     
                     <mat-form-field class="manager-form__form-field">
@@ -50,7 +51,7 @@ import {Manager} from "../../../../shared/models/manager";
                                [matDatepicker]="picker"
                                placeholder="Choose a date"
                                name="birthDate"
-                               [(ngModel)]="_manager.birthDate">
+                               [(ngModel)]="manager.birthDate">
                         <mat-datepicker-toggle matSuffix [for]="picker">
                         </mat-datepicker-toggle>
                         <mat-datepicker #picker></mat-datepicker>
@@ -77,35 +78,12 @@ import {Manager} from "../../../../shared/models/manager";
 })
 
 export class ManagerFormComponent {
-    private _manager: Manager = {} as Manager;
-    private isUpdated: boolean = false;
+    private manager: Manager = {} as Manager;
 
-    @Input()
-    set manager(manager: Manager) {
-        this._manager = manager || {} as Manager;
-        manager ? this.isUpdated = true : this.isUpdated = false;
-        console.log(this.isUpdated);
-    }
-
-    @Output() add: EventEmitter<Manager> = new EventEmitter();
-    @Output() update: EventEmitter<Manager> = new EventEmitter();
+    constructor(private managerService: ManagerService) {}
 
     onSubmit() {
-        if (this.isUpdated) {
-            this.submitUpdate(this._manager);
-        } else {
-            this.submitAdd(this._manager);
-        }
-    }
-    private submitAdd(manager: Manager) {
-        this.isUpdated = false;
-        this._manager = {} as Manager;
-        this.add.emit(manager);
-    }
-
-    private submitUpdate(manager: Manager) {
-        this.isUpdated = false;
-        this._manager = {} as Manager;
-        this.update.emit(manager)
+        this.manager = {} as Manager;
+        this.managerService.add(this.manager).subscribe();
     }
 }

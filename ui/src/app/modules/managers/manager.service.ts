@@ -1,6 +1,6 @@
 import {Injectable} from "@angular/core";
 import {Observable, throwError} from "rxjs";
-import {catchError, map, retry} from "rxjs/operators";
+import {catchError, map} from "rxjs/operators";
 import {HttpClient, HttpErrorResponse, HttpHeaders} from "@angular/common/http";
 import {Manager} from "../../shared/models/manager";
 
@@ -46,7 +46,6 @@ export class ManagerService {
                         }
                     })
                 }),
-                retry(3),
                 catchError(this.handleError)
             );
     }
@@ -60,7 +59,6 @@ export class ManagerService {
         return this.http
             .post<Manager>(this.url, manager, {headers})
             .pipe(
-                retry(3),
                 catchError(this.handleError)
             );
     }
@@ -75,7 +73,6 @@ export class ManagerService {
         return this.http
             .delete(url, {headers})
             .pipe(
-                retry(3),
                 catchError(this.handleError)
             );
     }
@@ -90,22 +87,20 @@ export class ManagerService {
         return this.http
             .put<Manager>(url, manager, {headers})
             .pipe(
-                retry(3),
                 catchError(this.handleError)
             );
     }
 
-    get(manager: Manager): Observable<Manager> {
+    get(id: string): Observable<Manager> {
         const authorization = 'Bearer_' + sessionStorage.getItem('token');
         let headers = new HttpHeaders({
             'Authorization': authorization
         });
 
-        const url: string = `${this.url}/${manager.id}`;
+        const url: string = `${this.url}/${id}`;
         return this.http
             .get<Manager>(url, {headers})
             .pipe(
-                retry(3),
                 catchError(this.handleError)
             );
     }

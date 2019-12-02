@@ -1,41 +1,51 @@
-import {Component, Input} from "@angular/core";
+import {Component, OnInit} from "@angular/core";
 import {Manager} from "../../../../shared/models/manager";
+import {ManagerService} from "../../manager.service";
+import {Router} from "@angular/router";
 
 @Component({
-    selector: "manager-profile-component",
+    selector: "manager-manager-component",
     template: `
-        <div *ngIf="profile.id">
+        <div *ngIf="manager.id">
             <h3>Manager profile</h3>
             <div>
                 <label>Email: </label>
-                <span>{{profile.email}}</span>
+                <span>{{manager.email}}</span>
             </div>
             <div>
                 <label>First Name: </label>
-                <span>{{profile.name}}</span>
+                <span>{{manager.name}}</span>
             </div>
             <div>
                 <label>Surname: </label>
-                <span>{{profile.surname}}</span>
+                <span>{{manager.surname}}</span>
             </div>
             <div>
                 <label>Patronymic: </label>
-                <span>{{profile.patronymic}}</span>
+                <span>{{manager.patronymic}}</span>
             </div>
             <div>
                 <label>Birth Date: </label>
-                <span>{{profile.birthDate}}</span>
+                <span>{{manager.birthDate}}</span>
             </div>
         </div>
-    `,
-    styles: []
+    `
 })
 
-export class ManagerProfileComponent {
-    private profile: Manager = {} as Manager;
+export class ManagerProfileComponent implements OnInit{
+    private manager: Manager = {} as Manager;
 
-    @Input()
-    set manager(profile: Manager) {
-        this.profile = profile || {} as Manager;
+    constructor(
+        private managerService: ManagerService,
+        private router: Router
+    ) {}
+
+    ngOnInit(): void {
+        const urlPaths = this.router.url.split('/');
+        const id: string = urlPaths[urlPaths.length - 1];
+
+        this.managerService
+            .get(id)
+            .subscribe((manager: Manager) => this.manager = manager);
     }
 }

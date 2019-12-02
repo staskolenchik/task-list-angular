@@ -6,7 +6,7 @@ import {LoginService} from "./pages/login/login-service";
 @Component({
     selector: 'my-app',
     template:`
-        <mat-toolbar color="primary" class="tool-bar">
+        <mat-toolbar color="primary" class="mat-elevation-z8">
             <button mat-icon-button (click)="sidenav.toggle()">
                 <mat-icon>menu</mat-icon>
             </button>

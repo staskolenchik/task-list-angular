@@ -12,8 +12,10 @@ import {
     MatChipsModule, MatDatepickerModule,
     MatIconModule,
     MatInputModule,
-    MatTableModule
+    MatTableModule, MatTabsModule
 } from "@angular/material";
+import {ManagerUpdateFormComponent} from "./components/manager-update-form/manager-update-form.component";
+import {ManagerService} from "./manager.service";
 
 @NgModule({
     declarations: [
@@ -21,6 +23,7 @@ import {
         ManagerListComponent,
         ManagerFormComponent,
         ManagerProfileComponent,
+        ManagerUpdateFormComponent
     ],
     imports: [
         ManagerRoutingModule,
@@ -34,13 +37,16 @@ import {
         MatInputModule,
         MatDatepickerModule,
         MatButtonToggleModule,
+        MatTabsModule,
     ],
     exports: [
         ManagerComponent,
         ManagerListComponent,
         ManagerFormComponent,
         ManagerProfileComponent,
-    ]
+        ManagerUpdateFormComponent
+    ],
+    providers: [ManagerService]
 })
 
 export class ManagerModule {

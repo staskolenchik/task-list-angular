@@ -1,4 +1,9 @@
-.manager-list,
-.manager-form {
-    padding: 30px;
+.manager-component__navbar {
+    display: flex;
+    align-items: flex-start;
+    flex-wrap: nowrap;
+}
+
+.manager_component__navbar-element {
+    width: 100%;
 }
