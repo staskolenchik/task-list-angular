@@ -1,6 +1,6 @@
 import {Component, OnInit} from "@angular/core";
 import {Manager} from "../../../../shared/models/manager";
-import {ManagerService} from "../../manager.service";
+import {ManagerHttpService} from "../../manager-http.service";
 import {Router} from "@angular/router";
 
 @Component({
@@ -36,7 +36,7 @@ export class ManagerProfileComponent implements OnInit{
     private manager: Manager = {} as Manager;
 
     constructor(
-        private managerService: ManagerService,
+        private managerService: ManagerHttpService,
         private router: Router
     ) {}
 

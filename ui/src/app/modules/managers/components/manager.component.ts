@@ -1,5 +1,4 @@
 import {Component} from "@angular/core";
-import {ManagerService} from "../manager.service";
 
 
 @Component({
@@ -7,8 +6,7 @@ import {ManagerService} from "../manager.service";
     template: `        
         <router-outlet></router-outlet>
     `,
-    styleUrls: ['./manager.component.css'],
-    providers: [ManagerService]
+    styleUrls: ['./manager.component.css']
 })
 
 export class ManagerComponent {

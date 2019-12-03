@@ -10,6 +10,7 @@ import {AppRoutingModule} from "./app-routing.module";
 import {AboutModule} from "./modules/about/about.module";
 
 import {
+    MAT_DATE_LOCALE,
     MatAutocompleteModule,
     MatBadgeModule,
     MatBottomSheetModule,
@@ -114,7 +115,15 @@ import {ForbiddenComponent} from "./pages/forbidden/forbidden.component";
         LoginComponent,
         ForbiddenComponent
     ],
-    bootstrap: [AppComponent]
+    bootstrap: [
+        AppComponent
+    ],
+    providers: [
+        {
+            provide: MAT_DATE_LOCALE,
+            useValue: 'en-GB'
+        },
+    ],
 })
 
 export class AppModule{}

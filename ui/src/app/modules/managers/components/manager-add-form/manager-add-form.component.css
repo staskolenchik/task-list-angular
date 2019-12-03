@@ -1,0 +1,30 @@
+.manager-add-form {
+    margin: 30px;
+}
+
+.manager-add-form__form-field {
+    display: block;
+    width: 100%;
+    margin: 5px 0 0;
+}
+
+.manager-add-form__button-group {
+    display: flex;
+    justify-content: flex-end;
+    margin: 0 0 8px;
+}
+
+.manager-add-form__add-button,
+.manager-add-form__back-button,
+.manager-add-form__reset-button {
+    width: 50px;
+    height: 36px;
+}
+
+.manager-add-form__reset-button-content {
+    margin: 0 8px;
+}
+
+.manager-add-form__password-confirmed-hint {
+    color: green;
+}

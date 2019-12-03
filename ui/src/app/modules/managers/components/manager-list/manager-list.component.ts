@@ -1,6 +1,6 @@
 import {Component, OnInit} from "@angular/core";
 import {Manager} from "../../../../shared/models/manager";
-import {ManagerService} from "../../manager.service";
+import {ManagerHttpService} from "../../manager-http.service";
 import {Router} from "@angular/router";
 
 @Component({
@@ -67,7 +67,7 @@ export class ManagerListComponent implements OnInit{
     columnsToDisplay = ['email', 'fullName', 'birthDate', 'options'];
 
     constructor(
-        private managerService: ManagerService,
+        private managerService: ManagerHttpService,
         private router: Router
     ) {}
 

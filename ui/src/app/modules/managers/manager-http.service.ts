@@ -3,23 +3,26 @@ import {Observable, throwError} from "rxjs";
 import {catchError, map} from "rxjs/operators";
 import {HttpClient, HttpErrorResponse, HttpHeaders} from "@angular/common/http";
 import {Manager} from "../../shared/models/manager";
+import {MatSnackBar} from "@angular/material";
+import {Urls} from "../../shared/constants/urls";
 
 @Injectable()
-export class ManagerService {
+export class ManagerHttpService {
 
-    private url: string = "http://localhost:8081/dev/managers";
+    private url: string = Urls.MANAGER;
 
-    constructor(private http: HttpClient) {
-    }
+    constructor(
+        private http: HttpClient,
+        private snackBar: MatSnackBar
+    ) {}
 
     private handleError(error: HttpErrorResponse) {
         if (error.error instanceof ErrorEvent) {
-            console.error('An error occurred:', error.error.message);
+            this.snackBar.open(error.error.toString(), "Close", {duration: 5000});
         } else {
-            console.error(
-                `Backend returned code ${error.status}, ` +
-                `body was: ${error.error}`);
+            this.snackBar.open(error.error.toString(), "Close", {duration: 5000});
         }
+
         return throwError(
             'Something bad happened; please try again later.');
     };
@@ -39,6 +42,7 @@ export class ManagerService {
                             id: manager.id,
                             email: manager.email,
                             password: null,
+                            confirmPassword: null,
                             name: manager.name,
                             surname: manager.surname,
                             patronymic: manager.patronymic,
@@ -46,7 +50,7 @@ export class ManagerService {
                         }
                     })
                 }),
-                catchError(this.handleError)
+                catchError((error) => this.handleError(error))
             );
     }
 
@@ -59,11 +63,11 @@ export class ManagerService {
         return this.http
             .post<Manager>(this.url, manager, {headers})
             .pipe(
-                catchError(this.handleError)
+                catchError((error) => this.handleError(error))
             );
     }
 
-    delete(manager: Manager): Observable<{}> {
+    delete(manager: Manager): Observable<any> {
         const authorization = 'Bearer_' + sessionStorage.getItem('token');
         let headers = new HttpHeaders({
             'Authorization': authorization

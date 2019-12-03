@@ -1,7 +1,7 @@
 import {NgModule} from "@angular/core";
 import {RouterModule, Routes} from "@angular/router";
 import {ManagerComponent} from "./components/manager.component";
-import {ManagerFormComponent} from "./components/manager-form/manager-form.component";
+import {ManagerAddFormComponent} from "./components/manager-add-form/manager-add-form.component";
 import {ManagerListComponent} from "./components/manager-list/manager-list.component";
 import {ManagerProfileComponent} from "./components/manager-profile/manager-profile.component";
 import {ManagerUpdateFormComponent} from "./components/manager-update-form/manager-update-form.component";
@@ -17,7 +17,7 @@ const managerRoutes: Routes = [
             },
             {
                 path: 'form',
-                component: ManagerFormComponent,
+                component: ManagerAddFormComponent,
             },
             {
                 path: ':id',

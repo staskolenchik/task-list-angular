@@ -1,7 +1,7 @@
 import {Component, OnInit} from "@angular/core";
 import {Employee} from "../../../shared/models/employee";
 import {EmployeeService} from "../employee.service";
-import {ManagerService} from "../../managers/manager.service";
+import {ManagerHttpService} from "../../managers/manager-http.service";
 import {Manager} from "../../../shared/models/manager";
 
 
@@ -16,7 +16,7 @@ import {Manager} from "../../../shared/models/manager";
         <employee-list-component [employees]="employees" (delete)="delete($event)" (update)="updateForm($event)"></employee-list-component>
     `,
     styles: [],
-    providers:[EmployeeService, ManagerService]
+    providers:[EmployeeService, ManagerHttpService]
 })
 
 export class EmployeeComponent implements OnInit{
@@ -27,7 +27,7 @@ export class EmployeeComponent implements OnInit{
 
     constructor(
         private employeeService: EmployeeService,
-        private managerService: ManagerService
+        private managerService: ManagerHttpService
     ) {}
 
     ngOnInit(): void {
@@ -67,7 +67,7 @@ export class EmployeeComponent implements OnInit{
     }
 
     delete(employee: Employee) {
-        this.employeeService.delete(employee).subscribe(response => {
+        this.employeeService.delete(employee).subscribe(() => {
             let index = this.employees.indexOf(employee);
             this.employees.splice(index, 1);
         });

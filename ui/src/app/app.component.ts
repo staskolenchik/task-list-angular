@@ -61,11 +61,15 @@ import {LoginService} from "./pages/login/login-service";
         </mat-sidenav-container>
     `,
     styleUrls: ['./app.component.css'],
+
 })
 
 export class AppComponent {
 
-    constructor(private router: Router, private loginService: LoginService) {}
+    constructor(
+        private router: Router,
+        private loginService: LoginService,
+    ) {}
 
     onLogout() {
         sessionStorage.clear();
