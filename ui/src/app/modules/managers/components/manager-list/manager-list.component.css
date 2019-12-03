@@ -13,3 +13,14 @@ table {
 .manager-list__option-button {
     margin-right: 3px;
 }
+
+.manager-list__footer {
+    padding: 15px 0 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.mat-cell {
+    padding: 0 5px;
+}

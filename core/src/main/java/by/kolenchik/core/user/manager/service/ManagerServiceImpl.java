@@ -98,4 +98,11 @@ public class ManagerServiceImpl implements ManagerService {
     public Boolean existsById(Long id) {
         return userRepository.existsById(id);
     }
+
+    @Override
+    public void deleteAll(Long[] ids) {
+        for (Long id : ids) {
+            userRepository.deleteById(id);
+        }
+    }
 }

@@ -21,4 +21,6 @@ public interface ManagerService {
     ManagerInfoDto findById(Long id);
 
     Boolean existsById(Long id);
+
+    void deleteAll(Long[] ids);
 }

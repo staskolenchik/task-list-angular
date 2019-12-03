@@ -44,6 +44,12 @@ public class ManagerController {
         managerService.deleteById(id);
     }
 
+    @DeleteMapping
+    public void deleteAll(Long... ids) {
+        managerService.deleteAll(ids);
+    }
+
+
     @PutMapping("/{id}")
     public ManagerInfoDto update(
             @PathVariable Long id,

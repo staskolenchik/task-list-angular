@@ -138,4 +138,25 @@ export class ManagerHttpService {
                 catchError((error) => this.handleError(error))
             ));
     }
+
+    deleteAll(managers: Manager[]) {
+        const ids: number[] = [];
+        managers.forEach((manager) => {
+            ids.push(manager.id);
+        });
+
+        let params = new HttpParams();
+        params = params.set('ids', ids.toString());
+
+        const authorization = 'Bearer_' + sessionStorage.getItem('token');
+        let headers = new HttpHeaders({
+            'Authorization': authorization
+        });
+
+        return this.http
+            .delete(`${this.url}`, {headers, params})
+            .pipe(
+                catchError((error) => this.handleError(error))
+            );
+    }
 }

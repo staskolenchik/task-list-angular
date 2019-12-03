@@ -2,9 +2,10 @@ import {Component, OnInit, ViewChild} from "@angular/core";
 import {Manager} from "../../../../shared/models/manager";
 import {ManagerHttpService} from "../../manager-http.service";
 import {Router} from "@angular/router";
-import {MatSort, MatTableDataSource, PageEvent} from "@angular/material";
+import {MatDialog, MatSort, MatTableDataSource, PageEvent} from "@angular/material";
 import {Page} from "../../../../shared/models/page";
 import {SelectionModel} from "@angular/cdk/collections";
+import {DeleteAllPermissionComponent} from "../../../../shared/modal-dialogs/delete-all-permission/delete-all-permission.component";
 
 @Component({
     selector: "manager-list-component",
@@ -81,7 +82,12 @@ import {SelectionModel} from "@angular/cdk/collections";
                 <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
                 <tr mat-row *matRowDef="let row; columns: columnsToDisplay;"></tr>
             </table>
-            <div class="manager_list__footer">
+            <div class="manager-list__footer">
+                <button mat-raised-button
+                        [disabled]="selection.isEmpty()"
+                        (click)="askDeleteAllPermission()"
+                        color="warn"
+                >Delete selected</button>
                 <mat-paginator [length]="page.length" 
                                [pageSizeOptions]="[5, 10, 20]"
                                [pageSize]="page.size"
@@ -114,11 +120,12 @@ export class ManagerListComponent implements OnInit{
 
     constructor(
         private managerHttpService: ManagerHttpService,
-        private router: Router
+        private router: Router,
+        private dialog: MatDialog
     ) {}
 
     ngOnInit(): void {
-        this.findAll(this.page);
+        this.loadManagersFromStartPage();
     }
 
     findAll(page: Page) {
@@ -180,5 +187,34 @@ export class ManagerListComponent implements OnInit{
         }
 
         return `${this.selection.isSelected(manager) ? 'deselect' : 'select'} manager `;
+    }
+
+    askDeleteAllPermission() {
+        const matDialogRef = this.dialog.open(DeleteAllPermissionComponent, {
+            height: '210px',
+            width: '480px',
+            data: {count: this.selection.selected.length}
+        });
+
+        matDialogRef.afterClosed().subscribe(isApproved => {
+            if (isApproved) {
+                this.onDeleteAll(this.selection.selected);
+            } else {
+                this.selection.clear();
+            }
+        })
+    }
+
+    private onDeleteAll(managers: Manager[]) {
+        this.managerHttpService
+            .deleteAll(managers)
+            .subscribe(() => {
+                this.loadManagersFromStartPage();
+            });
+    }
+
+    loadManagersFromStartPage(): void {
+        this.page.number = 0;
+        this.findAll(this.page);
     }
 }
