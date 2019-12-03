@@ -1,23 +1,22 @@
 package by.kolenchik.core.user.manager.service;
 
-import by.kolenchik.core.user.UserRole;
 import by.kolenchik.core.user.User;
+import by.kolenchik.core.user.UserRole;
 import by.kolenchik.core.user.UserRoleEnum;
 import by.kolenchik.core.user.exception.DuplicateEmailException;
-import by.kolenchik.core.user.exception.PasswordsMismatchException;
 import by.kolenchik.core.user.manager.dto.AddManagerDto;
 import by.kolenchik.core.user.manager.dto.ManagerInfoDto;
 import by.kolenchik.core.user.manager.dto.UpdateManagerDto;
-import by.kolenchik.core.user.repository.UserRoleRepository;
 import by.kolenchik.core.user.repository.UserRepository;
+import by.kolenchik.core.user.repository.UserRoleRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.BeanUtils;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 
 @Service
@@ -59,16 +58,17 @@ public class ManagerServiceImpl implements ManagerService {
     }
 
     @Override
-    public List<ManagerInfoDto> findAll() {
+    public Page<ManagerInfoDto> findAll(Pageable pageable) {
         UserRole managerRole = userRoleRepository.findByDesignation(UserRoleEnum.MANAGER.name());
         Set<UserRole> roles = new HashSet<>();
         roles.add(managerRole);
 
-        List<User> managers = userRepository.findAllByRoles(roles);
+        Page<User> managers = userRepository.findAllByRoles(roles, pageable);
 
-        return managers.stream()
-                .map(manager -> modelMapper.map(manager, ManagerInfoDto.class))
-                .collect(Collectors.toList());
+        return managers.map(manager -> {
+            return modelMapper.map(manager, ManagerInfoDto.class);
+        });
+
     }
 
     @Override

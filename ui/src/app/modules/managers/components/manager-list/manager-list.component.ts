@@ -2,6 +2,8 @@ import {Component, OnInit} from "@angular/core";
 import {Manager} from "../../../../shared/models/manager";
 import {ManagerHttpService} from "../../manager-http.service";
 import {Router} from "@angular/router";
+import {MatTableDataSource, PageEvent} from "@angular/material";
+import {Page} from "../../../../shared/models/page";
 
 @Component({
     selector: "manager-list-component",
@@ -9,11 +11,11 @@ import {Router} from "@angular/router";
         <button mat-raised-button class="manager-list__add-manager-button"
                 color="primary"
                 routerLink="form"
-        >New Manager
-        </button>
+        >New Manager</button>
+        
         <mat-card class="mat-elevation-z8 manager_list_content">
             <mat-card-title>Manager List</mat-card-title>
-            <table mat-table [dataSource]="managers">
+            <table mat-table [dataSource]="managersDataSource">
                 <ng-container matColumnDef="email">
                     <th mat-header-cell *matHeaderCellDef>Email</th>
                     <td mat-cell *matCellDef="let manager">{{manager.email}}</td>
@@ -58,6 +60,15 @@ import {Router} from "@angular/router";
                 <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
                 <tr mat-row *matRowDef="let row; columns: columnsToDisplay;"></tr>
             </table>
+            <div class="manager_list__footer">
+                <mat-paginator [length]="page.length" 
+                               [pageSizeOptions]="[5, 10, 20]"
+                               [pageSize]="page.size"
+                               [pageIndex]="page.number"
+                               (page)="onChangePage($event)"
+                               showFirstLastButtons>
+                </mat-paginator>
+            </div>
         </mat-card>
     `,
     styleUrls: ['./manager-list.component.css']
@@ -66,21 +77,46 @@ import {Router} from "@angular/router";
 export class ManagerListComponent implements OnInit{
     columnsToDisplay = ['email', 'fullName', 'birthDate', 'options'];
 
+    private managersDataSource: MatTableDataSource<Manager>;
+    private page: Page = {
+        length: 0,
+        size: 10,
+        number: 0,
+    } as Page;
+    private managers: Manager[] = [];
+
+
     constructor(
-        private managerService: ManagerHttpService,
+        private managerHttpService: ManagerHttpService,
         private router: Router
     ) {}
 
-    private managers: Manager[] = [];
-
     ngOnInit(): void {
-        this.managerService
-            .getAll()
-            .subscribe(managers => this.managers = managers);
+        this.findAll(this.page);
+    }
+
+    findAll(page: Page) {
+        this.managerHttpService
+            .findAll(page)
+            .subscribe((response: any) => {
+                const managers = response.content;
+                this.page = response.page;
+                this.managersDataSource = new MatTableDataSource(managers);
+            })
+    }
+
+    onChangePage(pageEvent: PageEvent): void {
+        const changedPage: Page = {
+            length: null,
+            size: pageEvent.pageSize,
+            number: pageEvent.pageIndex,
+        };
+
+        this.findAll(changedPage);
     }
 
     onDelete(manager: Manager): void {
-        this.managerService
+        this.managerHttpService
             .delete(manager)
             .subscribe(() => {
                 let index = this.managers.indexOf(manager);

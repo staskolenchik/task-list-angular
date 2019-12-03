@@ -11,7 +11,7 @@ import {
     MatCardModule,
     MatChipsModule, MatDatepickerModule, MatDialogModule,
     MatIconModule,
-    MatInputModule, MatProgressBarModule,
+    MatInputModule, MatPaginatorModule, MatProgressBarModule,
     MatTableModule, MatTabsModule
 } from "@angular/material";
 import {ManagerUpdateFormComponent} from "./components/manager-update-form/manager-update-form.component";
@@ -42,6 +42,7 @@ import {ClearFormPermissionComponent} from "../../shared/modal-dialogs/clear-for
         MatTabsModule,
         MatDialogModule,
         MatProgressBarModule,
+        MatPaginatorModule,
     ],
     entryComponents: [
         ClearFormPermissionComponent,

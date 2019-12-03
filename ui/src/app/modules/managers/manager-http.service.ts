@@ -1,10 +1,11 @@
 import {Injectable} from "@angular/core";
 import {Observable, throwError} from "rxjs";
 import {catchError, map} from "rxjs/operators";
-import {HttpClient, HttpErrorResponse, HttpHeaders} from "@angular/common/http";
+import {HttpClient, HttpErrorResponse, HttpHeaders, HttpParams} from "@angular/common/http";
 import {Manager} from "../../shared/models/manager";
 import {MatSnackBar} from "@angular/material";
 import {Urls} from "../../shared/constants/urls";
+import {Page} from "../../shared/models/page";
 
 @Injectable()
 export class ManagerHttpService {
@@ -107,5 +108,34 @@ export class ManagerHttpService {
             .pipe(
                 catchError(this.handleError)
             );
+    }
+
+    findAll(page: Page) {
+        let params = new HttpParams();
+        params = params.set('page', page.number.toString());
+        params = params.set('size', page.size.toString());
+
+        const authorization = 'Bearer_' + sessionStorage.getItem('token');
+        let headers = new HttpHeaders({
+            'Authorization': authorization
+        });
+
+        return this.http
+            .get(this.url, {headers, params})
+            .pipe(map((response: any) => {
+                    const managers: Manager[] = [].concat(response.content);
+                    const page: Page = {
+                        length: response.totalElements,
+                        number: response.number,
+                        size: response.size
+                    };
+
+                    return {
+                        content: managers,
+                        page: page
+                    }
+                },
+                catchError((error) => this.handleError(error))
+            ));
     }
 }
