@@ -3,6 +3,7 @@ package by.kolenchik.web.user.manager;
 import by.kolenchik.core.user.manager.dto.AddManagerDto;
 import by.kolenchik.core.user.manager.dto.ManagerInfoDto;
 import by.kolenchik.core.user.manager.dto.UpdateManagerDto;
+import by.kolenchik.core.user.exception.PasswordsMismatchException;
 import by.kolenchik.core.user.manager.service.ManagerService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
@@ -23,8 +24,11 @@ public class ManagerController {
 
     @PostMapping
     public ManagerInfoDto add(@RequestBody AddManagerDto addManagerDto) {
+        validatePassword(addManagerDto.getPassword(), addManagerDto.getConfirmPassword());
         String encodedPassword = passwordEncoder.encode(addManagerDto.getPassword());
+        String encodedConfirmPassword = passwordEncoder.encode(addManagerDto.getConfirmPassword());
         addManagerDto.setPassword(encodedPassword);
+        addManagerDto.setConfirmPassword(encodedConfirmPassword);
 
         return managerService.add(addManagerDto);
     }
@@ -50,5 +54,15 @@ public class ManagerController {
     @GetMapping("/{id}")
     public ManagerInfoDto findById(@PathVariable Long id) {
         return managerService.findById(id);
+    }
+
+    private void validatePassword(String password, String confirmPassword) {
+        if (!password.equals(confirmPassword)) {
+            throw new PasswordsMismatchException(
+                    "User passwords doesn't match. Password=%s. Password confirmation=%s",
+                    password,
+                    confirmPassword
+            );
+        }
     }
 }

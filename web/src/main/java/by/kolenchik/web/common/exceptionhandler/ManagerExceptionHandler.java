@@ -1,6 +1,8 @@
 package by.kolenchik.web.common.exceptionhandler;
 
+import by.kolenchik.core.user.exception.DuplicateEmailException;
 import by.kolenchik.core.user.manager.exceptions.ManagerNotFoundException;
+import by.kolenchik.core.user.exception.PasswordsMismatchException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,5 +19,19 @@ public class ManagerExceptionHandler extends ResponseEntityExceptionHandler {
         String responseBody = e.getMessage();
 
         return handleExceptionInternal(e, responseBody, new HttpHeaders(), HttpStatus.NOT_FOUND, request);
+    }
+
+    @ExceptionHandler(PasswordsMismatchException.class)
+    public ResponseEntity<Object> handlePasswordsMismatchException(RuntimeException e, WebRequest request) {
+        String responseBody = e.getMessage();
+
+        return handleExceptionInternal(e, responseBody, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
+    }
+
+    @ExceptionHandler(DuplicateEmailException.class)
+    public ResponseEntity<Object> handleDuplicateEmailException(RuntimeException e, WebRequest request) {
+        String responseBody = e.getMessage();
+
+        return handleExceptionInternal(e, responseBody, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
     }
 }

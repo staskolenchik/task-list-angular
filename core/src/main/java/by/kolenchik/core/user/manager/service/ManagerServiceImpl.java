@@ -3,6 +3,8 @@ package by.kolenchik.core.user.manager.service;
 import by.kolenchik.core.user.UserRole;
 import by.kolenchik.core.user.User;
 import by.kolenchik.core.user.UserRoleEnum;
+import by.kolenchik.core.user.exception.DuplicateEmailException;
+import by.kolenchik.core.user.exception.PasswordsMismatchException;
 import by.kolenchik.core.user.manager.dto.AddManagerDto;
 import by.kolenchik.core.user.manager.dto.ManagerInfoDto;
 import by.kolenchik.core.user.manager.dto.UpdateManagerDto;
@@ -37,6 +39,7 @@ public class ManagerServiceImpl implements ManagerService {
 
     @Override
     public ManagerInfoDto add(AddManagerDto addManagerDto) {
+        validateAdd(addManagerDto);
         User manager = modelMapper.map(addManagerDto, User.class);
 
         UserRole managerUserRole = userRoleRepository.findByDesignation(UserRoleEnum.MANAGER.name());
@@ -47,6 +50,12 @@ public class ManagerServiceImpl implements ManagerService {
         User managerFromDb = userRepository.save(manager);
 
         return modelMapper.map(managerFromDb, ManagerInfoDto.class);
+    }
+
+    private void validateAdd(AddManagerDto addManagerDto) {
+        if (userRepository.existsByEmail(addManagerDto.getEmail())) {
+            throw new DuplicateEmailException("Email=%s already exists", addManagerDto.getEmail());
+        }
     }
 
     @Override
