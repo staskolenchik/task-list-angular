@@ -4,6 +4,7 @@ import {ManagerHttpService} from "../../manager-http.service";
 import {Router} from "@angular/router";
 import {MatSort, MatTableDataSource, PageEvent} from "@angular/material";
 import {Page} from "../../../../shared/models/page";
+import {SelectionModel} from "@angular/cdk/collections";
 
 @Component({
     selector: "manager-list-component",
@@ -18,6 +19,23 @@ import {Page} from "../../../../shared/models/page";
             <table mat-table 
                    [dataSource]="managerDataSource" 
                    matSort>
+                <ng-container matColumnDef="select">
+                    <th mat-header-cell *matHeaderCellDef>
+                        <mat-checkbox (change)="$event ? masterToggle() : null"
+                                      [checked]="selection.hasValue() && isAllSelected()"
+                                      [indeterminate]="selection.hasValue() && !isAllSelected()"
+                                      [aria-label]="checkboxLabel()">
+                        </mat-checkbox>
+                    </th>
+                    <td mat-cell *matCellDef="let manager">
+                        <mat-checkbox (click)="$event.stopPropagation()"
+                                      (change)="$event ? this.selection.toggle(manager) : null"
+                                      [checked]="selection.isSelected(manager)"
+                                      [aria-label]="checkboxLabel(manager)">
+                        </mat-checkbox>
+                    </td>
+                </ng-container>
+                
                 <ng-container matColumnDef="email">
                     <th mat-header-cell *matHeaderCellDef mat-sort-header>Email</th>
                     <td mat-cell *matCellDef="let manager">{{manager.email}}</td>
@@ -78,9 +96,9 @@ import {Page} from "../../../../shared/models/page";
 })
 
 export class ManagerListComponent implements OnInit{
-    private columnsToDisplay = ['email', 'surname', 'birthDate', 'options'];
+    private columnsToDisplay = ['select', 'email', 'surname', 'birthDate', 'options'];
 
-    private managerDataSource: MatTableDataSource<Manager>;
+    private managerDataSource: MatTableDataSource<Manager> = new MatTableDataSource([]);
     private page: Page = {
         length: 0,
         size: 10,
@@ -89,6 +107,10 @@ export class ManagerListComponent implements OnInit{
     private managers: Manager[] = [];
 
     @ViewChild(MatSort, {static: true}) private sort: MatSort;
+    private selection: SelectionModel<Manager> = new SelectionModel<Manager>(
+        true,
+        []
+    );
 
     constructor(
         private managerHttpService: ManagerHttpService,
@@ -107,6 +129,7 @@ export class ManagerListComponent implements OnInit{
                 this.page = response.page;
                 this.managerDataSource = new MatTableDataSource(managers);
                 this.managerDataSource.sort = this.sort;
+                this.selection.clear();
             })
     }
 
@@ -137,5 +160,25 @@ export class ManagerListComponent implements OnInit{
 
     openProfile(manager: Manager): void {
         this.router.navigate([`managers/profile/${manager.id}`])
+    }
+
+    isAllSelected(): boolean {
+        const numSelected = this.selection.selected.length;
+        const numRows = this.managerDataSource.data.length;
+        return numSelected === numRows;
+    }
+
+    masterToggle(): void {
+        this.isAllSelected() ?
+            this.selection.clear() :
+            this.managerDataSource.data.forEach((row: any) => this.selection.select(row));
+    }
+
+    checkboxLabel(manager?: Manager): string {
+        if (!manager) {
+            return `${this.isAllSelected() ? 'select' : 'deselect'} all`;
+        }
+
+        return `${this.selection.isSelected(manager) ? 'deselect' : 'select'} manager `;
     }
 }

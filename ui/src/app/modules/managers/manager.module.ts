@@ -8,7 +8,7 @@ import {ManagerProfileComponent} from "./components/manager-profile/manager-prof
 import {ManagerRoutingModule} from "./manager-routing.module";
 import {
     MatButtonModule, MatButtonToggleModule,
-    MatCardModule,
+    MatCardModule, MatCheckboxModule,
     MatChipsModule, MatDatepickerModule, MatDialogModule,
     MatIconModule,
     MatInputModule, MatPaginatorModule, MatProgressBarModule, MatSortModule,
@@ -44,6 +44,7 @@ import {ClearFormPermissionComponent} from "../../shared/modal-dialogs/clear-for
         MatProgressBarModule,
         MatPaginatorModule,
         MatSortModule,
+        MatCheckboxModule,
     ],
     entryComponents: [
         ClearFormPermissionComponent,
