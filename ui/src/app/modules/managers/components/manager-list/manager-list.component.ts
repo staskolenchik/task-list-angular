@@ -1,8 +1,8 @@
-import {Component, OnInit} from "@angular/core";
+import {Component, OnInit, ViewChild} from "@angular/core";
 import {Manager} from "../../../../shared/models/manager";
 import {ManagerHttpService} from "../../manager-http.service";
 import {Router} from "@angular/router";
-import {MatTableDataSource, PageEvent} from "@angular/material";
+import {MatSort, MatTableDataSource, PageEvent} from "@angular/material";
 import {Page} from "../../../../shared/models/page";
 
 @Component({
@@ -15,18 +15,21 @@ import {Page} from "../../../../shared/models/page";
         
         <mat-card class="mat-elevation-z8 manager_list_content">
             <mat-card-title>Manager List</mat-card-title>
-            <table mat-table [dataSource]="managersDataSource">
+            <table mat-table 
+                   [dataSource]="managerDataSource" 
+                   matSort>
                 <ng-container matColumnDef="email">
-                    <th mat-header-cell *matHeaderCellDef>Email</th>
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Email</th>
                     <td mat-cell *matCellDef="let manager">{{manager.email}}</td>
                 </ng-container>
-                <ng-container matColumnDef="fullName">
-                    <th mat-header-cell *matHeaderCellDef>Full Name</th>
+                <ng-container matColumnDef="surname">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Full Name</th>
                     <td mat-cell
-                        *matCellDef="let manager">{{manager.name}} {{manager.surname}} {{manager.patronymic}}</td>
+                        *matCellDef="let manager"
+                    >{{manager.name}} {{manager.surname}} {{manager.patronymic}}</td>
                 </ng-container>
                 <ng-container matColumnDef="birthDate">
-                    <th mat-header-cell *matHeaderCellDef>Birth Date</th>
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Birth Date</th>
                     <td mat-cell *matCellDef="let manager">{{manager.birthDate}}</td>
                 </ng-container>
                 <ng-container matColumnDef="options">
@@ -75,9 +78,9 @@ import {Page} from "../../../../shared/models/page";
 })
 
 export class ManagerListComponent implements OnInit{
-    columnsToDisplay = ['email', 'fullName', 'birthDate', 'options'];
+    private columnsToDisplay = ['email', 'surname', 'birthDate', 'options'];
 
-    private managersDataSource: MatTableDataSource<Manager>;
+    private managerDataSource: MatTableDataSource<Manager>;
     private page: Page = {
         length: 0,
         size: 10,
@@ -85,6 +88,7 @@ export class ManagerListComponent implements OnInit{
     } as Page;
     private managers: Manager[] = [];
 
+    @ViewChild(MatSort, {static: true}) private sort: MatSort;
 
     constructor(
         private managerHttpService: ManagerHttpService,
@@ -101,7 +105,8 @@ export class ManagerListComponent implements OnInit{
             .subscribe((response: any) => {
                 const managers = response.content;
                 this.page = response.page;
-                this.managersDataSource = new MatTableDataSource(managers);
+                this.managerDataSource = new MatTableDataSource(managers);
+                this.managerDataSource.sort = this.sort;
             })
     }
 
