@@ -16,6 +16,7 @@ import {
     MatPaginatorModule, MatProgressBarModule, MatSortModule,
     MatTableModule
 } from "@angular/material";
+import {ApplicationPipesModule} from "../../shared/module/application-pipes.module";
 
 @NgModule({
     declarations: [
@@ -27,6 +28,7 @@ import {
     ],
     imports: [
         EmployeeRoutingModule,
+        ApplicationPipesModule,
         CommonModule,
         FormsModule,
         RouterModule,

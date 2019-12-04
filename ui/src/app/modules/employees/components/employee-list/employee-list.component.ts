@@ -44,7 +44,7 @@ import {EmployeeHttpService} from "../../employee-http.service";
                     <th mat-header-cell *matHeaderCellDef mat-sort-header>Full Name</th>
                     <td mat-cell
                         *matCellDef="let employee"
-                    >{{employee.name}} {{employee.surname}} {{employee.patronymic}}</td>
+                    >{{employee | fullName: true}}</td>
                 </ng-container>
                 <ng-container matColumnDef="birthDate">
                     <th mat-header-cell *matHeaderCellDef mat-sort-header>Birth Date</th>
