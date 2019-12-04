@@ -51,7 +51,7 @@ import {DeletePermissionComponent} from "../../../../shared/modal-dialogs/delete
                     <td mat-cell *matCellDef="let manager">{{manager.birthDate}}</td>
                 </ng-container>
                 <ng-container matColumnDef="options">
-                    <th mat-header-cell *matHeaderCellDef>Options</th>
+                    <th mat-header-cell *matHeaderCellDef>Update / Delete / Profile</th>
                     <td mat-cell *matCellDef="let manager">
                         <button mat-button
                                 class="manager-list__option-button"
