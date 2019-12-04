@@ -1,0 +1,30 @@
+.manager-update-form {
+    margin: 30px;
+}
+
+.manager-update-form__form-field {
+    display: block;
+    width: 100%;
+    margin: 5px 0 0;
+}
+
+.manager-update-form__button-group {
+    display: flex;
+    justify-content: flex-end;
+    margin: 0 0 8px;
+}
+
+.manager-update-form__update-button,
+.manager-update-form__back-button,
+.manager-update-form__reset-button {
+    width: 50px;
+    height: 36px;
+}
+
+.manager-update-form__reset-button-content {
+    margin: 0 8px;
+}
+
+.manager-update-form__password-confirmed-hint {
+    color: green;
+}

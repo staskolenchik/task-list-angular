@@ -8,8 +8,8 @@ import {MAT_DIALOG_DATA} from "@angular/material";
             <h2 mat-dialog-title class="delete-permission__title">Please, confirm delete operation</h2>
             <mat-dialog-content class="delete-permission__content">
                 <div>You are going to delete <b>{{data.count}}</b> 
-                    <span *ngIf="data.count < 2; else Plural"> task</span>
-                    <ng-template #Plural> tasks</ng-template>
+                    <span *ngIf="data.count < 2; else Plural"> item</span>
+                    <ng-template #Plural> items</ng-template>
                 </div>
                 <div>Are you sure?</div>
             </mat-dialog-content>

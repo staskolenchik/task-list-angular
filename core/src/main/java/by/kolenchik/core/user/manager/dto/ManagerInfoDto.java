@@ -6,7 +6,6 @@ import java.time.LocalDate;
 
 @Data
 public class ManagerInfoDto {
-
     private Long id;
     private String email;
     private String name;

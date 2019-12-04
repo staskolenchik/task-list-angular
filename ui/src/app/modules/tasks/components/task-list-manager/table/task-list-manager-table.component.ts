@@ -180,7 +180,7 @@ export class TaskListManagerTableComponent {
         const matDialogRef = this.dialog.open(DeletePermissionComponent, {
             height: '210px',
             width: '480px',
-            data: {subject: task.subject}
+            data: {item: task.subject}
         });
 
         matDialogRef.afterClosed().subscribe(isApproved => {

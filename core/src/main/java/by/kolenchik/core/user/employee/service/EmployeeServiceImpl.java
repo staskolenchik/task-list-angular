@@ -55,7 +55,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         Set<UserRole> roles = new HashSet<>();
         roles.add(employeeRole);
 
-        List<User> employees = userRepository.findAllByRoles(roles);
+        List<User> employees = userRepository.findAllByRolesAndDeleteDateIsNull(roles);
 
         return employees.stream()
                 .map(employee -> modelMapper.map(employee, EmployeeInfoDto.class))

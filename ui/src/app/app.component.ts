@@ -6,7 +6,7 @@ import {LoginService} from "./pages/login/login-service";
 @Component({
     selector: 'my-app',
     template:`
-        <mat-toolbar color="primary" class="tool-bar">
+        <mat-toolbar color="primary" class="mat-elevation-z8">
             <button mat-icon-button (click)="sidenav.toggle()">
                 <mat-icon>menu</mat-icon>
             </button>
@@ -61,11 +61,15 @@ import {LoginService} from "./pages/login/login-service";
         </mat-sidenav-container>
     `,
     styleUrls: ['./app.component.css'],
+
 })
 
 export class AppComponent {
 
-    constructor(private router: Router, private loginService: LoginService) {}
+    constructor(
+        private router: Router,
+        private loginService: LoginService,
+    ) {}
 
     onLogout() {
         sessionStorage.clear();
