@@ -8,12 +8,7 @@ import {Manager} from "../../../shared/models/manager";
 @Component({
     selector: 'employee-component',
     template: `
-        <employee-form-component (add)="add($event)" 
-                                 [employee]="employee" 
-                                 (update)="update($event)" 
-                                 [managers]="managers">
-        </employee-form-component>
-        <employee-list-component [employees]="employees" (delete)="delete($event)" (update)="updateForm($event)"></employee-list-component>
+        <router-outlet></router-outlet>
     `,
     styles: [],
     providers:[EmployeeService, ManagerHttpService]

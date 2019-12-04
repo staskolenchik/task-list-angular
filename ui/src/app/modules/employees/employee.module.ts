@@ -5,22 +5,30 @@ import {EmployeeComponent} from "./components/employee.component";
 import {FormsModule} from "@angular/forms";
 import {EmployeeListComponent} from "./components/employee-list/employee-list.component";
 import {EmployeeRoutingModule} from "./employee-routing.module";
+import {EmployeeUpdateFormComponent} from "./components/employee-update-form/employee-update-form.component";
+import {EmployeeProfileComponent} from "./components/employee-profile/employee-profile.component";
+import {RouterModule} from "@angular/router";
 
 @NgModule({
     declarations: [
         EmployeeFormComponent,
         EmployeeComponent,
-        EmployeeListComponent
+        EmployeeListComponent,
+        EmployeeUpdateFormComponent,
+        EmployeeProfileComponent,
     ],
     imports: [
         EmployeeRoutingModule,
         CommonModule,
         FormsModule,
+        RouterModule,
     ],
     exports: [
         EmployeeFormComponent,
         EmployeeComponent,
-        EmployeeListComponent
+        EmployeeListComponent,
+        EmployeeUpdateFormComponent,
+        EmployeeProfileComponent,
     ]
 })
 

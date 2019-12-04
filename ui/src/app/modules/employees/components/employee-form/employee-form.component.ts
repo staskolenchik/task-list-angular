@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, Output} from "@angular/core";
+import {Component} from "@angular/core";
 import {Employee} from "../../../../shared/models/employee";
 import {Manager} from "../../../../shared/models/manager";
 
@@ -63,24 +63,9 @@ export class EmployeeFormComponent {
     private _employee: Employee = {} as Employee;
     private _managers: Manager[] = [];
 
-    @Output() add: EventEmitter<Employee> = new EventEmitter();
-    @Output() update: EventEmitter<Employee> = new EventEmitter();
 
-    @Input()
-    set employee(employee: Employee) {
-        this._employee = employee ? employee : {} as Employee;
-    }
-
-    @Input()
-    set managers(managers: Manager[]) {
-        this._managers = managers;
-    }
 
     onSubmit() {
-        if (this._employee.id) {
-            this.update.emit(this._employee);
-        } else {
-            this.add.emit(this._employee);
-        }
+
     }
 }

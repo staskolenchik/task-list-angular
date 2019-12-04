@@ -14,6 +14,12 @@ const appRoutes: Routes = [
             .then(mod => mod.ManagerModule),
         canActivate: [AuthGuard, AdminAuthGuard]
     },
+    {
+        path: 'employees',
+        loadChildren: () => import('./modules/employees/employee.module')
+            .then(mod => mod.EmployeeModule),
+        canActivate: [AuthGuard, AdminAuthGuard]
+    },
     {path: 'login', component: LoginComponent},
     {path: 'forbidden', component: ForbiddenComponent},
 ];

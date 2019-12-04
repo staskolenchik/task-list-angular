@@ -1,12 +1,13 @@
-import {Component, EventEmitter, Input, Output} from "@angular/core";
+import {Component} from "@angular/core";
 import {Employee} from "../../../../shared/models/employee";
 
 @Component({
     selector: 'employee-list-component',
     template: `
         <div>
-            <div *ngIf="employees.length === 0; else showEmployees">Loading...</div>
-            <ng-template #showEmployees>
+            <a routerLink="form">Create Employee</a>
+            
+            <div #showEmployees>
                 <table>
                     <thead>
                     <tr>
@@ -23,10 +24,11 @@ import {Employee} from "../../../../shared/models/employee";
                         <td>
                             <button (click)="onUpdate(employee)">Update</button>
                             <button (click)="onDelete(employee)">Delete</button>
+                            <a routerLink="profile/{{employee.id}}">info</a>
                         </td>
                     </tr>
                 </table>
-            </ng-template>
+            </div>
         </div>
     `,
     styles: [],
@@ -34,16 +36,15 @@ import {Employee} from "../../../../shared/models/employee";
 
 export class EmployeeListComponent {
 
-    @Input() employees: Employee[];
+    private employees: Employee[];
 
-    @Output() delete: EventEmitter<Employee> = new EventEmitter();
-    @Output() update: EventEmitter<Employee> = new EventEmitter();
+
 
     onDelete(employee: Employee) {
-        this.delete.emit(employee);
+
     }
 
     onUpdate(employee: Employee) {
-        this.update.emit(employee);
+
     }
 }
