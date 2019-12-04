@@ -29,9 +29,7 @@ public class ManagerController {
     public ManagerInfoDto add(@Valid @RequestBody AddManagerDto addManagerDto) {
         validatePassword(addManagerDto.getPassword(), addManagerDto.getConfirmPassword());
         String encodedPassword = passwordEncoder.encode(addManagerDto.getPassword());
-        String encodedConfirmPassword = passwordEncoder.encode(addManagerDto.getConfirmPassword());
         addManagerDto.setPassword(encodedPassword);
-        addManagerDto.setConfirmPassword(encodedConfirmPassword);
 
         return managerService.add(addManagerDto);
     }
