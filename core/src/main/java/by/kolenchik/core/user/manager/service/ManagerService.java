@@ -5,6 +5,7 @@ import by.kolenchik.core.user.manager.dto.ManagerInfoDto;
 import by.kolenchik.core.user.manager.dto.UpdateManagerDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -14,6 +15,7 @@ public interface ManagerService {
 
     Page<ManagerInfoDto> findAll(Pageable pageable);
 
+    @Transactional
     void deleteById(Long id);
 
     ManagerInfoDto update(Long id, UpdateManagerDto updateManagerDto);
@@ -22,5 +24,6 @@ public interface ManagerService {
 
     Boolean existsById(Long id);
 
+    @Transactional
     void deleteAll(Long[] ids);
 }

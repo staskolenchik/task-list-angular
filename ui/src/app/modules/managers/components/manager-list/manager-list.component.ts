@@ -6,6 +6,7 @@ import {MatDialog, MatSort, MatTableDataSource, PageEvent} from "@angular/materi
 import {Page} from "../../../../shared/models/page";
 import {SelectionModel} from "@angular/cdk/collections";
 import {DeleteAllPermissionComponent} from "../../../../shared/modal-dialogs/delete-all-permission/delete-all-permission.component";
+import {DeletePermissionComponent} from "../../../../shared/modal-dialogs/delete-permission/delete-permission.component";
 
 @Component({
     selector: "manager-list-component",
@@ -64,7 +65,7 @@ import {DeleteAllPermissionComponent} from "../../../../shared/modal-dialogs/del
                         </button>
                         <button mat-button
                                 color="warn"
-                                (click)="onDelete(manager)">
+                                (click)="askDeletePermission(manager)">
                             <mat-icon aria-label="Delete icon">
                                 delete
                             </mat-icon>
@@ -110,7 +111,6 @@ export class ManagerListComponent implements OnInit{
         size: 10,
         number: 0,
     } as Page;
-    private managers: Manager[] = [];
 
     @ViewChild(MatSort, {static: true}) private sort: MatSort;
     private selection: SelectionModel<Manager> = new SelectionModel<Manager>(
@@ -154,10 +154,7 @@ export class ManagerListComponent implements OnInit{
         this.managerHttpService
             .delete(manager)
             .subscribe(() => {
-                let index = this.managers.indexOf(manager);
-                if (index > -1) {
-                    this.managers.splice(index, 1);
-                }
+                this.loadManagersFromStartPage();
             })
     }
 
@@ -201,6 +198,20 @@ export class ManagerListComponent implements OnInit{
                 this.onDeleteAll(this.selection.selected);
             } else {
                 this.selection.clear();
+            }
+        })
+    }
+
+    askDeletePermission(manager: Manager) {
+        const matDialogRef = this.dialog.open(DeletePermissionComponent, {
+            height: '210px',
+            width: '480px',
+            data: {item: `${manager.name} ${manager.surname}`}
+        });
+
+        matDialogRef.afterClosed().subscribe(isApproved => {
+            if (isApproved) {
+                this.onDelete(manager);
             }
         })
     }

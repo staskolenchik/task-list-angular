@@ -7,7 +7,7 @@ import {MAT_DIALOG_DATA} from "@angular/material";
         <div class="delete-permission">
             <h2 mat-dialog-title class="delete-permission__title">Please, confirm delete operation</h2>
             <mat-dialog-content class="delete-permission__content">
-                <div>You are going to delete <b>{{data.subject}}</b>.</div>
+                <div>You are going to delete <b>{{data.item}}</b>.</div>
                 <div>Are you sure?</div>
             </mat-dialog-content>
             <mat-dialog-actions class="delete-permission__actions">

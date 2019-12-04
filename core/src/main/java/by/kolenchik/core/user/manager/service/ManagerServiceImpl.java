@@ -63,7 +63,7 @@ public class ManagerServiceImpl implements ManagerService {
         Set<UserRole> roles = new HashSet<>();
         roles.add(managerRole);
 
-        Page<User> managers = userRepository.findAllByRoles(roles, pageable);
+        Page<User> managers = userRepository.findAllByRolesAndDeleteDateIsNull(roles, pageable);
 
         return managers.map(manager -> {
             return modelMapper.map(manager, ManagerInfoDto.class);
@@ -73,7 +73,7 @@ public class ManagerServiceImpl implements ManagerService {
 
     @Override
     public void deleteById(Long id) {
-        userRepository.deleteById(id);
+        userRepository.delete(id);
     }
 
     @Override
@@ -102,7 +102,7 @@ public class ManagerServiceImpl implements ManagerService {
     @Override
     public void deleteAll(Long[] ids) {
         for (Long id : ids) {
-            userRepository.deleteById(id);
+            userRepository.delete(id);
         }
     }
 }
