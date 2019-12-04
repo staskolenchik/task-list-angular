@@ -1,29 +1,35 @@
 import {Injectable} from "@angular/core";
 import {HttpClient, HttpErrorResponse, HttpParams} from "@angular/common/http";
-import {catchError, map, retry} from "rxjs/operators";
+import {catchError, map} from "rxjs/operators";
 import {Observable, throwError} from "rxjs";
 import {Employee} from "../../shared/models/employee";
 import {Manager} from "../../shared/models/manager";
 import {Page} from "../../shared/models/page";
 import {Urls} from "../../shared/constants/urls";
+import {MatSnackBar} from "@angular/material";
 
 @Injectable()
 export class EmployeeHttpService {
 
     private url: string = Urls.EMPLOYEE;
 
-    constructor(private http: HttpClient) {}
+    constructor(
+        private http: HttpClient,
+        private snackBar: MatSnackBar,
+    ) {}
 
     private handleError(error: HttpErrorResponse) {
         if (error.error instanceof ErrorEvent) {
-            console.error('An error occurred:', error.error.message);
+            this.snackBar.open(error.error.toString(), "Close", {duration: 5000});
+        } else if (error.status === 0) {
+            const errorMessage = 'Error. Please check internet connection';
+            this.snackBar.open(errorMessage, "Close", {duration: 5000});
+            console.log(error.message);
         } else {
-            console.error(
-                `Backend returned code ${error.status}, ` +
-                `body was: ${error.error}`);
+            this.snackBar.open(error.error, "Close", {duration: 5000});
         }
-        return throwError(
-            'Something bad happened; please try again later.');
+
+        return throwError('Something bad happened; please try again later.');
     };
 
     getAll() : Observable<Employee[]>{
@@ -44,8 +50,7 @@ export class EmployeeHttpService {
                         }
                     })
                 }),
-                retry(3),
-                catchError(this.handleError)
+                catchError((error) => this.handleError(error))
             );
     }
 
@@ -54,7 +59,7 @@ export class EmployeeHttpService {
         return this.http
             .post<Employee>(this.url, employee)
             .pipe(
-                catchError(this.handleError)
+                catchError((error) => this.handleError(error))
             )
     }
 
@@ -64,7 +69,7 @@ export class EmployeeHttpService {
         return this.http
             .put<Employee>(url, employee)
             .pipe(
-                catchError(this.handleError)
+                catchError((error) => this.handleError(error))
             );
     }
 
@@ -74,7 +79,7 @@ export class EmployeeHttpService {
         return this.http
             .delete(url)
             .pipe(
-                catchError(this.handleError)
+                catchError((error) => this.handleError(error))
             );
     }
 
@@ -84,20 +89,22 @@ export class EmployeeHttpService {
         return this.http
             .get(url)
             .pipe(map(data => {
-                let employees = [].concat(data);
-                return employees.map(function (employee: Employee) {
-                    return {
-                        id: employee.id,
-                        email: employee.email,
-                        password: null,
-                        name: employee.name,
-                        surname: employee.surname,
-                        patronymic: employee.patronymic,
-                        birthDate: employee.birthDate,
-                        superior: employee.superior
-                    }
-                })
-            }))
+                    let employees = [].concat(data);
+                    return employees.map(function (employee: Employee) {
+                        return {
+                            id: employee.id,
+                            email: employee.email,
+                            password: null,
+                            name: employee.name,
+                            surname: employee.surname,
+                            patronymic: employee.patronymic,
+                            birthDate: employee.birthDate,
+                            superior: employee.superior
+                        }
+                    })
+                },
+                catchError((error) => this.handleError(error))
+            ))
     }
 
     findAll(page: Page) {
