@@ -18,9 +18,7 @@ import {DeletePermissionComponent} from "../../../../shared/modal-dialogs/delete
         
         <mat-card class="mat-elevation-z8 manager_list_content">
             <mat-card-title>Manager List</mat-card-title>
-            <table mat-table 
-                   [dataSource]="managerDataSource" 
-                   matSort>
+            <table mat-table [dataSource]="managerDataSource" matSort>
                 <ng-container matColumnDef="select">
                     <th mat-header-cell *matHeaderCellDef>
                         <mat-checkbox (change)="$event ? masterToggle() : null"
