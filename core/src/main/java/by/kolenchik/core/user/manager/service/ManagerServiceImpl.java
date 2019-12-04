@@ -97,9 +97,16 @@ public class ManagerServiceImpl implements ManagerService {
 
     @Override
     public ManagerInfoDto findById(Long id) {
+        validateGet(id);
         User managerFromDb = userRepository.findByIdAndDeleteDateIsNull(id);
 
         return modelMapper.map(managerFromDb, ManagerInfoDto.class);
+    }
+
+    private void validateGet(Long id) {
+        if (!userRepository.existsByIdAndDeleteDateIsNull(id)) {
+            throw new UserNotFoundException("Manager with id=%d was not found", id);
+        }
     }
 
     @Override
