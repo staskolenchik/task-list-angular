@@ -1,13 +1,14 @@
 package by.kolenchik.core.user.employee.service;
 
-import by.kolenchik.core.user.UserRole;
 import by.kolenchik.core.user.User;
+import by.kolenchik.core.user.UserRole;
 import by.kolenchik.core.user.UserRoleEnum;
 import by.kolenchik.core.user.employee.dto.AddEmployeeDto;
 import by.kolenchik.core.user.employee.dto.EmployeeInfoDto;
 import by.kolenchik.core.user.employee.dto.UpdateEmployeeDto;
-import by.kolenchik.core.user.repository.UserRoleRepository;
+import by.kolenchik.core.user.exception.UserNotFoundException;
 import by.kolenchik.core.user.repository.UserRepository;
+import by.kolenchik.core.user.repository.UserRoleRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
@@ -18,7 +19,6 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @Service
 public class EmployeeServiceImpl implements EmployeeService {
@@ -79,7 +79,11 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public EmployeeInfoDto findById(Long id) {
-        User employee = userRepository.getOne(id);
+        validateGet(id);
+
+        User employee = userRepository.findByIdAndDeleteDateIsNull(id);
+        Long superiorId = employee.getSuperior();
+        validateManager(superiorId);
 
         return modelMapper.map(employee, EmployeeInfoDto.class);
     }
@@ -106,6 +110,18 @@ public class EmployeeServiceImpl implements EmployeeService {
     public void deleteAll(Long[] ids) {
         for (Long id : ids) {
             userRepository.delete(id);
+        }
+    }
+
+    private void validateGet(Long id) {
+        if (!userRepository.existsByIdAndDeleteDateIsNull(id)) {
+            throw new UserNotFoundException("Employee with id=%d was not found", id);
+        }
+    }
+
+    private void validateManager(Long id) {
+        if (!userRepository.existsByIdAndDeleteDateIsNull(id)) {
+            throw new UserNotFoundException("Manager with id=%d was not found", id);
         }
     }
 }

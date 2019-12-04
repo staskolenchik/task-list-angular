@@ -11,8 +11,8 @@ import {RouterModule} from "@angular/router";
 import {
     MatButtonModule,
     MatCardModule,
-    MatCheckboxModule,
-    MatIconModule,
+    MatCheckboxModule, MatDatepickerModule,
+    MatIconModule, MatInputModule,
     MatPaginatorModule, MatProgressBarModule, MatSortModule,
     MatTableModule
 } from "@angular/material";
@@ -38,6 +38,8 @@ import {
         MatPaginatorModule,
         MatProgressBarModule,
         MatSortModule,
+        MatInputModule,
+        MatDatepickerModule,
     ],
     exports: [
         EmployeeFormComponent,

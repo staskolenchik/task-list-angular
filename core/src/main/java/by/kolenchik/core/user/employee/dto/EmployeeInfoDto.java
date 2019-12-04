@@ -6,7 +6,6 @@ import java.time.LocalDate;
 
 @Data
 public class EmployeeInfoDto {
-
     private Long id;
     private String email;
     private String password;
@@ -14,5 +13,5 @@ public class EmployeeInfoDto {
     private String surname;
     private String patronymic;
     private LocalDate birthDate;
-
+    private String superior;
 }

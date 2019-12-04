@@ -1,0 +1,20 @@
+.employee-profile-form {
+    margin: 30px;
+}
+
+.employee-profile-form__form-field {
+    display: block;
+    width: 100%;
+    margin: 5px 0 0;
+}
+
+.employee-profile-form__button-group {
+    display: flex;
+    justify-content: flex-end;
+    margin: 0 0 8px;
+}
+
+.employee-profile-form__back-button{
+    width: 50px;
+    height: 36px;
+}

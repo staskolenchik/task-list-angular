@@ -146,4 +146,14 @@ export class EmployeeHttpService {
                 catchError((error) => this.handleError(error))
             );
     }
+
+    findById(id: string) {
+        const url: string = `${this.url}/${id}`;
+
+        return this.http
+            .get<Employee>(url)
+            .pipe(
+                catchError((error) => this.handleError(error))
+            );
+    }
 }

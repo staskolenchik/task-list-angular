@@ -11,7 +11,6 @@ import by.kolenchik.core.task.dto.UpdateTaskDto;
 import by.kolenchik.core.task.exceptions.TaskNotFoundException;
 import by.kolenchik.core.task.exceptions.TaskTypeUndefinedException;
 import by.kolenchik.core.task.repository.TaskRepository;
-import by.kolenchik.core.user.employee.exceptions.EmployeeNotFoundException;
 import by.kolenchik.core.user.employee.service.EmployeeService;
 import by.kolenchik.core.user.exception.UserNotFoundException;
 import by.kolenchik.core.user.manager.service.ManagerService;
@@ -85,7 +84,7 @@ class TaskServiceImpl implements TaskService {
             throw new UserNotFoundException("Manager with id=%d was not found", managerId);
         }
         if (!employeeService.existsById(employeeId)) {
-            throw new EmployeeNotFoundException("Employee with id=%d was not found", employeeId);
+            throw new UserNotFoundException("Employee with id=%d was not found", employeeId);
         }
     }
 
@@ -116,7 +115,7 @@ class TaskServiceImpl implements TaskService {
             throw new UserNotFoundException("Manager with id=%d was not found", managerId);
         }
         if (!employeeService.existsById(employeeId)) {
-            throw new EmployeeNotFoundException("Employee with id=%d was not found", employeeId);
+            throw new UserNotFoundException("Employee with id=%d was not found", employeeId);
         }
     }
 
