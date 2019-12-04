@@ -10,6 +10,8 @@ import by.kolenchik.core.user.repository.UserRoleRepository;
 import by.kolenchik.core.user.repository.UserRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.BeanUtils;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -50,16 +52,14 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public List<EmployeeInfoDto> findAll() {
+    public Page<EmployeeInfoDto> findAll(Pageable pageable) {
         UserRole employeeRole = userRoleRepository.findByDesignation(UserRoleEnum.EMPLOYEE.name());
         Set<UserRole> roles = new HashSet<>();
         roles.add(employeeRole);
 
-        List<User> employees = userRepository.findAllByRolesAndDeleteDateIsNull(roles);
+        Page<User> employees = userRepository.findAllByRolesAndDeleteDateIsNull(roles, pageable);
 
-        return employees.stream()
-                .map(employee -> modelMapper.map(employee, EmployeeInfoDto.class))
-                .collect(Collectors.toList());
+        return employees.map(employee -> modelMapper.map(employee, EmployeeInfoDto.class));
     }
 
     @Override
@@ -74,7 +74,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public void deleteById(Long id) {
-        userRepository.deleteById(id);
+        userRepository.delete(id);
     }
 
     @Override
@@ -100,5 +100,12 @@ public class EmployeeServiceImpl implements EmployeeService {
             employeeInfoDtos.add(employeeInfoDto);
         }
         return employeeInfoDtos;
+    }
+
+    @Override
+    public void deleteAll(Long[] ids) {
+        for (Long id : ids) {
+            userRepository.delete(id);
+        }
     }
 }

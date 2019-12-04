@@ -2,7 +2,7 @@ import {Component, OnInit} from "@angular/core";
 import {Task} from "../../../../shared/models/task";
 import {Employee} from "../../../../shared/models/employee";
 import {Manager} from "../../../../shared/models/manager";
-import {EmployeeService} from "../../../employees/employee.service";
+import {EmployeeHttpService} from "../../../employees/employee-http.service";
 import {Router} from "@angular/router";
 import {TaskDataService} from "../../task-data.service";
 import {TaskHttpService} from "../../task-http.service";
@@ -133,7 +133,7 @@ import {Messages} from "../../../../shared/constants/messages";
         </div>
     `,
     styleUrls: [`./task-form.component.css`],
-    providers: [EmployeeService]
+    providers: [EmployeeHttpService]
 })
 
 export class TaskFormComponent implements OnInit{
@@ -153,7 +153,7 @@ export class TaskFormComponent implements OnInit{
     constructor(
         private taskDataService: TaskDataService,
         private tasksHttpService: TaskHttpService,
-        private employeeService: EmployeeService,
+        private employeeService: EmployeeHttpService,
         private router: Router,
         private location: Location,
         private snackBar: MatSnackBar

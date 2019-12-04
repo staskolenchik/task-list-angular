@@ -4,6 +4,9 @@ import by.kolenchik.core.user.employee.dto.AddEmployeeDto;
 import by.kolenchik.core.user.employee.dto.EmployeeInfoDto;
 import by.kolenchik.core.user.employee.dto.UpdateEmployeeDto;
 import by.kolenchik.core.user.employee.service.EmployeeService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
@@ -35,8 +38,8 @@ public class EmployeeController {
     }
 
     @GetMapping
-    public List<EmployeeInfoDto> findAll() {
-        return employeeService.findAll();
+    public Page<EmployeeInfoDto> findAll(@PageableDefault(sort = {"id"})Pageable pageable) {
+        return employeeService.findAll(pageable);
     }
 
     @PutMapping("/{id}")
@@ -47,6 +50,11 @@ public class EmployeeController {
     @DeleteMapping("/{id}")
     public void delete(@PathVariable Long id) {
         employeeService.deleteById(id);
+    }
+
+    @DeleteMapping
+    public void deleteAll(Long... ids) {
+        employeeService.deleteAll(ids);
     }
 
     @GetMapping("/{id}")

@@ -1,17 +1,18 @@
 import {Injectable} from "@angular/core";
-import {HttpClient, HttpErrorResponse, HttpHeaders} from "@angular/common/http";
+import {HttpClient, HttpErrorResponse, HttpParams} from "@angular/common/http";
 import {catchError, map, retry} from "rxjs/operators";
 import {Observable, throwError} from "rxjs";
 import {Employee} from "../../shared/models/employee";
 import {Manager} from "../../shared/models/manager";
+import {Page} from "../../shared/models/page";
+import {Urls} from "../../shared/constants/urls";
 
 @Injectable()
-export class EmployeeService {
+export class EmployeeHttpService {
 
-    private url: string = "http://localhost:8081/dev/employees";
+    private url: string = Urls.EMPLOYEE;
 
-    constructor(private http: HttpClient) {
-    }
+    constructor(private http: HttpClient) {}
 
     private handleError(error: HttpErrorResponse) {
         if (error.error instanceof ErrorEvent) {
@@ -26,13 +27,8 @@ export class EmployeeService {
     };
 
     getAll() : Observable<Employee[]>{
-        const authorization = 'Bearer_' + sessionStorage.getItem('token');
-        let headers = new HttpHeaders({
-            'Authorization': authorization
-        });
-
         return this.http
-            .get(this.url, {headers})
+            .get(this.url)
             .pipe(map(data => {
                     let employees = [].concat(data);
                     return employees.map(function (employee: Employee) {
@@ -54,55 +50,39 @@ export class EmployeeService {
     }
 
     add(employee: Employee) : Observable<Employee> {
-        const authorization = 'Bearer_' + sessionStorage.getItem('token');
-        let headers = new HttpHeaders({
-            'Authorization': authorization
-        });
 
         return this.http
-            .post<Employee>(this.url, employee, {headers})
+            .post<Employee>(this.url, employee)
             .pipe(
                 catchError(this.handleError)
             )
     }
 
     update(employee: Employee): Observable<Employee> {
-        const authorization = 'Bearer_' + sessionStorage.getItem('token');
-        let headers = new HttpHeaders({
-            'Authorization': authorization
-        });
-
         let url = `${this.url}/${employee.id}`;
+
         return this.http
-            .put<Employee>(url, employee, {headers})
+            .put<Employee>(url, employee)
             .pipe(
                 catchError(this.handleError)
             );
     }
 
     delete(employee: Employee) {
-        const authorization = 'Bearer_' + sessionStorage.getItem('token');
-        let headers = new HttpHeaders({
-            'Authorization': authorization
-        });
-
         const url = `${this.url}/${employee.id}`;
+
         return this.http
-            .delete(url, {headers})
+            .delete(url)
             .pipe(
                 catchError(this.handleError)
             );
     }
 
     getEmployeesByManagerId(manager: Manager): Observable<Employee[]> {
-        const authorization = 'Bearer_' + sessionStorage.getItem('token');
-        let headers = new HttpHeaders({
-            'Authorization': authorization
-        });
-
         const url = `${this.url}/managers/${manager.id}`;
+
         return this.http
-            .get(url, {headers})
+            .get(url)
             .pipe(map(data => {
                 let employees = [].concat(data);
                 return employees.map(function (employee: Employee) {
@@ -118,5 +98,45 @@ export class EmployeeService {
                     }
                 })
             }))
+    }
+
+    findAll(page: Page) {
+        let params = new HttpParams();
+        params = params.set('page', page.number.toString());
+        params = params.set('size', page.size.toString());
+
+        return this.http
+            .get(this.url, {params})
+            .pipe(map((response: any) => {
+                    const employees: Employee[] = [].concat(response.content);
+                    const page: Page = {
+                        length: response.totalElements,
+                        number: response.number,
+                        size: response.size
+                    };
+
+                    return {
+                        content: employees,
+                        page: page
+                    }
+                },
+                catchError((error) => this.handleError(error))
+            ));
+    }
+
+    deleteAll(employees: Employee[]) {
+        const ids: number[] = [];
+        employees.forEach((employee) => {
+            ids.push(employee.id);
+        });
+
+        let params = new HttpParams();
+        params = params.set('ids', ids.toString());
+
+        return this.http
+            .delete(`${this.url}`, {params})
+            .pipe(
+                catchError((error) => this.handleError(error))
+            );
     }
 }

@@ -8,6 +8,14 @@ import {EmployeeRoutingModule} from "./employee-routing.module";
 import {EmployeeUpdateFormComponent} from "./components/employee-update-form/employee-update-form.component";
 import {EmployeeProfileComponent} from "./components/employee-profile/employee-profile.component";
 import {RouterModule} from "@angular/router";
+import {
+    MatButtonModule,
+    MatCardModule,
+    MatCheckboxModule,
+    MatIconModule,
+    MatPaginatorModule, MatProgressBarModule, MatSortModule,
+    MatTableModule
+} from "@angular/material";
 
 @NgModule({
     declarations: [
@@ -22,6 +30,14 @@ import {RouterModule} from "@angular/router";
         CommonModule,
         FormsModule,
         RouterModule,
+        MatCardModule,
+        MatTableModule,
+        MatCheckboxModule,
+        MatIconModule,
+        MatButtonModule,
+        MatPaginatorModule,
+        MatProgressBarModule,
+        MatSortModule,
     ],
     exports: [
         EmployeeFormComponent,
