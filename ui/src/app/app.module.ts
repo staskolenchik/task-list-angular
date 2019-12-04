@@ -55,6 +55,7 @@ import {DragDropModule} from "@angular/cdk/drag-drop";
 import {CdkTreeModule} from "@angular/cdk/tree";
 import {LoginComponent} from "./pages/login/login.component";
 import {ForbiddenComponent} from "./pages/forbidden/forbidden.component";
+import {HTTP_INTERCEPTOR_PROVIDERS} from "./http-interceptors";
 
 @NgModule({
     imports:[
@@ -119,6 +120,7 @@ import {ForbiddenComponent} from "./pages/forbidden/forbidden.component";
         AppComponent
     ],
     providers: [
+        HTTP_INTERCEPTOR_PROVIDERS,
         {
             provide: MAT_DATE_LOCALE,
             useValue: 'en-GB'

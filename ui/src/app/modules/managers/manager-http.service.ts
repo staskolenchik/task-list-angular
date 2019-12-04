@@ -1,7 +1,7 @@
 import {Injectable} from "@angular/core";
 import {Observable, throwError} from "rxjs";
 import {catchError, map} from "rxjs/operators";
-import {HttpClient, HttpErrorResponse, HttpHeaders, HttpParams} from "@angular/common/http";
+import {HttpClient, HttpErrorResponse, HttpParams} from "@angular/common/http";
 import {Manager} from "../../shared/models/manager";
 import {MatSnackBar} from "@angular/material";
 import {Urls} from "../../shared/constants/urls";
@@ -32,13 +32,9 @@ export class ManagerHttpService {
     };
 
     getAll(): Observable<Manager[]>{
-        const authorization = 'Bearer_' + sessionStorage.getItem('token');
-        let headers = new HttpHeaders({
-            'Authorization': authorization
-        });
 
         return this.http
-            .get(this.url, {headers})
+            .get(this.url)
             .pipe(map(data => {
                     let managers = [].concat(data);
                     return managers.map(function (manager: any) {
@@ -59,55 +55,39 @@ export class ManagerHttpService {
     }
 
     add(manager: Manager): Observable<Manager> {
-        const authorization = 'Bearer_' + sessionStorage.getItem('token');
-        let headers = new HttpHeaders({
-            'Authorization': authorization
-        });
 
         return this.http
-            .post<Manager>(this.url, manager, {headers})
+            .post<Manager>(this.url, manager)
             .pipe(
                 catchError((error) => this.handleError(error))
             );
     }
 
     delete(manager: Manager): Observable<any> {
-        const authorization = 'Bearer_' + sessionStorage.getItem('token');
-        let headers = new HttpHeaders({
-            'Authorization': authorization
-        });
-
         const url: string = `${this.url}/${manager.id}`;
+
         return this.http
-            .delete(url, {headers})
+            .delete(url, )
             .pipe(
                 catchError((error) => this.handleError(error))
             );
     }
 
     update(manager: Manager): Observable<Manager> {
-        const authorization = 'Bearer_' + sessionStorage.getItem('token');
-        let headers = new HttpHeaders({
-            'Authorization': authorization
-        });
-
         const url: string = `${this.url}/${manager.id}`;
+
         return this.http
-            .put<Manager>(url, manager, {headers})
+            .put<Manager>(url, manager)
             .pipe(
                 catchError((error) => this.handleError(error))
             );
     }
 
     findById(id: string): Observable<Manager> {
-        const authorization = 'Bearer_' + sessionStorage.getItem('token');
-        let headers = new HttpHeaders({
-            'Authorization': authorization
-        });
-
         const url: string = `${this.url}/${id}`;
+
         return this.http
-            .get<Manager>(url, {headers})
+            .get<Manager>(url)
             .pipe(
                 catchError((error) => this.handleError(error))
             );
@@ -118,13 +98,8 @@ export class ManagerHttpService {
         params = params.set('page', page.number.toString());
         params = params.set('size', page.size.toString());
 
-        const authorization = 'Bearer_' + sessionStorage.getItem('token');
-        let headers = new HttpHeaders({
-            'Authorization': authorization
-        });
-
         return this.http
-            .get(this.url, {headers, params})
+            .get(this.url, {params})
             .pipe(map((response: any) => {
                     const managers: Manager[] = [].concat(response.content);
                     const page: Page = {
@@ -151,13 +126,8 @@ export class ManagerHttpService {
         let params = new HttpParams();
         params = params.set('ids', ids.toString());
 
-        const authorization = 'Bearer_' + sessionStorage.getItem('token');
-        let headers = new HttpHeaders({
-            'Authorization': authorization
-        });
-
         return this.http
-            .delete(`${this.url}`, {headers, params})
+            .delete(`${this.url}`, {params})
             .pipe(
                 catchError((error) => this.handleError(error))
             );
