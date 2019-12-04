@@ -97,6 +97,7 @@ import {DeletePermissionComponent} from "../../../../shared/modal-dialogs/delete
                                showFirstLastButtons>
                 </mat-paginator>
             </div>
+            <mat-progress-bar mode="indeterminate" *ngIf="sending"></mat-progress-bar>
         </mat-card>
     `,
     styleUrls: ['./manager-list.component.css']
@@ -104,7 +105,7 @@ import {DeletePermissionComponent} from "../../../../shared/modal-dialogs/delete
 
 export class ManagerListComponent implements OnInit{
     private columnsToDisplay = ['select', 'email', 'surname', 'birthDate', 'options'];
-
+    private sending: boolean = false;
     private managerDataSource: MatTableDataSource<Manager> = new MatTableDataSource([]);
     private page: Page = {
         length: 0,
@@ -131,16 +132,21 @@ export class ManagerListComponent implements OnInit{
     findAll(page: Page) {
         this.managerHttpService
             .findAll(page)
-            .subscribe((response: any) => {
-                const managers = response.content;
-                this.page = response.page;
-                this.managerDataSource = new MatTableDataSource(managers);
-                this.managerDataSource.sort = this.sort;
-                this.selection.clear();
-            })
+            .subscribe(
+                (response: any) => {
+                    this.sending = false;
+                    const managers = response.content;
+                    this.page = response.page;
+                    this.managerDataSource = new MatTableDataSource(managers);
+                    this.managerDataSource.sort = this.sort;
+                    this.selection.clear();
+                    },
+                () => this.sending = false
+            )
     }
 
     onChangePage(pageEvent: PageEvent): void {
+        this.sending = true;
         const changedPage: Page = {
             length: null,
             size: pageEvent.pageSize,
@@ -151,11 +157,15 @@ export class ManagerListComponent implements OnInit{
     }
 
     onDelete(manager: Manager): void {
+        this.sending = true;
         this.managerHttpService
             .delete(manager)
-            .subscribe(() => {
-                this.loadManagersFromStartPage();
-            })
+            .subscribe(
+                () => {
+                    this.loadManagersFromStartPage();
+                },
+                () => this.sending = false
+            );
     }
 
     onUpdate(manager: Manager): void {
@@ -217,14 +227,20 @@ export class ManagerListComponent implements OnInit{
     }
 
     private onDeleteAll(managers: Manager[]) {
+        this.sending = true;
+
         this.managerHttpService
             .deleteAll(managers)
-            .subscribe(() => {
-                this.loadManagersFromStartPage();
-            });
+            .subscribe(
+                () => {
+                    this.loadManagersFromStartPage();
+                    },
+                () => this.sending = false
+            );
     }
 
     loadManagersFromStartPage(): void {
+        this.sending = true;
         this.page.number = 0;
         this.findAll(this.page);
     }

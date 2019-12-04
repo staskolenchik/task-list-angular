@@ -20,12 +20,15 @@ export class ManagerHttpService {
     private handleError(error: HttpErrorResponse) {
         if (error.error instanceof ErrorEvent) {
             this.snackBar.open(error.error.toString(), "Close", {duration: 5000});
+        } else if (error.status === 0) {
+            const errorMessage = 'Error. Please check internet connection';
+            this.snackBar.open(errorMessage, "Close", {duration: 5000});
+            console.log(error.message);
         } else {
-            this.snackBar.open(error.error.toString(), "Close", {duration: 5000});
+            this.snackBar.open(error.error, "Close", {duration: 5000});
         }
 
-        return throwError(
-            'Something bad happened; please try again later.');
+        return throwError('Something bad happened; please try again later.');
     };
 
     getAll(): Observable<Manager[]>{
@@ -78,7 +81,7 @@ export class ManagerHttpService {
         return this.http
             .delete(url, {headers})
             .pipe(
-                catchError(this.handleError)
+                catchError((error) => this.handleError(error))
             );
     }
 
@@ -92,7 +95,7 @@ export class ManagerHttpService {
         return this.http
             .put<Manager>(url, manager, {headers})
             .pipe(
-                catchError(this.handleError)
+                catchError((error) => this.handleError(error))
             );
     }
 
