@@ -55,7 +55,6 @@ export class ManagerHttpService {
     }
 
     add(manager: Manager): Observable<Manager> {
-
         return this.http
             .post<Manager>(this.url, manager)
             .pipe(
