@@ -11,6 +11,8 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+
 @RestController
 @RequestMapping("/dev/managers")
 public class ManagerController {
@@ -24,7 +26,7 @@ public class ManagerController {
     }
 
     @PostMapping
-    public ManagerInfoDto add(@RequestBody AddManagerDto addManagerDto) {
+    public ManagerInfoDto add(@Valid @RequestBody AddManagerDto addManagerDto) {
         validatePassword(addManagerDto.getPassword(), addManagerDto.getConfirmPassword());
         String encodedPassword = passwordEncoder.encode(addManagerDto.getPassword());
         String encodedConfirmPassword = passwordEncoder.encode(addManagerDto.getConfirmPassword());
@@ -53,7 +55,7 @@ public class ManagerController {
     @PutMapping("/{id}")
     public ManagerInfoDto update(
             @PathVariable Long id,
-            @RequestBody UpdateManagerDto updateManagerDto
+            @Valid @RequestBody UpdateManagerDto updateManagerDto
     ) {
         return managerService.update(id, updateManagerDto);
     }
