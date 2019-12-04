@@ -96,7 +96,7 @@ export class ManagerHttpService {
             );
     }
 
-    get(id: string): Observable<Manager> {
+    findById(id: string): Observable<Manager> {
         const authorization = 'Bearer_' + sessionStorage.getItem('token');
         let headers = new HttpHeaders({
             'Authorization': authorization
@@ -106,7 +106,7 @@ export class ManagerHttpService {
         return this.http
             .get<Manager>(url, {headers})
             .pipe(
-                catchError(this.handleError)
+                catchError((error) => this.handleError(error))
             );
     }
 

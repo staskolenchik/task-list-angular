@@ -45,7 +45,7 @@ export class ManagerProfileComponent implements OnInit{
         const id: string = urlPaths[urlPaths.length - 1];
 
         this.managerService
-            .get(id)
+            .findById(id)
             .subscribe((manager: Manager) => this.manager = manager);
     }
 }

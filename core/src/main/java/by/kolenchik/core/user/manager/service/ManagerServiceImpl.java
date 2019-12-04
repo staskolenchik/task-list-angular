@@ -7,6 +7,7 @@ import by.kolenchik.core.user.exception.DuplicateEmailException;
 import by.kolenchik.core.user.manager.dto.AddManagerDto;
 import by.kolenchik.core.user.manager.dto.ManagerInfoDto;
 import by.kolenchik.core.user.manager.dto.UpdateManagerDto;
+import by.kolenchik.core.user.exception.UserNotFoundException;
 import by.kolenchik.core.user.repository.UserRepository;
 import by.kolenchik.core.user.repository.UserRoleRepository;
 import org.modelmapper.ModelMapper;
@@ -78,7 +79,8 @@ public class ManagerServiceImpl implements ManagerService {
 
     @Override
     public ManagerInfoDto update(Long id, UpdateManagerDto updateManagerDto) {
-        User managerFromDb = userRepository.getOne(id);
+        validateUpdate(updateManagerDto);
+        User managerFromDb = userRepository.findByIdAndDeleteDateIsNull(id);
 
         BeanUtils.copyProperties(updateManagerDto, managerFromDb);
 
@@ -87,9 +89,15 @@ public class ManagerServiceImpl implements ManagerService {
         return modelMapper.map(savedManager, ManagerInfoDto.class);
     }
 
+    private void validateUpdate(UpdateManagerDto updateManagerDto) {
+        if (!userRepository.existsByIdAndDeleteDateIsNull(updateManagerDto.getId())) {
+            throw new UserNotFoundException("Manager with id=%d was not found", updateManagerDto.getId());
+        }
+    }
+
     @Override
     public ManagerInfoDto findById(Long id) {
-        User managerFromDb = userRepository.getOne(id);
+        User managerFromDb = userRepository.findByIdAndDeleteDateIsNull(id);
 
         return modelMapper.map(managerFromDb, ManagerInfoDto.class);
     }

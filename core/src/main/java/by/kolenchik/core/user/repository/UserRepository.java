@@ -25,7 +25,11 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     User findByEmail(String email);
 
+    User findByIdAndDeleteDateIsNull(Long id);
+
     boolean existsByEmail(String email);
+
+    boolean existsByIdAndDeleteDateIsNull(Long id);
 
     @Modifying(clearAutomatically = true)
     @Query("UPDATE User SET deleteDate = now() WHERE id = ?1 AND deleteDate IS NULL")
