@@ -17,7 +17,7 @@ import {
     MatTableModule
 } from "@angular/material";
 import {ApplicationPipesModule} from "../../shared/module/application-pipes.module";
-import {ManagerSelectionComponent} from "./components/employee-update-form/manager-selection/manager-selection.component";
+import {ManagerSelectionComponent} from "./components/manager-selection/manager-selection.component";
 
 @NgModule({
     declarations: [

@@ -1,7 +1,7 @@
 import {Component, EventEmitter, OnInit, Output} from "@angular/core";
-import {ManagerHttpService} from "../../../../managers/manager-http.service";
-import {Manager} from "../../../../../shared/models/manager";
-import {Page} from "../../../../../shared/models/page";
+import {ManagerHttpService} from "../../../managers/manager-http.service";
+import {Manager} from "../../../../shared/models/manager";
+import {Page} from "../../../../shared/models/page";
 import {PageEvent} from "@angular/material";
 
 @Component({
