@@ -5,6 +5,7 @@ import {EmployeeListComponent} from "./components/employee-list/employee-list.co
 import {EmployeeFormComponent} from "./components/employee-form/employee-form.component";
 import {EmployeeUpdateFormComponent} from "./components/employee-update-form/employee-update-form.component";
 import {EmployeeProfileComponent} from "./components/employee-profile/employee-profile.component";
+import {ManagerSelectionComponent} from "./components/employee-update-form/manager-selection/manager-selection.component";
 
 const employeeRoutes: Routes = [
     {
@@ -26,7 +27,7 @@ const employeeRoutes: Routes = [
             {
                 path: 'profile/:id',
                 component: EmployeeProfileComponent,
-            }
+            },
         ]
     },
 ];

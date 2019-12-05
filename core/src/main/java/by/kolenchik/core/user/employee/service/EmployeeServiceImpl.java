@@ -1,16 +1,19 @@
 package by.kolenchik.core.user.employee.service;
 
+import by.kolenchik.core.task.service.TaskService;
 import by.kolenchik.core.user.User;
 import by.kolenchik.core.user.UserRole;
 import by.kolenchik.core.user.UserRoleEnum;
 import by.kolenchik.core.user.employee.dto.AddEmployeeDto;
 import by.kolenchik.core.user.employee.dto.EmployeeInfoDto;
 import by.kolenchik.core.user.employee.dto.UpdateEmployeeDto;
+import by.kolenchik.core.user.exception.IncompleteTaskException;
 import by.kolenchik.core.user.exception.UserNotFoundException;
 import by.kolenchik.core.user.repository.UserRepository;
 import by.kolenchik.core.user.repository.UserRoleRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -26,6 +29,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     private UserRepository userRepository;
     private ModelMapper modelMapper;
     private UserRoleRepository userRoleRepository;
+    private TaskService taskService;
 
     public EmployeeServiceImpl(
             UserRepository userRepository,
@@ -35,6 +39,10 @@ public class EmployeeServiceImpl implements EmployeeService {
         this.userRepository = userRepository;
         this.modelMapper = modelMapper;
         this.userRoleRepository = userRoleRepository;
+    }
+
+    public void setTaskService(TaskService taskService) {
+        this.taskService = taskService;
     }
 
     @Override
@@ -64,12 +72,33 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public EmployeeInfoDto update(Long id, UpdateEmployeeDto updateEmployeeDto) {
-        User employeeFromDb = userRepository.getOne(id);
+        validateUpdate(id, updateEmployeeDto);
+
+        User employeeFromDb = userRepository.findByIdAndDeleteDateIsNull(id);
         BeanUtils.copyProperties(updateEmployeeDto, employeeFromDb);
 
         User savedEmployee = userRepository.save(employeeFromDb);
 
         return modelMapper.map(savedEmployee, EmployeeInfoDto.class);
+    }
+
+    private void validateUpdate(Long id, UpdateEmployeeDto updateEmployeeDto) {
+        if (!userRepository.existsByIdAndDeleteDateIsNull(id)) {
+            throw new UserNotFoundException("Employee with id=%d wasn't found", id);
+        }
+
+        Set<UserRole> roles = new HashSet<>();
+        UserRole userRole = userRoleRepository.findByDesignation(UserRoleEnum.MANAGER.name());
+        roles.add(userRole);
+
+        if (!userRepository.existsByIdAndRolesAndDeleteDateIsNull(updateEmployeeDto.getSuperior(), roles)) {
+            throw new UserNotFoundException("Manager with id=%d wasn't found", updateEmployeeDto.getSuperior());
+        }
+
+        User employee = userRepository.findByIdAndDeleteDateIsNull(id);
+        if (taskService.existsByTaskStatusAndAssignee(id, employee)) {
+            throw new IncompleteTaskException("Employee with id=%d has incomplete tasks", id);
+        }
     }
 
     @Override

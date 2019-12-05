@@ -12,11 +12,12 @@ import {
     MatButtonModule,
     MatCardModule,
     MatCheckboxModule, MatDatepickerModule,
-    MatIconModule, MatInputModule,
+    MatIconModule, MatInputModule, MatListModule,
     MatPaginatorModule, MatProgressBarModule, MatSortModule,
     MatTableModule
 } from "@angular/material";
 import {ApplicationPipesModule} from "../../shared/module/application-pipes.module";
+import {ManagerSelectionComponent} from "./components/employee-update-form/manager-selection/manager-selection.component";
 
 @NgModule({
     declarations: [
@@ -25,6 +26,7 @@ import {ApplicationPipesModule} from "../../shared/module/application-pipes.modu
         EmployeeListComponent,
         EmployeeUpdateFormComponent,
         EmployeeProfileComponent,
+        ManagerSelectionComponent,
     ],
     imports: [
         EmployeeRoutingModule,
@@ -42,6 +44,7 @@ import {ApplicationPipesModule} from "../../shared/module/application-pipes.modu
         MatSortModule,
         MatInputModule,
         MatDatepickerModule,
+        MatListModule,
     ],
     exports: [
         EmployeeFormComponent,
@@ -49,7 +52,8 @@ import {ApplicationPipesModule} from "../../shared/module/application-pipes.modu
         EmployeeListComponent,
         EmployeeUpdateFormComponent,
         EmployeeProfileComponent,
-    ]
+        ManagerSelectionComponent,
+    ],
 })
 
 export class EmployeeModule {

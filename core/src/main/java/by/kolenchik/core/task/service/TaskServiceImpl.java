@@ -11,6 +11,7 @@ import by.kolenchik.core.task.dto.UpdateTaskDto;
 import by.kolenchik.core.task.exceptions.TaskNotFoundException;
 import by.kolenchik.core.task.exceptions.TaskTypeUndefinedException;
 import by.kolenchik.core.task.repository.TaskRepository;
+import by.kolenchik.core.user.User;
 import by.kolenchik.core.user.employee.service.EmployeeService;
 import by.kolenchik.core.user.exception.UserNotFoundException;
 import by.kolenchik.core.user.manager.service.ManagerService;
@@ -19,7 +20,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.PostConstruct;
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 @Service
 class TaskServiceImpl implements TaskService {
@@ -39,6 +44,11 @@ class TaskServiceImpl implements TaskService {
         this.employeeService = employeeService;
         this.managerService = managerService;
         this.modelMapper = modelMapper;
+    }
+
+    @PostConstruct
+    public void init() {
+        employeeService.setTaskService(this);
     }
 
     @Override
@@ -154,5 +164,15 @@ class TaskServiceImpl implements TaskService {
 
             taskRepository.deleteById(id);
         }
+    }
+
+    public boolean existsByTaskStatusAndAssignee(Long id, User assignee) {
+        Set<TaskStatus> taskStatuses = new HashSet<>();
+        taskStatuses.add(TaskStatus.TODO);
+        taskStatuses.add(TaskStatus.IN_PROGRESS);
+        taskStatuses.add(TaskStatus.IN_REVIEW);
+
+        List<Task> allByTaskStatusAndAssignee = taskRepository.findAllByTaskStatusAndAssignee(taskStatuses, assignee);
+        return !allByTaskStatusAndAssignee.isEmpty();
     }
 }

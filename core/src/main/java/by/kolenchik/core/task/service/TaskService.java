@@ -4,6 +4,7 @@ import by.kolenchik.core.task.dto.TaskAddDto;
 import by.kolenchik.core.task.dto.TaskFilterDto;
 import by.kolenchik.core.task.dto.TaskInfoDto;
 import by.kolenchik.core.task.dto.UpdateTaskDto;
+import by.kolenchik.core.user.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -18,4 +19,6 @@ public interface TaskService {
     Page<TaskInfoDto> find(TaskFilterDto taskFilterDto,Pageable pageable);
 
     void deleteAll(Long[] ids);
+
+    boolean existsByTaskStatusAndAssignee(Long id, User assignee);
 }
