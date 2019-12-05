@@ -11,7 +11,7 @@ import {Employee} from "../../../../shared/models/employee";
 import {EmployeeHttpService} from "../../employee-http.service";
 
 @Component({
-    selector: 'employee-form-component',
+    selector: 'employee-add-form-component',
     template: `
         <div class="employee-add-form">
             <form #form="ngForm" (ngSubmit)="save()">
@@ -233,7 +233,7 @@ import {EmployeeHttpService} from "../../employee-http.service";
     styleUrls: ['./employee-add-form.component.css']
 })
 
-export class EmployeeFormComponent {
+export class EmployeeAddFormComponent {
     private fieldLength = FieldLength;
     private errors = Errors;
     private hints = Hints;

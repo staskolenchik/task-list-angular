@@ -1,6 +1,6 @@
 import {NgModule} from "@angular/core";
 import {CommonModule} from "@angular/common";
-import {EmployeeFormComponent} from "./components/employee-form/employee-form.component";
+import {EmployeeAddFormComponent} from "./components/employee-form/employee-add-form.component";
 import {EmployeeComponent} from "./components/employee.component";
 import {FormsModule} from "@angular/forms";
 import {EmployeeListComponent} from "./components/employee-list/employee-list.component";
@@ -21,7 +21,7 @@ import {ManagerSelectionComponent} from "./components/manager-selection/manager-
 
 @NgModule({
     declarations: [
-        EmployeeFormComponent,
+        EmployeeAddFormComponent,
         EmployeeComponent,
         EmployeeListComponent,
         EmployeeUpdateFormComponent,
@@ -47,7 +47,7 @@ import {ManagerSelectionComponent} from "./components/manager-selection/manager-
         MatListModule,
     ],
     exports: [
-        EmployeeFormComponent,
+        EmployeeAddFormComponent,
         EmployeeComponent,
         EmployeeListComponent,
         EmployeeUpdateFormComponent,
