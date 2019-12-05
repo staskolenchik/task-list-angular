@@ -168,6 +168,8 @@ import {EmployeeHttpService} from "../../employee-http.service";
 
                             <mat-form-field class="employee-add-form__form-field">
                                 <input matInput
+                                       class="employee-add-form__manager_input"
+                                       required
                                        placeholder="Superior"
                                        name="superior"
                                        (mousedown)="selectManager()"

@@ -96,6 +96,8 @@ import {ManagerHttpService} from "../../../managers/manager-http.service";
 
                             <mat-form-field class="employee-update-form__form-field">
                                 <input matInput
+                                       class="employee-update-form__manager_input"
+                                       required
                                        placeholder="Superior"
                                        name="superior"
                                        (mousedown)="selectManager()"

@@ -28,3 +28,7 @@
 .employee-add-form__password-confirmed-hint {
     color: green;
 }
+
+.employee-add-form__manager_input {
+    cursor: pointer;
+}
