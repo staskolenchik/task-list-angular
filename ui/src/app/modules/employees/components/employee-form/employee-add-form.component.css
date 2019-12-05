@@ -1,0 +1,30 @@
+.employee-add-form {
+    margin: 30px;
+}
+
+.employee-add-form__form-field {
+    display: block;
+    width: 100%;
+    margin: 5px 0 0;
+}
+
+.employee-add-form__button-group {
+    display: flex;
+    justify-content: flex-end;
+    margin: 0 0 8px;
+}
+
+.employee-add-form__add-button,
+.employee-add-form__back-button,
+.employee-add-form__reset-button {
+    width: 50px;
+    height: 36px;
+}
+
+.employee-add-form__reset-button-content {
+    margin: 0 8px;
+}
+
+.employee-add-form__password-confirmed-hint {
+    color: green;
+}

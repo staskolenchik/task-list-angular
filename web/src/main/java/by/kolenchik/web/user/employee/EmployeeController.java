@@ -4,6 +4,7 @@ import by.kolenchik.core.user.employee.dto.AddEmployeeDto;
 import by.kolenchik.core.user.employee.dto.EmployeeInfoDto;
 import by.kolenchik.core.user.employee.dto.UpdateEmployeeDto;
 import by.kolenchik.core.user.employee.service.EmployeeService;
+import by.kolenchik.core.user.exception.PasswordsMismatchException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -31,7 +32,9 @@ public class EmployeeController {
     }
 
     @PostMapping
-    public EmployeeInfoDto add(@RequestBody AddEmployeeDto addEmployeeDto) {
+    public EmployeeInfoDto add(@Valid @RequestBody AddEmployeeDto addEmployeeDto) {
+        validatePassword(addEmployeeDto.getPassword(), addEmployeeDto.getConfirmPassword());
+
         String encodedPassword = passwordEncoder.encode(addEmployeeDto.getPassword());
         addEmployeeDto.setPassword(encodedPassword);
 
@@ -64,5 +67,15 @@ public class EmployeeController {
     @GetMapping("/{id}")
     public EmployeeInfoDto findById(@PathVariable Long id) {
         return employeeService.findById(id);
+    }
+
+    private void validatePassword(String password, String confirmPassword) {
+        if (!password.equals(confirmPassword)) {
+            throw new PasswordsMismatchException(
+                    "Employee's passwords doesn't match. Password=%s. Password confirmation=%s",
+                    password,
+                    confirmPassword
+            );
+        }
     }
 }

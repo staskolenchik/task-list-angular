@@ -7,13 +7,13 @@ import by.kolenchik.core.user.UserRoleEnum;
 import by.kolenchik.core.user.employee.dto.AddEmployeeDto;
 import by.kolenchik.core.user.employee.dto.EmployeeInfoDto;
 import by.kolenchik.core.user.employee.dto.UpdateEmployeeDto;
+import by.kolenchik.core.user.exception.DuplicateEmailException;
 import by.kolenchik.core.user.exception.IncompleteTaskException;
 import by.kolenchik.core.user.exception.UserNotFoundException;
 import by.kolenchik.core.user.repository.UserRepository;
 import by.kolenchik.core.user.repository.UserRoleRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -47,6 +47,8 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public EmployeeInfoDto add(AddEmployeeDto addEmployeeDto) {
+        validateAdd(addEmployeeDto);
+
         User employee = modelMapper.map(addEmployeeDto, User.class);
 
         UserRole employeeUserRole = userRoleRepository.findByDesignation(UserRoleEnum.EMPLOYEE.name());
@@ -57,6 +59,19 @@ public class EmployeeServiceImpl implements EmployeeService {
         User employeeFromDB = userRepository.save(employee);
 
         return modelMapper.map(employeeFromDB, EmployeeInfoDto.class);
+    }
+
+    private void validateAdd(AddEmployeeDto addEmployeeDto) {
+        if (userRepository.existsByEmail(addEmployeeDto.getEmail())) {
+            throw new DuplicateEmailException("Email=%s already exists", addEmployeeDto.getEmail());
+        }
+
+        Set<UserRole> roles = new HashSet<>();
+        UserRole userRole = userRoleRepository.findByDesignation(UserRoleEnum.MANAGER.name());
+        roles.add(userRole);
+        if (!userRepository.existsByIdAndRolesAndDeleteDateIsNull(addEmployeeDto.getSuperior(), roles)) {
+            throw new UserNotFoundException("Manager with id=%d wasn't found", addEmployeeDto.getSuperior());
+        }
     }
 
     @Override

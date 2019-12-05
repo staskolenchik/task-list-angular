@@ -1,6 +1,7 @@
 package by.kolenchik.web.common.exceptionhandler;
 
 import by.kolenchik.core.user.exception.IncompleteTaskException;
+import by.kolenchik.core.user.exception.PasswordsMismatchException;
 import by.kolenchik.core.user.exception.UserNotFoundException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -22,6 +23,13 @@ public class EmployeeExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(IncompleteTaskException.class)
     public ResponseEntity<Object> handleIncompleteTaskException(RuntimeException e, WebRequest request) {
+        String responseBody = e.getMessage();
+
+        return handleExceptionInternal(e, responseBody, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
+    }
+
+    @ExceptionHandler(PasswordsMismatchException.class)
+    public ResponseEntity<Object> handlePasswordsMismatchException(RuntimeException e, WebRequest request) {
         String responseBody = e.getMessage();
 
         return handleExceptionInternal(e, responseBody, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
