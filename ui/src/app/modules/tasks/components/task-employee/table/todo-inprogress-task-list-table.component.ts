@@ -73,7 +73,7 @@ import {TaskHttpService} from "../../../task-http.service";
             </mat-card>
         </div>
     `,
-    styleUrls: ['./todo-inprogress-task-list-table-component.css']
+    styleUrls: ['./todo-inprogress-task-list-table.component.css']
 })
 export class TodoInprogressTaskListTableComponent implements OnInit {
     private displayedColumns = ['subject', 'status', 'type', 'creationDateTime', 'options'];
