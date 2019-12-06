@@ -5,12 +5,14 @@ import {Urls} from "../../shared/constants/urls";
 import {LoginDto} from "./login-dto";
 import {catchError, map} from "rxjs/operators";
 import {Router} from "@angular/router";
-import {throwError} from "rxjs";
+import {Observable, throwError} from "rxjs";
+import {Errors} from "../../shared/constants/errors";
 
 @Injectable({
     providedIn: 'root'
 })
 export class LoginService {
+    private errors = Errors;
 
     private _url = Urls.LOGIN;
     private _redirectUrl = '/';
@@ -22,14 +24,22 @@ export class LoginService {
     ){}
 
     private handleError(error: HttpErrorResponse) {
+        console.log(error);
         if (error.error instanceof ErrorEvent) {
-            this.snackBar.open(error.message, "Close", {duration: 5000});
+            this.snackBar.open(error.error.toString(), "Close", {duration: 5000});
+        } else if (error.status === 0) {
+            const errorMessage = this.errors.CONNECTION_FAILED;
+            this.snackBar.open(errorMessage, "Close", {duration: 5000});
+            console.log(error.message);
+        } else if (error.status === 403) {
+            const errorMessage = this.errors.EMAIL_OR_PASSWORD_IS_INVALID;
+            this.snackBar.open(errorMessage, "Close", {duration: 5000});
+            console.log(error.message);
         } else {
-            this.snackBar.open(error.message, "Close", {duration: 5000});
+            this.snackBar.open(error.error, "Close", {duration: 5000});
         }
 
-        return throwError(
-            'Something bad happened; please try again later.');
+        return throwError('Something bad happened; please try again later.');
     };
 
     set redirectUrl(value: string) {
@@ -40,8 +50,8 @@ export class LoginService {
         return this._redirectUrl;
     }
 
-    signin(loginDto: LoginDto) {
-        this.http
+    signin(loginDto: LoginDto): Observable<any> {
+        return this.http
             .post(this._url, loginDto)
             .pipe(map((response: any) => {
                     const token: string = response.token;
@@ -55,7 +65,7 @@ export class LoginService {
 
                     this.router.navigate([this._redirectUrl]);
                 }),
-                catchError((error) => this.handleError(error)))
-            .subscribe();
+                catchError((error) => this.handleError(error))
+            );
     }
 }

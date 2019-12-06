@@ -8,6 +8,9 @@ export const Errors = {
 
     INVALID_EMAIL: `Invalid email`,
 
-    PASSWORDS_MISMATCH: `Passwords mismatch`
+    PASSWORDS_MISMATCH: `Passwords mismatch`,
 
+    EMAIL_OR_PASSWORD_IS_INVALID: `Email or Password is invalid`,
+
+    CONNECTION_FAILED: `Error. Please check internet connection`,
 };

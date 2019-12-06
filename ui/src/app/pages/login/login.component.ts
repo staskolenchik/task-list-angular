@@ -1,4 +1,4 @@
-import {Component, OnInit} from "@angular/core";
+import {Component} from "@angular/core";
 import {Hints} from "../../shared/constants/hints";
 import {FieldLength} from "../../shared/constants/field-length";
 import {Errors} from "../../shared/constants/errors";
@@ -71,7 +71,7 @@ import {LoginService} from "./login-service";
                             Sign In
                         </button>
                     </mat-card-actions>
-                    <mat-progress-bar *ngIf="isSending" mode="indeterminate"></mat-progress-bar>
+                    <mat-progress-bar *ngIf="sending" mode="indeterminate"></mat-progress-bar>
                 </mat-card>
             </form>
         </div>
@@ -84,12 +84,19 @@ export class LoginComponent {
     private errors = Errors;
 
     private loginDto: LoginDto = {} as LoginDto;
-    private isSending: boolean = false;
+    private sending: boolean = false;
 
     constructor(private loginService: LoginService) {}
 
     onSignIn(): void {
-        this.isSending = true;
-        this.loginService.signin(this.loginDto);
+        this.sending = true;
+        this.loginService.signin(this.loginDto)
+            .subscribe(
+                () => {
+                    this.sending = false;
+                },
+                () => {
+                    this.sending = false;
+                });
     }
 }

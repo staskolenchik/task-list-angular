@@ -72,9 +72,14 @@ export class AppComponent {
     ) {}
 
     onLogout() {
-        sessionStorage.clear();
-        this.loginService.redirectUrl = '/';
-        this.router.navigate(['/']);
+        sessionStorage.removeItem('token');
+        sessionStorage.removeItem('sub');
+        sessionStorage.removeItem('roles');
+        sessionStorage.removeItem('uid');
+        sessionStorage.removeItem('exp');
+
+        this.loginService.redirectUrl = '/login';
+        this.router.navigate(['/login']);
     }
 
     isSignedIn() {

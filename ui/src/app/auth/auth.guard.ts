@@ -29,6 +29,12 @@ export class AuthGuard implements CanActivate{
             }
         }
 
+        sessionStorage.removeItem('token');
+        sessionStorage.removeItem('sub');
+        sessionStorage.removeItem('roles');
+        sessionStorage.removeItem('uid');
+        sessionStorage.removeItem('exp');
+
         this.router.navigate(['/login']);
 
         return false;
