@@ -1,4 +1,4 @@
-import {Component, OnInit, ViewChild} from "@angular/core";
+import {Component, EventEmitter, OnInit, Output, ViewChild} from "@angular/core";
 import {Task} from "../../../../../shared/models/task";
 import {MatDialog, MatSort, MatTableDataSource, PageEvent} from "@angular/material";
 import {DeletePermissionComponent} from "../../../../../shared/modal-dialogs/delete-permission/delete-permission.component";
@@ -8,6 +8,7 @@ import {DeleteAllPermissionComponent} from "../../../../../shared/modal-dialogs/
 import {TaskHttpService} from "../../../task-http.service";
 import {TaskDataService} from "../../../task-data.service";
 import {Router} from "@angular/router";
+import {TaskStatus} from "../../../../../shared/models/task-status";
 
 @Component({
     selector: 'in-review-task-list-table-component',
@@ -15,9 +16,9 @@ import {Router} from "@angular/router";
         <div class="task-list__in-review-table-card">
             <mat-card class="mat-elevation-z8 ">
                 <mat-card-title>In Review Tasks</mat-card-title>
-                <table mat-table 
-                       [dataSource]="taskDataSource" 
-                       matSort 
+                <table mat-table
+                       [dataSource]="taskDataSource"
+                       matSort
                        class="task-list__in-review-table">
                     <ng-container matColumnDef="select">
                         <th mat-header-cell *matHeaderCellDef>
@@ -35,7 +36,7 @@ import {Router} from "@angular/router";
                             </mat-checkbox>
                         </td>
                     </ng-container>
-                    
+
                     <ng-container matColumnDef="subject">
                         <th mat-header-cell *matHeaderCellDef mat-sort-header>Subject</th>
                         <td mat-cell *matCellDef="let task">{{task.subject}}</td>
@@ -77,8 +78,8 @@ import {Router} from "@angular/router";
                             <button mat-button
                                     class="manager-list__option-button"
                                     color="accent"
-                                    (click)="onUpdateForm(task)">
-                                <mat-icon aria-label="Update icon" >
+                                    (click)="onUpdate(task)">
+                                <mat-icon aria-label="Update icon">
                                     update
                                 </mat-icon>
                             </button>
@@ -103,11 +104,12 @@ import {Router} from "@angular/router";
                     <tr mat-row *matRowDef="let row; columns: displayedColumns;">
                 </table>
                 <div class="task-list__footer">
-                    <button mat-raised-button 
-                            [disabled]="selection.isEmpty()" 
-                            (click)="askDeleteAllPermission()" 
+                    <button mat-raised-button
+                            [disabled]="selection.isEmpty()"
+                            (click)="askDeleteAllPermission()"
                             color="warn"
-                    >Delete selected</button>
+                    >Delete selected
+                    </button>
                     <mat-paginator [length]="page.length"
                                    [pageSizeOptions]="[5, 10, 20]"
                                    [pageSize]="page.size"
@@ -130,11 +132,14 @@ export class InReviewTaskListTableComponent implements OnInit {
         number: 0,
     } as Page;
 
-    private filter = {statuses: ['IN_REVIEW']};
+    private filter = {statuses: [TaskStatus.INREVIEW]};
     private selection: SelectionModel<Task> = new SelectionModel<Task>(
         true,
         []
     );
+
+    @Output() transferUpdate: EventEmitter<Task> = new EventEmitter<Task>();
+    @Output() transferShow: EventEmitter<Task> = new EventEmitter<Task>();
 
     constructor(
         private taskDataService: TaskDataService,
@@ -159,20 +164,8 @@ export class InReviewTaskListTableComponent implements OnInit {
 
     @ViewChild(MatSort, {static: true}) sort: MatSort;
 
-    onUpdateForm(task: Task): void {
-        this.taskDataService.setTask(task);
-        this.taskDataService.setUpdatable(true);
-        this.openForm();
-    }
-
-    openForm(): void {
-        this.router.navigate(['/tasks/task-form']);
-    }
-
     onUpdate(task: Task): void {
-        this.taskHttpService
-            .update(task)
-            .subscribe(() => this.findAll(this.page, this.filter));
+        this.transferUpdate.emit(task);
     }
 
     onDelete(task: Task): void {
@@ -218,8 +211,7 @@ export class InReviewTaskListTableComponent implements OnInit {
     }
 
     onShowInfo(task: Task): void {
-        this.taskDataService.setTask(task);
-        this.router.navigate([`tasks/${task.id}`]);
+        this.transferShow.emit(task);
     }
 
     onChangePage(pageEvent: PageEvent): void {

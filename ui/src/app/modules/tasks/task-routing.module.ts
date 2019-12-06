@@ -9,7 +9,12 @@ import {EmployeeAuthGuard} from "../../auth/employee.auth.guard";
 import {ManagerOrEmployeeAuthGuard} from "../../auth/manager-or-employee.auth.guard";
 
 const taskRoutes: Routes = [
-    {path: 'tasks', component: TaskManagerComponent, canActivate: [AuthGuard, ManagerAuthGuard]},
+    {
+        path: 'tasks',
+        component: TaskManagerComponent,
+        canActivate: [AuthGuard, ManagerAuthGuard],
+    },
+
     {path: 'tasks/employee', component: TaskListEmployeeComponent, canActivate: [AuthGuard, EmployeeAuthGuard]},
     {path: 'tasks/:id', component: TaskInfoComponent, canActivate: [AuthGuard, ManagerAuthGuard, ManagerOrEmployeeAuthGuard]},
 ];

@@ -1,4 +1,4 @@
-import {Component, ViewChild} from "@angular/core";
+import {Component, EventEmitter, Output, ViewChild} from "@angular/core";
 import {MatDialog, MatSort, MatTableDataSource, PageEvent} from "@angular/material";
 import {Task} from "../../../../../shared/models/task";
 import {DeletePermissionComponent} from "../../../../../shared/modal-dialogs/delete-permission/delete-permission.component";
@@ -70,8 +70,8 @@ import {TaskStatus} from "../../../../../shared/models/task-status";
                             <button mat-button
                                     class="manager-list__option-button"
                                     color="accent"
-                                    (click)="onUpdateForm(task)">
-                                <mat-icon aria-label="Update icon" >
+                                    (click)="onUpdate(task)">
+                                <mat-icon aria-label="Update icon">
                                     update
                                 </mat-icon>
                             </button>
@@ -100,7 +100,8 @@ import {TaskStatus} from "../../../../../shared/models/task-status";
                             [disabled]="selection.isEmpty()"
                             (click)="askDeleteAllPermission()"
                             color="warn"
-                    >Delete selected</button>
+                    >Delete selected
+                    </button>
                     <mat-paginator [length]="page.length"
                                    [pageSizeOptions]="[5, 10, 20]"
                                    [pageSize]="page.size"
@@ -136,6 +137,9 @@ export class AllTaskListTableComponent {
         []
     );
 
+    @Output() transferUpdate: EventEmitter<Task> = new EventEmitter<Task>();
+    @Output() transferShow: EventEmitter<Task> = new EventEmitter<Task>();
+
     constructor(
         private taskDataService: TaskDataService,
         private taskHttpService: TaskHttpService,
@@ -159,20 +163,8 @@ export class AllTaskListTableComponent {
 
     @ViewChild(MatSort, {static: true}) sort: MatSort;
 
-    onUpdateForm(task: Task): void {
-        this.taskDataService.setTask(task);
-        this.taskDataService.setUpdatable(true);
-        this.openForm();
-    }
-
-    openForm(): void {
-        this.router.navigate(['/tasks/task-form']);
-    }
-
     onUpdate(task: Task): void {
-        this.taskHttpService
-            .update(task)
-            .subscribe(() => this.findAll(this.page, this.filter));
+        this.transferUpdate.emit(task);
     }
 
     onDelete(task: Task): void {
@@ -218,8 +210,7 @@ export class AllTaskListTableComponent {
     }
 
     onShowInfo(task: Task): void {
-        this.taskDataService.setTask(task);
-        this.router.navigate([`tasks/${task.id}`]);
+        this.transferShow.emit(task);
     }
 
     onChangePage(pageEvent: PageEvent): void {
