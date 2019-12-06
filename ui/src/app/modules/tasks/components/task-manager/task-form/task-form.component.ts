@@ -1,26 +1,26 @@
-import {Component, OnInit} from "@angular/core";
-import {Task} from "../../../../shared/models/task";
-import {Employee} from "../../../../shared/models/employee";
-import {Manager} from "../../../../shared/models/manager";
-import {EmployeeHttpService} from "../../../employees/employee-http.service";
+import {Component, EventEmitter, OnInit, Output} from "@angular/core";
+import {Task} from "../../../../../shared/models/task";
+import {Employee} from "../../../../../shared/models/employee";
+import {Manager} from "../../../../../shared/models/manager";
+import {EmployeeHttpService} from "../../../../employees/employee-http.service";
 import {Router} from "@angular/router";
-import {TaskDataService} from "../../task-data.service";
-import {TaskHttpService} from "../../task-http.service";
+import {TaskDataService} from "../../../task-data.service";
+import {TaskHttpService} from "../../../task-http.service";
 import {Location} from '@angular/common';
 
-import {FieldLength} from "../../../../shared/constants/field-length";
-import {TaskTypes} from "../../../../shared/constants/task-types";
-import {Errors} from "../../../../shared/constants/errors";
-import {Hints} from "../../../../shared/constants/hints";
+import {FieldLength} from "../../../../../shared/constants/field-length";
+import {TaskTypes} from "../../../../../shared/constants/task-types";
+import {Errors} from "../../../../../shared/constants/errors";
+import {Hints} from "../../../../../shared/constants/hints";
 import {MatSnackBar} from "@angular/material";
-import {Messages} from "../../../../shared/constants/messages";
+import {Messages} from "../../../../../shared/constants/messages";
 
 @Component({
     selector: 'task-form-component',
     template: `
         <div class="task-form">
             <form #form="ngForm" (ngSubmit)="save(task)">
-                <mat-card class="mat-elevation-z8">
+                <mat-card>
                     <mat-card-title>Task Form</mat-card-title>
                     <mat-card-content>
                         <mat-form-field class="task-form__form-field">
@@ -116,16 +116,28 @@ import {Messages} from "../../../../shared/constants/messages";
                             <mat-error align="start" >{{errors.FIELD_IS_REQUIRED}}</mat-error>
                         </mat-form-field>
                     </mat-card-content>
-                    <mat-card-actions>
+                    <mat-card-actions class="task-add-form__button-group">
+                        <div class="task-add-form__reset-button-content">
+                            <button type="button"
+                                    mat-raised-button
+                                    class="task-add-form__reset-button"
+                                    color="warn"
+                                    (click)="onReset()"
+                            >Clear</button>
+                        </div>
+                        <button type="button"
+                                mat-stroked-button
+                                class="task-add-form__cancel-button"
+                                color="primary"
+                                (click)="onCancel()"
+                        >Cancel</button>
                         <button type="submit"
                                 mat-raised-button
+                                class="task-add-form__save-button"
                                 color="primary"
                                 [disabled]="form.invalid || isSending || isSent"
                         >Save</button>
-                        <button type="button"
-                                mat-raised-button
-                                (click)="onCancel()"
-                        >Cancel</button>
+                        
                     </mat-card-actions>
                     <mat-progress-bar *ngIf="isSending" mode="indeterminate"></mat-progress-bar>
                 </mat-card>
@@ -149,6 +161,8 @@ export class TaskFormComponent implements OnInit{
     private manager: Manager = {} as Manager;
     private isSending: boolean = false;
     private isSent: boolean = false;
+
+    @Output() expand: EventEmitter<boolean> = new EventEmitter<boolean>();
 
     constructor(
         private taskDataService: TaskDataService,
@@ -223,13 +237,13 @@ export class TaskFormComponent implements OnInit{
         this.taskDataService.setTask({} as Task);
     }
 
-    goBack() {
-        this.location.back();
+    onReset() {
+        this.task = {} as Task;
     }
 
     onCancel() {
         this.clearForm();
-        this.goBack();
+        this.expand.emit(false);
     }
 
     clearUpdatable() {

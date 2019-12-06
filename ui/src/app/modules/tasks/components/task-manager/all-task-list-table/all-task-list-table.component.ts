@@ -112,23 +112,7 @@ import {TaskStatus} from "../../../../../shared/models/task-status";
             </mat-card>
         </div>
     `,
-    styles: [`        
-        .task-list__in-review-table-card {
-            min-width: 850px;
-        }
-        .task-list__in-review-table {
-            width: 100%;
-        }
-        .task-list__footer {
-            padding: 15px 0 0;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .mat-cell {
-            padding: 0 5px;
-        }
-    `]
+    styleUrls: ['./all-task-list-table.component.css']
 })
 export class AllTaskListTableComponent {
     private displayedColumns = ['select', 'subject', 'assigneeName', 'status', 'type', 'creationDateTime', 'options'];
