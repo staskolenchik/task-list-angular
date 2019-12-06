@@ -32,29 +32,6 @@ export class EmployeeHttpService {
         return throwError('Something bad happened; please try again later.');
     };
 
-    getAll() : Observable<Employee[]>{
-        return this.http
-            .get(this.url)
-            .pipe(map(data => {
-                    let employees = [].concat(data);
-                    return employees.map(function (employee: Employee) {
-                        return {
-                            id: employee.id,
-                            email: employee.email,
-                            password: null,
-                            confirmPassword: null,
-                            name: employee.name,
-                            surname: employee.surname,
-                            patronymic: employee.patronymic,
-                            birthDate: employee.birthDate,
-                            superior: employee.superior
-                        }
-                    })
-                }),
-                catchError((error) => this.handleError(error))
-            );
-    }
-
     add(employee: Employee) : Observable<Employee> {
 
         return this.http
