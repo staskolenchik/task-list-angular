@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, Output} from "@angular/core";
+import {AfterViewChecked, ChangeDetectorRef, Component, EventEmitter, Input, Output} from "@angular/core";
 import {Task} from "../../../../shared/models/task";
 
 @Component({
@@ -56,7 +56,7 @@ import {Task} from "../../../../shared/models/task";
         }
     `]
 })
-export class TaskInfoComponent {
+export class TaskInfoComponent implements AfterViewChecked{
 
     private task: Task;
 
@@ -66,7 +66,11 @@ export class TaskInfoComponent {
 
     @Output() showInfo: EventEmitter<boolean> = new EventEmitter<boolean>();
 
-    constructor() {}
+    constructor(private cdRef: ChangeDetectorRef) {}
+
+    ngAfterViewChecked() {
+        this.cdRef.detectChanges();
+    }
 
     setEmptyTask() {
         this.task = {
