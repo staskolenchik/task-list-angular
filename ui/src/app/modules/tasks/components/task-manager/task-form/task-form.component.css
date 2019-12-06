@@ -1,0 +1,38 @@
+.task-form__form-field,
+.task-form__radio-button-group {
+    display: block;
+    padding: 5px 0;
+}
+
+.task-form__radio-button-group {
+    padding: 10px 0;
+}
+
+.task-form__radio-button {
+    padding: 0 10px;
+}
+.task-form {
+    padding: 30px;
+}
+.task-form__description {
+    max-height: 100px;
+}
+
+.task-add-form__button-group {
+    display: flex;
+    justify-content: flex-end;
+    margin: 0 0 8px;
+}
+
+.task-add-form__reset-button-content {
+    margin: 0 8px;
+}
+
+.task-add-form__save-button,
+.task-add-form__cancel-button,
+.task-add-form__reset-button {
+    width: 80px;
+    height: 36px;
+}
+
+

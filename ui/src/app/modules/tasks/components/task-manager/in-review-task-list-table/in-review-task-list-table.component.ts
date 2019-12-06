@@ -1,20 +1,24 @@
-import {Component, EventEmitter, Input, Output, ViewChild} from "@angular/core";
+import {Component, EventEmitter, OnInit, Output, ViewChild} from "@angular/core";
 import {Task} from "../../../../../shared/models/task";
 import {MatDialog, MatSort, MatTableDataSource, PageEvent} from "@angular/material";
 import {DeletePermissionComponent} from "../../../../../shared/modal-dialogs/delete-permission/delete-permission.component";
 import {Page} from "../../../../../shared/models/page";
 import {SelectionModel} from "@angular/cdk/collections";
 import {DeleteAllPermissionComponent} from "../../../../../shared/modal-dialogs/delete-all-permission/delete-all-permission.component";
+import {TaskHttpService} from "../../../task-http.service";
+import {TaskDataService} from "../../../task-data.service";
+import {Router} from "@angular/router";
+import {TaskStatus} from "../../../../../shared/models/task-status";
 
 @Component({
-    selector: 'task-list-manager-table-component',
+    selector: 'in-review-task-list-table-component',
     template: `
         <div class="task-list__in-review-table-card">
             <mat-card class="mat-elevation-z8 ">
-                <mat-card-title>Manager's table</mat-card-title>
-                <table mat-table 
-                       [dataSource]="taskDataSource" 
-                       matSort 
+                <mat-card-title>In Review Tasks</mat-card-title>
+                <table mat-table
+                       [dataSource]="taskDataSource"
+                       matSort
                        class="task-list__in-review-table">
                     <ng-container matColumnDef="select">
                         <th mat-header-cell *matHeaderCellDef>
@@ -32,7 +36,7 @@ import {DeleteAllPermissionComponent} from "../../../../../shared/modal-dialogs/
                             </mat-checkbox>
                         </td>
                     </ng-container>
-                    
+
                     <ng-container matColumnDef="subject">
                         <th mat-header-cell *matHeaderCellDef mat-sort-header>Subject</th>
                         <td mat-cell *matCellDef="let task">{{task.subject}}</td>
@@ -74,8 +78,8 @@ import {DeleteAllPermissionComponent} from "../../../../../shared/modal-dialogs/
                             <button mat-button
                                     class="manager-list__option-button"
                                     color="accent"
-                                    (click)="onUpdateForm(task)">
-                                <mat-icon aria-label="Update icon" >
+                                    (click)="onUpdate(task)">
+                                <mat-icon aria-label="Update icon">
                                     update
                                 </mat-icon>
                             </button>
@@ -100,11 +104,12 @@ import {DeleteAllPermissionComponent} from "../../../../../shared/modal-dialogs/
                     <tr mat-row *matRowDef="let row; columns: displayedColumns;">
                 </table>
                 <div class="task-list__footer">
-                    <button mat-raised-button 
-                            [disabled]="selection.isEmpty()" 
-                            (click)="askDeleteAllPermission()" 
+                    <button mat-raised-button
+                            [disabled]="selection.isEmpty()"
+                            (click)="askDeleteAllPermission()"
                             color="warn"
-                    >Delete selected</button>
+                    >Delete selected
+                    </button>
                     <mat-paginator [length]="page.length"
                                    [pageSizeOptions]="[5, 10, 20]"
                                    [pageSize]="page.size"
@@ -115,65 +120,66 @@ import {DeleteAllPermissionComponent} from "../../../../../shared/modal-dialogs/
             </mat-card>
         </div>
     `,
-    styles: [`        
-        .task-list__in-review-table-card {
-            min-width: 850px;
-        }
-        .task-list__in-review-table {
-            width: 100%;
-        }
-        .task-list__footer {
-            padding: 15px 0 0;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .mat-cell {
-            padding: 0 5px;
-        }
-    `],
-    providers: []
+    styleUrls: ['./in-review-task-list-table.component.css']
 })
-export class TaskListManagerTableComponent {
-
+export class InReviewTaskListTableComponent implements OnInit {
     private displayedColumns = ['select', 'subject', 'assigneeName', 'status', 'type', 'creationDateTime', 'options'];
+    private taskDataSource: MatTableDataSource<Task> = new MatTableDataSource([]);
 
-    private taskDataSource: MatTableDataSource<Task>;
-    @Input() private page: Page;
+    private page: Page = {
+        length: 0,
+        size: 10,
+        number: 0,
+    } as Page;
 
-    @ViewChild(MatSort, {static: true}) sort: MatSort;
+    private filter = {statuses: [TaskStatus.INREVIEW]};
+    private selection: SelectionModel<Task> = new SelectionModel<Task>(
+        true,
+        []
+    );
 
-    @Input()
-    set inReviewTasks(tasks: Task[]) {
-        this.taskDataSource = new MatTableDataSource(tasks);
+    @Output() transferUpdate: EventEmitter<Task> = new EventEmitter<Task>();
+    @Output() transferShow: EventEmitter<Task> = new EventEmitter<Task>();
+
+    constructor(
+        private taskDataService: TaskDataService,
+        private taskHttpService: TaskHttpService,
+        private router: Router,
+        private dialog: MatDialog,
+    ) {}
+
+    ngOnInit(): void {
+        this.findAll(this.page, this.filter);
         this.taskDataSource.sort = this.sort;
     }
 
-    @Input() private selection: SelectionModel<Task>;
-
-    @Output() updateForm: EventEmitter<Task> = new EventEmitter();
-    @Output() delete: EventEmitter<Task> = new EventEmitter();
-    @Output() deleteAll: EventEmitter<Task[]> = new EventEmitter();
-    @Output() update: EventEmitter<Task> = new EventEmitter();
-    @Output() showInfo: EventEmitter<Task> = new EventEmitter();
-    @Output() changePage: EventEmitter<Page> = new EventEmitter();
-
-    constructor(private dialog: MatDialog) {}
-
-    onUpdate(task: Task): void {
-        this.update.emit(task);
+    findAll(page: Page, filter: any): void {
+        this.taskHttpService.findAll(page, filter)
+            .subscribe((response) => {
+                this.taskDataSource = new MatTableDataSource(response.content);
+                this.page = response.page;
+                this.selection.clear();
+            });
     }
 
-    onUpdateForm(task: Task): void {
-        this.updateForm.emit(task);
+    @ViewChild(MatSort, {static: true}) sort: MatSort;
+
+    onUpdate(task: Task): void {
+        this.transferUpdate.emit(task);
     }
 
     onDelete(task: Task): void {
-        this.delete.emit(task);
+        this.taskHttpService
+            .delete(task)
+            .subscribe(() => this.findAll(this.page, this.filter));
     }
 
     onDeleteAll(tasks: Task[]): void {
-        this.deleteAll.emit(tasks);
+        this.taskHttpService
+            .deleteAll(tasks)
+            .subscribe(() => {
+                this.loadTasksFromStartPage();
+            });
     }
 
     askPermission(task: Task): void {
@@ -199,13 +205,13 @@ export class TaskListManagerTableComponent {
 
         matDialogRef.afterClosed().subscribe(isApproved => {
             if (isApproved) {
-                this.onDeleteAll(this.selection.selected);
+                 this.onDeleteAll(this.selection.selected);
             }
         })
     }
 
     onShowInfo(task: Task): void {
-        this.showInfo.emit(task);
+        this.transferShow.emit(task);
     }
 
     onChangePage(pageEvent: PageEvent): void {
@@ -215,7 +221,12 @@ export class TaskListManagerTableComponent {
             number: pageEvent.pageIndex,
         };
 
-        this.changePage.emit(changedPage);
+        this.findAll(changedPage, this.filter);
+    }
+
+    loadTasksFromStartPage(): void {
+        this.page.number = 0;
+        this.findAll(this.page, this.filter);
     }
 
     isAllSelected(): boolean {

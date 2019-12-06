@@ -1,9 +1,5 @@
-import {Component, OnInit} from "@angular/core";
-import {Location} from '@angular/common';
-import {TaskDataService} from "../../task-data.service";
+import {Component, EventEmitter, Input, Output} from "@angular/core";
 import {Task} from "../../../../shared/models/task";
-
-import {ChangeDetectorRef} from '@angular/core';
 
 @Component({
     selector: 'task-info-component',
@@ -43,7 +39,8 @@ import {ChangeDetectorRef} from '@angular/core';
                     </form>
                 </mat-card-content>
                 <mat-card-actions>
-                    <button mat-raised-button
+                    <button mat-stroked-button
+                            color="primary"
                             (click)="goBack()"
                     >Cancel</button>
                 </mat-card-actions>
@@ -59,34 +56,17 @@ import {ChangeDetectorRef} from '@angular/core';
         }
     `]
 })
-export class TaskInfoComponent implements OnInit{
+export class TaskInfoComponent {
 
     private task: Task;
 
-    constructor(
-        private taskDataService: TaskDataService,
-        private location: Location,
-        private cdRef: ChangeDetectorRef
-    ) {}
-
-    ngOnInit(): void {
-        this.getTask();
+    @Input() set taskInfo(task: Task) {
+        this.task = task;
     }
 
-    ngAfterViewChecked() {
-        this.cdRef.detectChanges();
-    }
+    @Output() showInfo: EventEmitter<boolean> = new EventEmitter<boolean>();
 
-    getTask() {
-        this.taskDataService.getTask()
-            .subscribe(task => {
-            if (task.id) {
-                this.task = task;
-            } else {
-                this.setEmptyTask();
-            }
-        });
-    }
+    constructor() {}
 
     setEmptyTask() {
         this.task = {
@@ -99,7 +79,7 @@ export class TaskInfoComponent implements OnInit{
     }
 
     goBack() {
-        this.taskDataService.setTask({} as Task);
-        this.location.back();
+        this.setEmptyTask();
+        this.showInfo.emit(false);
     }
 }
