@@ -72,7 +72,11 @@ export class AppComponent {
     ) {}
 
     onLogout() {
-        sessionStorage.clear();
+        sessionStorage.removeItem('token');
+        sessionStorage.removeItem('sub');
+        sessionStorage.removeItem('roles');
+        sessionStorage.removeItem('uid');
+        sessionStorage.removeItem('exp');
         this.loginService.redirectUrl = '/';
         this.router.navigate(['/']);
     }
