@@ -6,11 +6,13 @@ import {catchError, map} from "rxjs/operators";
 import {MatSnackBar} from "@angular/material";
 import {Urls} from "../../shared/constants/urls";
 import {Page} from "../../shared/models/page";
+import {Errors} from "../../shared/constants/errors";
 
 @Injectable()
 export class TaskHttpService{
 
     private url = Urls.TASK;
+    private errors = Errors;
 
     constructor(
         private http: HttpClient,
@@ -19,13 +21,15 @@ export class TaskHttpService{
 
     private handleError(error: HttpErrorResponse) {
         if (error.error instanceof ErrorEvent) {
-            this.snackBar.open(error.message, "Close", {duration: 5000});
+            this.snackBar.open(error.error.toString(), "Close", {duration: 5000});
+        } else if (error.status === 0) {
+            this.snackBar.open(this.errors.CONNECTION_FAILED, "Close", {duration: 5000});
+            console.log(error.message);
         } else {
-            this.snackBar.open(error.message, "Close", {duration: 5000});
+            this.snackBar.open(error.error, "Close", {duration: 5000});
         }
 
-        return throwError(
-            'Something bad happened; please try again later.');
+        return throwError('Something bad happened; please try again later.');
     };
 
     add(task: Task) : Observable<Task>{
