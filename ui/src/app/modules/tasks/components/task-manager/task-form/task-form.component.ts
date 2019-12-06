@@ -1,4 +1,4 @@
-import {Component, EventEmitter, OnInit, Output} from "@angular/core";
+import {Component, EventEmitter, Input, OnInit, Output} from "@angular/core";
 import {Task} from "../../../../../shared/models/task";
 import {Employee} from "../../../../../shared/models/employee";
 import {Manager} from "../../../../../shared/models/manager";
@@ -156,8 +156,8 @@ export class TaskFormComponent implements OnInit{
     private messages = Messages;
 
     private assignees: Employee[];
-    private task: Task;
-    private updatable: boolean;
+    @Input() private task: Task;
+    @Input() private updatable: boolean;
     private manager: Manager = {} as Manager;
     private isSending: boolean = false;
     private isSent: boolean = false;
@@ -176,7 +176,6 @@ export class TaskFormComponent implements OnInit{
     ngOnInit(): void {
         this.getEmployees();
         this.isUpdatable();
-        this.retrieveTaskFromStore();
     }
 
     save(task: Task) {
@@ -267,12 +266,5 @@ export class TaskFormComponent implements OnInit{
 
     clearTaskFromStore() {
         this.taskDataService.setTask({} as Task);
-    }
-
-    retrieveTaskFromStore() {
-        this.taskDataService.getTask()
-            .subscribe((task: Task) => {
-                this.task = task;
-            })
     }
 }
