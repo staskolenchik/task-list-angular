@@ -36,7 +36,7 @@ import {Task} from "../../../../shared/models/task";
             </div>
         </mat-tab-group>
 
-        <div *ngIf="infoable">
+        <div *ngIf="showable">
             <task-info-component [taskInfo]="taskInfo" (showInfo)="showInfo($event)"></task-info-component>
         </div>
 
@@ -50,7 +50,7 @@ import {Task} from "../../../../shared/models/task";
 export class TaskManagerComponent {
     private isOpenedForm: boolean = false;
     private updatable: boolean = false;
-    private infoable: boolean = false;
+    private showable: boolean = false;
     private task: Task = {} as Task;
     private taskInfo: Task = {} as Task;
 
@@ -75,12 +75,12 @@ export class TaskManagerComponent {
     }
 
     transferShow(task: Task) {
-        this.infoable = true;
+        this.showable = true;
         this.taskInfo = task;
     }
 
-    showInfo(infoable: boolean) {
-        this.infoable = infoable;
+    showInfo(showable: boolean) {
+        this.showable = showable;
     }
 }
 
