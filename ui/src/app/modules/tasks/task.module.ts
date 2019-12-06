@@ -13,8 +13,8 @@ import {
     MatProgressBarModule, MatExpansionModule, MatTabsModule
 } from "@angular/material";
 import {TaskFormComponent} from "./components/task-manager/task-form/task-form.component";
-import {TaskListEmployeeComponent} from "./components/task-list-employee/task-list-employee.component";
-import {TaskListEmployeeTableComponent} from "./components/task-list-employee/table/task-list-employee-table.component";
+import {TaskEmployeeComponent} from "./components/task-employee/task-employee.component";
+import {TodoInprogressTaskListTableComponent} from "./components/task-employee/table/todo-inprogress-task-list-table.component";
 import {TaskManagerComponent} from "./components/task-manager/task-manager.component";
 import {InReviewTaskListTableComponent} from "./components/task-manager/in-review-task-list-table/in-review-task-list-table.component";
 import {TaskDataService} from "./task-data.service";
@@ -29,8 +29,8 @@ import {AllTaskListTableComponent} from "./components/task-manager/all-task-list
 @NgModule({
     declarations: [
         TaskFormComponent,
-        TaskListEmployeeComponent,
-        TaskListEmployeeTableComponent,
+        TaskEmployeeComponent,
+        TodoInprogressTaskListTableComponent,
         TaskManagerComponent,
         InReviewTaskListTableComponent,
         TaskInfoComponent,
@@ -62,8 +62,8 @@ import {AllTaskListTableComponent} from "./components/task-manager/all-task-list
     ],
     exports: [
         TaskFormComponent,
-        TaskListEmployeeComponent,
-        TaskListEmployeeTableComponent,
+        TaskEmployeeComponent,
+        TodoInprogressTaskListTableComponent,
         TaskManagerComponent,
         InReviewTaskListTableComponent,
         TaskInfoComponent,
