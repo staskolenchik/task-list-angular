@@ -77,8 +77,9 @@ export class AppComponent {
         sessionStorage.removeItem('roles');
         sessionStorage.removeItem('uid');
         sessionStorage.removeItem('exp');
-        this.loginService.redirectUrl = '/';
-        this.router.navigate(['/']);
+
+        this.loginService.redirectUrl = '/login';
+        this.router.navigate(['/login']);
     }
 
     isSignedIn() {
