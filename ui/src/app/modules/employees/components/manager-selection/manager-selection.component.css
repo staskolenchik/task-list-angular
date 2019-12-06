@@ -1,0 +1,9 @@
+.manager-list-selection {
+    margin: 30px;
+}
+
+.manager-list__footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}

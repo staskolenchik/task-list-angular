@@ -1,0 +1,26 @@
+table {
+    width: 100%;
+}
+
+.employee-list__add-employee-button {
+    margin: 30px 30px 0;
+}
+
+.employee_list_content {
+    margin: 30px;
+}
+
+.employee-list__option-button {
+    margin-right: 3px;
+}
+
+.employee-list__footer {
+    padding: 15px 0 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.mat-cell {
+    padding: 0 5px;
+}

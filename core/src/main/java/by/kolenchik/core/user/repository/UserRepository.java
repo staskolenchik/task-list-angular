@@ -31,6 +31,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     boolean existsByIdAndDeleteDateIsNull(Long id);
 
+    boolean existsByIdAndRolesAndDeleteDateIsNull(Long id, Set<UserRole> roles);
+
     @Modifying(clearAutomatically = true)
     @Query("UPDATE User SET deleteDate = now() WHERE id = ?1 AND deleteDate IS NULL")
     void delete(Long id);
