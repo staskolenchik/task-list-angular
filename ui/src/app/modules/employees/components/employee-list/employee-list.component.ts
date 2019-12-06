@@ -48,7 +48,7 @@ import {EmployeeHttpService} from "../../employee-http.service";
                 </ng-container>
                 <ng-container matColumnDef="birthDate">
                     <th mat-header-cell *matHeaderCellDef mat-sort-header>Birth Date</th>
-                    <td mat-cell *matCellDef="let employee">{{employee.birthDate}}</td>
+                    <td mat-cell *matCellDef="let employee">{{employee.birthDate | date:"dd/MM/yyyy"}}</td>
                 </ng-container>
                 <ng-container matColumnDef="options">
                     <th mat-header-cell *matHeaderCellDef>Update / Delete / Profile</th>
