@@ -1,0 +1,12 @@
+/deep/.mat-tab-label, /deep/.mat-tab-label-active{
+    min-width: 50%!important;
+}
+
+all-task-list-table-component {
+    width: 100%;
+}
+
+.mat-form-field {
+    width: 100%;
+    display: block;
+}

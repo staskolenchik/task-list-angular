@@ -36,4 +36,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Modifying(clearAutomatically = true)
     @Query("UPDATE User SET deleteDate = now() WHERE id = ?1 AND deleteDate IS NULL")
     void delete(Long id);
+
+    @Query(value = "SELECT user FROM User user WHERE ((:ids) IS NULL OR user.id IN :ids)")
+    List<User> findByIdInAndDeleteDateNotNull(Set<Long> ids);
 }

@@ -86,6 +86,31 @@ export class EmployeeHttpService {
             ))
     }
 
+    getEmployeesByManagerIdAsString(id: string): Observable<Employee[]> {
+        const url = `${this.url}/managers/${id}`;
+
+        return this.http
+            .get(url)
+            .pipe(map(data => {
+                    let employees = [].concat(data);
+                    return employees.map(function (employee: Employee) {
+                        return {
+                            id: employee.id,
+                            email: employee.email,
+                            password: null,
+                            confirmPassword: null,
+                            name: employee.name,
+                            surname: employee.surname,
+                            patronymic: employee.patronymic,
+                            birthDate: employee.birthDate,
+                            superior: employee.superior
+                        }
+                    })
+                },
+                catchError((error) => this.handleError(error))
+            ))
+    }
+
     findAll(page: Page) {
         let params = new HttpParams();
         params = params.set('page', page.number.toString());

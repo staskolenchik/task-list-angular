@@ -9,14 +9,24 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.Set;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.*;
 
 public interface TaskRepository extends JpaRepository<Task, Long> {
 
-    @Query(value = "SELECT task FROM Task task WHERE task.taskStatus IN :statuses")
-    Page<Task> getByStatuses(Collection<TaskStatus> statuses, Pageable pageable);
+    @Query(value = "SELECT task FROM Task task WHERE task.createdBy = :createdBy" +
+            " AND ((:statuses) IS NULL OR task.taskStatus IN :statuses) " +
+            " AND ((:assignees) IS NULL OR task.assignee IN :assignees) " +
+            " AND (cast(:dateFrom as timestamp) IS NULL OR task.creationDateTime >= :dateFrom) " +
+            " AND (cast(:dateTo as timestamp) IS NULL OR task.creationDateTime <= :dateTo)")
+    Page<Task> getByStatusesAndByEmployeeId(
+            User createdBy,
+            Collection<TaskStatus> statuses,
+            List<User> assignees,
+            LocalDateTime dateFrom,
+            LocalDateTime dateTo,
+            Pageable pageable);
 
     @Query(value = "SELECT task FROM Task task WHERE task.taskStatus IN :statuses AND task.assignee = :assignee")
     List<Task> findAllByTaskStatusAndAssignee(Set<TaskStatus> statuses, @Param("assignee") User assignee);

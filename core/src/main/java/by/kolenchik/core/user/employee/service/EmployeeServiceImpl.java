@@ -157,6 +157,15 @@ public class EmployeeServiceImpl implements EmployeeService {
         }
     }
 
+    @Override
+    public List<User> findAllByIds(Set<Long> ids) {
+        for (Long id : ids) {
+            validateGet(id);
+        }
+
+        return userRepository.findByIdInAndDeleteDateNotNull(ids);
+    }
+
     private void validateGet(Long id) {
         if (!userRepository.existsByIdAndDeleteDateIsNull(id)) {
             throw new UserNotFoundException("Employee with id=%d was not found", id);

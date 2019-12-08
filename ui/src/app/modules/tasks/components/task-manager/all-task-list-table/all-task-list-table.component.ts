@@ -9,12 +9,21 @@ import {TaskDataService} from "../../../task-data.service";
 import {TaskHttpService} from "../../../task-http.service";
 import {Router} from "@angular/router";
 import {TaskStatus} from "../../../../../shared/models/task-status";
+import {Employee} from "../../../../../shared/models/employee";
+import {TaskFilter} from "../../../../../shared/models/task-filter";
 
 @Component({
     selector: 'all-task-list-table-component',
     template: `
-        <div class="task-list__in-review-table-card">
+        <div class="task-list__all-task-list-table-card">
             <mat-card class="mat-elevation-z8 ">
+                <mat-card-title>Filter</mat-card-title>
+                <filter-component (employees)="filterByEmployees($event)"
+                                  (statuses)="filterByStatuses($event)" 
+                                  (dateFrom)="filterByDateFrom($event)"
+                                  (dateTo)="filterByDateTo($event)"
+                ></filter-component>
+
                 <mat-card-title>All Tasks</mat-card-title>
                 <table mat-table
                        [dataSource]="taskDataSource"
@@ -65,7 +74,7 @@ import {TaskStatus} from "../../../../../shared/models/task-status";
                     </ng-container>
 
                     <ng-container matColumnDef="options">
-                        <th mat-header-cell *matHeaderCellDef>Options</th>
+                        <th mat-header-cell *matHeaderCellDef>Update / Delete / Info</th>
                         <td mat-cell *matCellDef="let task">
                             <button mat-button
                                     class="manager-list__option-button"
@@ -119,19 +128,18 @@ export class AllTaskListTableComponent {
     private displayedColumns = ['select', 'subject', 'assigneeName', 'status', 'type', 'creationDateTime', 'options'];
     private taskDataSource: MatTableDataSource<Task> = new MatTableDataSource([]);
 
-    private page: Page = {
+    private startPage: Page = {
         length: 0,
         size: 10,
         number: 0,
     } as Page;
 
-    private filter = {
-        statuses: [
-            TaskStatus.TODO,
-            TaskStatus.INPROGRESS,
-            TaskStatus.INREVIEW,
-            TaskStatus.DONE
-        ]};
+    private page: Page = this.startPage;
+
+    private filter: TaskFilter = {
+        createdBy: sessionStorage.getItem('uid'),
+    } as TaskFilter;
+
     private selection: SelectionModel<Task> = new SelectionModel<Task>(
         true,
         []
@@ -148,14 +156,14 @@ export class AllTaskListTableComponent {
     ) {}
 
     ngOnInit(): void {
-        this.findAll(this.page, this.filter);
-        this.taskDataSource.sort = this.sort;
+        this.findAll(this.startPage, this.filter);
     }
 
-    findAll(page: Page, filter: any): void {
+    findAll(page: Page, filter: TaskFilter): void {
         this.taskHttpService.findAll(page, filter)
             .subscribe((response) => {
                 this.taskDataSource = new MatTableDataSource(response.content);
+                this.taskDataSource.sort = this.sort;
                 this.page = response.page;
                 this.selection.clear();
             });
@@ -224,8 +232,7 @@ export class AllTaskListTableComponent {
     }
 
     loadTasksFromStartPage(): void {
-        this.page.number = 0;
-        this.findAll(this.page, this.filter);
+        this.findAll(this.startPage, this.filter);
     }
 
     isAllSelected(): boolean {
@@ -246,5 +253,45 @@ export class AllTaskListTableComponent {
         }
 
         return `${this.selection.isSelected(task) ? 'deselect' : 'select'} task `;
+    }
+
+    filterByEmployees(employees: Employee[]) {
+        if (employees.length > 0) {
+            this.filter.employeeIds = employees.map((employee: Employee) => employee.id);
+        } else {
+            this.filter.employeeIds = null;
+        }
+
+        this.loadTasksFromStartPage();
+    }
+
+    filterByStatuses(statuses: TaskStatus[]) {
+        if (statuses.length > 0) {
+            this.filter.statuses = statuses;
+        } else {
+            this.filter.statuses = null;
+        }
+
+        this.loadTasksFromStartPage();
+    }
+
+    filterByDateFrom(dateFrom: any) {
+        if (dateFrom) {
+            this.filter.dateFrom = dateFrom;
+        } else {
+            this.filter.dateFrom = null;
+        }
+
+        this.loadTasksFromStartPage();
+    }
+
+    filterByDateTo(dateTo: any) {
+        if (dateTo) {
+            this.filter.dateTo = dateTo;
+        } else {
+            this.filter.dateTo = null;
+        }
+
+        this.loadTasksFromStartPage();
     }
 }

@@ -22,6 +22,7 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -143,7 +144,37 @@ class TaskServiceImpl implements TaskService {
 
     @Override
     public Page<TaskInfoDto> find(TaskFilterDto taskFilterDto, Pageable pageable) {
-        Page<Task> page = taskRepository.getByStatuses(taskFilterDto.getStatuses(), pageable);
+        User createdBy = null;
+        if (taskFilterDto.getCreatedBy() != null) {
+            createdBy = managerService.findUserById(taskFilterDto.getCreatedBy());
+        }
+
+        List<User> assignees = null;
+        if (taskFilterDto.getEmployeeIds() != null) {
+            assignees = employeeService.findAllByIds(taskFilterDto.getEmployeeIds());
+        }
+
+        LocalDateTime localDateTimeFrom = null;
+        if (taskFilterDto.getDateFrom() != null) {
+            String dateFrom = taskFilterDto.getDateFrom();
+            localDateTimeFrom = LocalDateTime.parse(dateFrom, DateTimeFormatter.ISO_DATE_TIME);
+        }
+
+        LocalDateTime localDateTimeTo = null;
+        if (taskFilterDto.getDateTo() != null) {
+            String dateTo = taskFilterDto.getDateTo();
+            localDateTimeTo = LocalDateTime.parse(dateTo, DateTimeFormatter.ISO_DATE_TIME);
+        }
+
+        Page<Task> page = taskRepository.getByStatusesAndByEmployeeId(
+                createdBy,
+                taskFilterDto.getStatuses(),
+                assignees,
+                localDateTimeFrom,
+                localDateTimeTo,
+                pageable
+        );
+
         return page.map(task -> {
             TaskInfoDto taskInfoDto = modelMapper.map(task, TaskInfoDto.class);
 

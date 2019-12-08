@@ -120,4 +120,11 @@ public class ManagerServiceImpl implements ManagerService {
             userRepository.delete(id);
         }
     }
+
+    @Override
+    public User findUserById(Long id) {
+        validateGet(id);
+
+        return userRepository.findByIdAndDeleteDateIsNull(id);
+    }
 }

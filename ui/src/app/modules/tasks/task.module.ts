@@ -1,16 +1,28 @@
 import {NgModule} from "@angular/core";
 import {CommonModule} from "@angular/common";
-import {FormsModule} from "@angular/forms";
+import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {TaskRoutingModule} from "./task-routing.module";
 import {
     MatButtonModule,
-    MatCardModule, MatCheckboxModule, MatDialogModule,
-    MatGridListModule, MatIconModule,
-    MatInputModule, MatPaginatorModule,
+    MatCardModule,
+    MatCheckboxModule,
+    MatDialogModule,
+    MatGridListModule,
+    MatIconModule,
+    MatInputModule,
+    MatPaginatorModule,
     MatRadioModule,
-    MatSelectModule, MatSortModule,
-    MatTableModule, MatToolbarModule,
-    MatProgressBarModule, MatExpansionModule, MatTabsModule
+    MatSelectModule,
+    MatSortModule,
+    MatTableModule,
+    MatToolbarModule,
+    MatProgressBarModule,
+    MatExpansionModule,
+    MatTabsModule,
+    MatListModule,
+    MatChipsModule,
+    MatAutocompleteModule,
+    MatDatepickerModule
 } from "@angular/material";
 import {TaskFormComponent} from "./components/task-manager/task-form/task-form.component";
 import {TaskEmployeeComponent} from "./components/task-employee/task-employee.component";
@@ -24,7 +36,10 @@ import {RouterModule} from "@angular/router";
 import {DeletePermissionComponent} from "../../shared/modal-dialogs/delete-permission/delete-permission.component";
 import {DeleteAllPermissionComponent} from "../../shared/modal-dialogs/delete-all-permission/delete-all-permission.component";
 import {AllTaskListTableComponent} from "./components/task-manager/all-task-list-table/all-task-list-table.component";
-
+import {ApplicationPipesModule} from "../../shared/module/application-pipes.module";
+import {FilterComponent} from "./components/task-manager/filter/filter.component";
+import {StatusFilterComponent} from "./components/task-manager/filter/status-filter.component";
+import {AssigneeFilterComponent} from "./components/task-manager/filter/assignee-filter.component";
 
 @NgModule({
     declarations: [
@@ -37,6 +52,9 @@ import {AllTaskListTableComponent} from "./components/task-manager/all-task-list
         AllTaskListTableComponent,
         DeletePermissionComponent,
         DeleteAllPermissionComponent,
+        FilterComponent,
+        StatusFilterComponent,
+        AssigneeFilterComponent,
     ],
     imports: [
         RouterModule,
@@ -58,7 +76,13 @@ import {AllTaskListTableComponent} from "./components/task-manager/all-task-list
         MatToolbarModule,
         MatProgressBarModule,
         MatExpansionModule,
-        MatTabsModule
+        MatTabsModule,
+        MatListModule,
+        ApplicationPipesModule,
+        MatChipsModule,
+        MatAutocompleteModule,
+        ReactiveFormsModule,
+        MatDatepickerModule,
     ],
     exports: [
         TaskFormComponent,
@@ -69,7 +93,9 @@ import {AllTaskListTableComponent} from "./components/task-manager/all-task-list
         TaskInfoComponent,
         AllTaskListTableComponent,
         DeletePermissionComponent,
-        DeleteAllPermissionComponent
+        DeleteAllPermissionComponent,
+        FilterComponent,
+        AssigneeFilterComponent,
     ],
     entryComponents: [
         DeletePermissionComponent,
