@@ -99,19 +99,19 @@ export class TaskHttpService{
         if (filter.dateFrom) {
             const tzOffSet: number = filter.dateFrom.getTimezoneOffset() * 60000;
             const fromLocalISOTime = (new Date(filter.dateFrom.getTime() - tzOffSet)).toISOString();
-            params = params.set('dateFrom', fromLocalISOTime);
+            params = params.set('after', fromLocalISOTime);
         }
 
         if (filter.dateTo) {
-            const tzOffSet: number = filter.dateFrom.getTimezoneOffset() * 60000;
-            const toLocalISOTime = (new Date(filter.dateFrom.getTime() - tzOffSet)).toISOString();
-            params = params.set('dateTo', toLocalISOTime);
+            const tzOffSet: number = filter.dateTo.getTimezoneOffset() * 60000;
+            const toLocalISOTime = (new Date(filter.dateTo.getTime() - tzOffSet)).toISOString();
+            params = params.set('before', toLocalISOTime);
         }
 
         return this.http
             .get(this.url, {params})
             .pipe(map((response: any) => {
-                const tasks: Task[] = [].concat(response.content);
+                const tasks: Task[] = response.content;
                 const page: Page = {
                     length: response.totalElements,
                     number: response.number,
