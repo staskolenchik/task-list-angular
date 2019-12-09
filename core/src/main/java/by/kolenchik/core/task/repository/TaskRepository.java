@@ -26,7 +26,8 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
             List<User> assignees,
             LocalDateTime dateFrom,
             LocalDateTime dateTo,
-            Pageable pageable);
+            Pageable pageable
+    );
 
     @Query(value = "SELECT task FROM Task task WHERE task.taskStatus IN :statuses AND task.assignee = :assignee")
     List<Task> findAllByTaskStatusAndAssignee(Set<TaskStatus> statuses, @Param("assignee") User assignee);
