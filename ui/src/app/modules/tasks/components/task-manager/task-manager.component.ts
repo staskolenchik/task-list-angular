@@ -6,17 +6,17 @@ import {EmployeeHttpService} from "../../../employees/employee-http.service";
     selector: 'task-manager-component',
     template: `
         <mat-accordion>
-            <mat-expansion-panel [expanded]="isOpenedForm"
-                                 (opened)="openForm()"
-                                 (closed)="closeForm()">
+            <mat-expansion-panel [expanded]="openingForm"
+                                 (opened)="openPanel()"
+                                 (closed)="closePanel()">
                 <mat-expansion-panel-header>
                     <mat-panel-title>Fill Task Form</mat-panel-title>
-                    <mat-panel-description>{{isOpenedForm ? 'Click to Close' : 'Click to Open'}}</mat-panel-description>
+                    <mat-panel-description>{{openingForm ? 'Click to Close' : 'Click to Open'}}</mat-panel-description>
                 </mat-expansion-panel-header>
 
-                <task-form-component (expand)="closeFormByCancel($event)"
+                <task-form-component (expand)="closePanelFromForm($event)"
                                      [task]="task"
-                                     [updatable]="updating">
+                                     [updating]="updating">
                 </task-form-component>
             </mat-expansion-panel>
         </mat-accordion>
@@ -44,29 +44,29 @@ import {EmployeeHttpService} from "../../../employees/employee-http.service";
     providers: [EmployeeHttpService]
 })
 export class TaskManagerComponent {
-    private isOpenedForm: boolean = false;
+    private openingForm: boolean = false;
     private updating: boolean = false;
     private showingInfo: boolean = false;
     private task: Task = {} as Task;
     private taskInfo: Task = {} as Task;
 
-    openForm() {
-        this.isOpenedForm = true;
+    openPanel() {
+        this.openingForm = true;
     }
 
-    closeForm() {
+    closePanel() {
         this.updating = false;
-        this.isOpenedForm = false;
+        this.openingForm = false;
     }
 
-    closeFormByCancel(expand: boolean) {
+    closePanelFromForm(expand: boolean) {
         this.updating = false;
-        this.isOpenedForm = expand;
+        this.openingForm = expand;
     }
 
     transferUpdate(task: Task) {
         this.updating = true;
-        this.isOpenedForm = true;
+        this.openingForm = true;
         this.task = task;
     }
 

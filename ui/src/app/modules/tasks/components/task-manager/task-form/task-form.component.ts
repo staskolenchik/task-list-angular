@@ -73,7 +73,7 @@ import {Messages} from "../../../../../shared/constants/messages";
                             </mat-hint>
                         </mat-form-field>
 
-                        <mat-form-field *ngIf="!updatable" class="task-form__form-field">
+                        <mat-form-field *ngIf="!updating" class="task-form__form-field">
                             <input matInput
                                    placeholder="Type"
                                    required
@@ -86,26 +86,26 @@ import {Messages} from "../../../../../shared/constants/messages";
                                 {{errors.FIELD_IS_REQUIRED}}
                             </mat-error>
                         </mat-form-field>
-                       
+
                         <mat-radio-group required
                                          class="task-form__radio-button-group"
                                          name="taskType"
                                          #type="ngModel"
                                          [(ngModel)]="task.type">
-                            <div *ngIf="!updatable">
+                            <div *ngIf="!updating">
                                 <mat-radio-button *ngFor="let type of taskTypes"
                                                   class="task-form__radio-button"
                                                   [value]="type"
                                 >{{type}}</mat-radio-button>
                             </div>
                         </mat-radio-group>
-                        
-                        <mat-form-field *ngIf="!updatable" class="task-form__form-field">
+
+                        <mat-form-field *ngIf="!updating" class="task-form__form-field">
                             <mat-label>Assignee</mat-label>
                             <mat-select name="assignee"
                                         required
                                         [(ngModel)]="task.assigneeId">
-                                <mat-option *ngFor="let assignee of assignees" 
+                                <mat-option *ngFor="let assignee of assignees"
                                             [value]="assignee.id">
                                     {{assignee.name}} {{assignee.surname}} {{assignee.patronymic}}
                                 </mat-option>
@@ -113,7 +113,7 @@ import {Messages} from "../../../../../shared/constants/messages";
                             <mat-hint align="start" *ngIf="!task.assigneeId">
                                 {{hints.CHOOSE_TASK_ASSIGNEE}}
                             </mat-hint>
-                            <mat-error align="start" >{{errors.FIELD_IS_REQUIRED}}</mat-error>
+                            <mat-error align="start">{{errors.FIELD_IS_REQUIRED}}</mat-error>
                         </mat-form-field>
                     </mat-card-content>
                     <mat-card-actions class="task-add-form__button-group">
@@ -123,23 +123,26 @@ import {Messages} from "../../../../../shared/constants/messages";
                                     class="task-add-form__reset-button"
                                     color="warn"
                                     (click)="onReset()"
-                            >Clear</button>
+                            >Clear
+                            </button>
                         </div>
                         <button type="button"
                                 mat-stroked-button
                                 class="task-add-form__cancel-button"
                                 color="primary"
                                 (click)="onCancel()"
-                        >Cancel</button>
+                        >Cancel
+                        </button>
                         <button type="submit"
                                 mat-raised-button
                                 class="task-add-form__save-button"
                                 color="primary"
-                                [disabled]="form.invalid || isSending || isSent"
-                        >Save</button>
-                        
+                                [disabled]="form.invalid || sending"
+                        >Save
+                        </button>
+
                     </mat-card-actions>
-                    <mat-progress-bar *ngIf="isSending" mode="indeterminate"></mat-progress-bar>
+                    <mat-progress-bar *ngIf="sending" mode="indeterminate"></mat-progress-bar>
                 </mat-card>
             </form>
         </div>
@@ -156,11 +159,11 @@ export class TaskFormComponent implements OnInit{
     private messages = Messages;
 
     private assignees: Employee[];
-    @Input() private task: Task;
-    @Input() private updatable: boolean;
     private manager: Manager = {} as Manager;
-    private isSending: boolean = false;
-    private isSent: boolean = false;
+    private sending: boolean = false;
+
+    @Input() private task: Task;
+    @Input() private updating: boolean;
 
     @Output() expand: EventEmitter<boolean> = new EventEmitter<boolean>();
 
@@ -175,14 +178,12 @@ export class TaskFormComponent implements OnInit{
 
     ngOnInit(): void {
         this.getEmployees();
-        this.isUpdatable();
     }
 
     save(task: Task) {
-        this.isSending = true;
-        this.task.createdById = 2;
-
-        if (this.updatable) {
+        this.sending = true;
+        this.task.createdById = Number(sessionStorage.getItem("uid"));
+        if (this.updating) {
             this.update(task);
         } else {
             this.add(task);
@@ -198,8 +199,8 @@ export class TaskFormComponent implements OnInit{
     }
 
     showMessage() {
-        this.isSending = false;
-        this.isSent = true;
+        this.sending = false;
+
         let snackBarRef = this.snackBar.open(
             this.messages.TASK_SAVED,
             'Close',
@@ -207,17 +208,12 @@ export class TaskFormComponent implements OnInit{
         );
 
         snackBarRef.afterDismissed()
-            .subscribe(() => {
-                this.clearTaskFromStore();
-                this.clearUpdatable();
-                this.goToTasks();
-            });
+            .subscribe();
         snackBarRef.onAction()
-            .subscribe(() => {
-                this.clearTaskFromStore();
-                this.clearUpdatable();
-                this.goToTasks();
-            });
+            .subscribe();
+
+        this.closeForm();
+        this.clearForm();
     }
 
     update(task: Task) {
@@ -228,32 +224,21 @@ export class TaskFormComponent implements OnInit{
             });
     }
 
-    goToTasks() {
-        this.router.navigate(['/tasks']);
-    }
-
     clearForm() {
-        this.taskDataService.setTask({} as Task);
-    }
-
-    onReset() {
         this.task = {} as Task;
     }
 
-    onCancel() {
+    onReset() {
         this.clearForm();
+    }
+
+    onCancel() {
+        this.closeForm();
+        this.clearForm();
+    }
+
+    closeForm() {
         this.expand.emit(false);
-    }
-
-    clearUpdatable() {
-        this.taskDataService.setUpdatable(false);
-    }
-
-    isUpdatable() {
-        this.taskDataService.isUpdatable()
-            .subscribe(updatable => {
-                this.updatable = updatable;
-            })
     }
 
     getEmployees() {
@@ -262,9 +247,5 @@ export class TaskFormComponent implements OnInit{
         this.employeeService
             .getEmployeesByManagerId(this.manager)
             .subscribe(assignees => this.assignees = assignees);
-    }
-
-    clearTaskFromStore() {
-        this.taskDataService.setTask({} as Task);
     }
 }
