@@ -54,7 +54,7 @@ import {TaskFilter} from "../../../../../shared/models/task-filter";
                         <th mat-header-cell *matHeaderCellDef mat-sort-header>Status</th>
                         <td mat-cell *matCellDef="let task">
                             <mat-form-field>
-                                <mat-select [(value)]="task.status" (selectionChange)="onUpdate(task)">
+                                <mat-select [(value)]="task.status" (selectionChange)="updateStatus(task)">
                                     <mat-option value="IN_PROGRESS">IN PROGRESS</mat-option>
                                     <mat-option value="IN_REVIEW">IN REVIEW</mat-option>
                                     <mat-option value="DONE">DONE</mat-option>
@@ -171,6 +171,11 @@ export class InReviewTaskListTableComponent implements OnInit {
 
     onUpdate(task: Task): void {
         this.transferUpdate.emit(task);
+    }
+
+    updateStatus(task: Task): void {
+        this.taskHttpService.update(task)
+            .subscribe(() => this.findAll(this.page, this.filter))
     }
 
     onDelete(task: Task): void {
