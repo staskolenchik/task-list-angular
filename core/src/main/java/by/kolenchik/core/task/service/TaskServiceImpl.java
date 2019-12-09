@@ -154,24 +154,12 @@ class TaskServiceImpl implements TaskService {
             assignees = employeeService.findAllByIds(taskFilterDto.getEmployeeIds());
         }
 
-        LocalDateTime localDateTimeFrom = null;
-        if (taskFilterDto.getDateFrom() != null) {
-            String dateFrom = taskFilterDto.getDateFrom();
-            localDateTimeFrom = LocalDateTime.parse(dateFrom, DateTimeFormatter.ISO_DATE_TIME);
-        }
-
-        LocalDateTime localDateTimeTo = null;
-        if (taskFilterDto.getDateTo() != null) {
-            String dateTo = taskFilterDto.getDateTo();
-            localDateTimeTo = LocalDateTime.parse(dateTo, DateTimeFormatter.ISO_DATE_TIME);
-        }
-
         Page<Task> page = taskRepository.getByStatusesAndByEmployeeId(
                 createdBy,
                 taskFilterDto.getStatuses(),
                 assignees,
-                localDateTimeFrom,
-                localDateTimeTo,
+                taskFilterDto.getAfter(),
+                taskFilterDto.getBefore(),
                 pageable
         );
 
