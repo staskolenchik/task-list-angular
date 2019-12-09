@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {HttpClient, HttpErrorResponse, HttpHeaders, HttpParams} from '@angular/common/http';
+import {HttpClient, HttpErrorResponse, HttpParams} from '@angular/common/http';
 import {Observable, throwError} from "rxjs";
 import {Task} from '../../shared/models/task';
 import {catchError, map} from "rxjs/operators";
@@ -7,6 +7,7 @@ import {MatSnackBar} from "@angular/material";
 import {Urls} from "../../shared/constants/urls";
 import {Page} from "../../shared/models/page";
 import {Errors} from "../../shared/constants/errors";
+import {TaskFilter} from "../../shared/models/task-filter";
 
 @Injectable()
 export class TaskHttpService{
@@ -33,38 +34,23 @@ export class TaskHttpService{
     };
 
     add(task: Task) : Observable<Task>{
-        const authorization = 'Bearer_' + sessionStorage.getItem('token');
-        let headers = new HttpHeaders({
-            'Authorization': authorization
-        });
-
         return this.http
-            .post<Task>(this.url, task, {headers})
+            .post<Task>(this.url, task)
             .pipe(
                 catchError((error) => this.handleError(error))
             );
     }
 
     update(task: Task): Observable<Task> {
-        const authorization = 'Bearer_' + sessionStorage.getItem('token');
-        let headers = new HttpHeaders({
-            'Authorization': authorization
-        });
-
         return this.http
-            .put<Task>(`${this.url}/${task.id}`, task, {headers})
+            .put<Task>(`${this.url}/${task.id}`, task)
             .pipe(
                 catchError((error) => this.handleError(error))
             );
     }
 
     delete(task: Task): Observable<any> {
-        const authorization = 'Bearer_' + sessionStorage.getItem('token');
-        let headers = new HttpHeaders({
-            'Authorization': authorization
-        });
-
-        return this.http.delete(`${this.url}/${task.id}`, {headers})
+        return this.http.delete(`${this.url}/${task.id}`)
             .pipe(
                 catchError((error) => this.handleError(error))
             );
@@ -79,13 +65,8 @@ export class TaskHttpService{
         let params = new HttpParams();
         params = params.set('ids', ids.toString());
 
-        const authorization = 'Bearer_' + sessionStorage.getItem('token');
-        let headers = new HttpHeaders({
-            'Authorization': authorization
-        });
-
         return this.http
-            .delete(`${this.url}`, {headers, params})
+            .delete(`${this.url}`, {params})
             .pipe(
                 catchError((error) => this.handleError(error))
             )
@@ -94,33 +75,43 @@ export class TaskHttpService{
     get(task: Task): Observable<Task> {
         let url = `${this.url}/${task.id}`;
 
-        const authorization = 'Bearer_' + sessionStorage.getItem('token');
-        let headers = new HttpHeaders({
-            'Authorization': authorization
-        });
-
         return this.http
-            .get<Task>(url, {headers})
+            .get<Task>(url)
             .pipe(
                 catchError((error) => this.handleError(error))
             );
     }
 
-    findAll(page: Page, filter: any): Observable<any> {
+    findAll(page: Page, filter: TaskFilter): Observable<any> {
         let params = new HttpParams();
         params = params.set('page', page.number.toString());
         params = params.set('size', page.size.toString());
-        params = params.set('statuses', filter.statuses);
+        params = params.set('createdBy', filter.createdBy);
 
-        const authorization = 'Bearer_' + sessionStorage.getItem('token');
-        let headers = new HttpHeaders({
-            'Authorization': authorization
-        });
+        if (filter.statuses) {
+            params = params.set('statuses', filter.statuses.toString());
+        }
+
+        if (filter.employeeIds) {
+            params = params.set('employeeIds', filter.employeeIds.toString());
+        }
+
+        if (filter.dateFrom) {
+            const tzOffSet: number = filter.dateFrom.getTimezoneOffset() * 60000;
+            const fromLocalISOTime = (new Date(filter.dateFrom.getTime() - tzOffSet)).toISOString();
+            params = params.set('after', fromLocalISOTime);
+        }
+
+        if (filter.dateTo) {
+            const tzOffSet: number = filter.dateTo.getTimezoneOffset() * 60000;
+            const toLocalISOTime = (new Date(filter.dateTo.getTime() - tzOffSet)).toISOString();
+            params = params.set('before', toLocalISOTime);
+        }
 
         return this.http
-            .get(this.url, {headers, params})
+            .get(this.url, {params})
             .pipe(map((response: any) => {
-                const tasks: Task[] = [].concat(response.content);
+                const tasks: Task[] = response.content;
                 const page: Page = {
                     length: response.totalElements,
                     number: response.number,

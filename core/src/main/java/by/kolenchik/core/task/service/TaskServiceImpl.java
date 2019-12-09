@@ -143,7 +143,25 @@ class TaskServiceImpl implements TaskService {
 
     @Override
     public Page<TaskInfoDto> find(TaskFilterDto taskFilterDto, Pageable pageable) {
-        Page<Task> page = taskRepository.getByStatuses(taskFilterDto.getStatuses(), pageable);
+        User createdBy = null;
+        if (taskFilterDto.getCreatedBy() != null) {
+            createdBy = managerService.findUserById(taskFilterDto.getCreatedBy());
+        }
+
+        List<User> assignees = null;
+        if (taskFilterDto.getEmployeeIds() != null) {
+            assignees = employeeService.findAllByIds(taskFilterDto.getEmployeeIds());
+        }
+
+        Page<Task> page = taskRepository.getByStatusesAndByEmployeeId(
+                createdBy,
+                taskFilterDto.getStatuses(),
+                assignees,
+                taskFilterDto.getAfter(),
+                taskFilterDto.getBefore(),
+                pageable
+        );
+
         return page.map(task -> {
             TaskInfoDto taskInfoDto = modelMapper.map(task, TaskInfoDto.class);
 

@@ -9,6 +9,7 @@ import {TaskHttpService} from "../../../task-http.service";
 import {TaskDataService} from "../../../task-data.service";
 import {Router} from "@angular/router";
 import {TaskStatus} from "../../../../../shared/models/task-status";
+import {TaskFilter} from "../../../../../shared/models/task-filter";
 
 @Component({
     selector: 'in-review-task-list-table-component',
@@ -53,7 +54,7 @@ import {TaskStatus} from "../../../../../shared/models/task-status";
                         <th mat-header-cell *matHeaderCellDef mat-sort-header>Status</th>
                         <td mat-cell *matCellDef="let task">
                             <mat-form-field>
-                                <mat-select [(value)]="task.status" (selectionChange)="onUpdate(task)">
+                                <mat-select [(value)]="task.status" (selectionChange)="updateStatus(task)">
                                     <mat-option value="IN_PROGRESS">IN PROGRESS</mat-option>
                                     <mat-option value="IN_REVIEW">IN REVIEW</mat-option>
                                     <mat-option value="DONE">DONE</mat-option>
@@ -73,7 +74,7 @@ import {TaskStatus} from "../../../../../shared/models/task-status";
                     </ng-container>
 
                     <ng-container matColumnDef="options">
-                        <th mat-header-cell *matHeaderCellDef>Options</th>
+                        <th mat-header-cell *matHeaderCellDef>Update / Delete / Info</th>
                         <td mat-cell *matCellDef="let task">
                             <button mat-button
                                     class="manager-list__option-button"
@@ -132,7 +133,11 @@ export class InReviewTaskListTableComponent implements OnInit {
         number: 0,
     } as Page;
 
-    private filter = {statuses: [TaskStatus.INREVIEW]};
+    private filter = {
+        createdBy: sessionStorage.getItem('uid'),
+        statuses: [TaskStatus.INREVIEW],
+    } as TaskFilter;
+
     private selection: SelectionModel<Task> = new SelectionModel<Task>(
         true,
         []
@@ -150,13 +155,13 @@ export class InReviewTaskListTableComponent implements OnInit {
 
     ngOnInit(): void {
         this.findAll(this.page, this.filter);
-        this.taskDataSource.sort = this.sort;
     }
 
-    findAll(page: Page, filter: any): void {
+    findAll(page: Page, filter: TaskFilter): void {
         this.taskHttpService.findAll(page, filter)
             .subscribe((response) => {
                 this.taskDataSource = new MatTableDataSource(response.content);
+                this.taskDataSource.sort = this.sort;
                 this.page = response.page;
                 this.selection.clear();
             });
@@ -166,6 +171,11 @@ export class InReviewTaskListTableComponent implements OnInit {
 
     onUpdate(task: Task): void {
         this.transferUpdate.emit(task);
+    }
+
+    updateStatus(task: Task): void {
+        this.taskHttpService.update(task)
+            .subscribe(() => this.findAll(this.page, this.filter))
     }
 
     onDelete(task: Task): void {

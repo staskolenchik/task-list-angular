@@ -1,6 +1,7 @@
 package by.kolenchik.core.user.employee.service;
 
 import by.kolenchik.core.task.service.TaskService;
+import by.kolenchik.core.user.User;
 import by.kolenchik.core.user.employee.dto.AddEmployeeDto;
 import by.kolenchik.core.user.employee.dto.EmployeeInfoDto;
 import by.kolenchik.core.user.employee.dto.UpdateEmployeeDto;
@@ -9,6 +10,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Set;
 
 public interface EmployeeService {
 
@@ -31,4 +33,6 @@ public interface EmployeeService {
 
     @Transactional
     void deleteAll(Long[] ids);
+
+    List<User> findAllByIds(Set<Long> employeeIds);
 }
