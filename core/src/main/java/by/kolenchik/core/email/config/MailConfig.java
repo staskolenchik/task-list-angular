@@ -1,5 +1,6 @@
 package by.kolenchik.core.email.config;
 
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -37,7 +38,7 @@ public class MailConfig {
     @Value("${mail.debug}")
     private String debug;
 
-    @Bean
+    @Bean(name = "mailSenderBean")
     public JavaMailSender getMailSender() {
         JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
 
