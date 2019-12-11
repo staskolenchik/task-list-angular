@@ -19,6 +19,20 @@ spring:
     liquibase:
         change-log: classpath:/db/changelog/master.xml
 
+    mail:
+        default-encoding: UTF-8
+        port: 465
+        protocol: smtps
+        username: mnopqwaszx@gmail.com
+        password: qwerty12345A
+        host: smtp.gmail.com
+        properties:
+            mail:
+                smtp:
+                    auth: true
+                    starttls:
+                        enable: true
+
 
 logging:
     level:
