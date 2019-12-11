@@ -40,6 +40,7 @@ import {ApplicationPipesModule} from "../../shared/module/application-pipes.modu
 import {FilterComponent} from "./components/task-manager/filter/filter.component";
 import {StatusFilterComponent} from "./components/task-manager/filter/status-filter.component";
 import {AssigneeFilterComponent} from "./components/task-manager/filter/assignee-filter.component";
+import {CommentModule} from "../comments/comment.module";
 
 @NgModule({
     declarations: [
@@ -83,6 +84,7 @@ import {AssigneeFilterComponent} from "./components/task-manager/filter/assignee
         MatAutocompleteModule,
         ReactiveFormsModule,
         MatDatepickerModule,
+        CommentModule,
     ],
     exports: [
         TaskFormComponent,

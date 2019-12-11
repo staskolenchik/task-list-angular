@@ -31,4 +31,4 @@ logging:
 security:
         jwt:
             key: secret
-            token.expiredIn: 1800000
+            token.expiredIn: 7200000

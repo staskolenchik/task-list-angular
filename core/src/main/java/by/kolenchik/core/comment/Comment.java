@@ -21,13 +21,13 @@ public abstract class Comment {
     private String text;
 
     @Column(name = "creation_timestamp",nullable = false)
-    private LocalDateTime creationDate;
+    private LocalDateTime creationTimestamp;
 
     @ManyToOne
     @JoinColumn(name = "author_id",nullable = false)
     private User author;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "task_id", nullable = false)
     private Task task;
 }

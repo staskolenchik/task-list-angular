@@ -1,0 +1,7 @@
+CREATE TABLE IF NOT EXISTS comment (
+    id BIGSERIAL PRIMARY KEY,
+    text varchar(255) NOT NULL,
+    creation_timestamp TIMESTAMP NOT NULL,
+    author_id BIGSERIAL NOT NULL REFERENCES usr(id),
+    task_id BIGSERIAL NOT NULL REFERENCES task(id) ON DELETE CASCADE
+)

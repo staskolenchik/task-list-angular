@@ -82,7 +82,13 @@ export class TodoInprogressTaskListTableComponent implements OnInit {
         size: 10,
         number: 0
     } as Page;
-    private filter = {statuses: [TaskStatus.TODO, TaskStatus.INPROGRESS]};
+    private filter = {
+        statuses: [
+            TaskStatus.TODO,
+            TaskStatus.INPROGRESS
+        ],
+        assigneeId: sessionStorage.getItem('uid'),
+    };
     private taskDataSource: MatTableDataSource<Task> = new MatTableDataSource([]);
 
     @ViewChild(MatSort, {static: true}) sort: MatSort;
@@ -97,7 +103,7 @@ export class TodoInprogressTaskListTableComponent implements OnInit {
     }
 
     findAll(page: Page, filter: any): void {
-        this.taskHttpService.findAll(page, filter)
+        this.taskHttpService.findAllForEmployee(page, filter)
             .subscribe((response) => {
                 this.taskDataSource = new MatTableDataSource(response.content);
                 this.page = response.page;

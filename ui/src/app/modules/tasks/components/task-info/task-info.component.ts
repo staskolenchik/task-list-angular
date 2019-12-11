@@ -45,6 +45,8 @@ import {Task} from "../../../../shared/models/task";
                     >Cancel</button>
                 </mat-card-actions>
             </mat-card>
+            <br>
+            <comment-component [task]="task"></comment-component>
         </div>
     `,
     styles: [`

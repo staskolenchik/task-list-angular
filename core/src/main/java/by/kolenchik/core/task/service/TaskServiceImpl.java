@@ -4,10 +4,7 @@ import by.kolenchik.core.task.IssueTask;
 import by.kolenchik.core.task.StoryTask;
 import by.kolenchik.core.task.Task;
 import by.kolenchik.core.task.TaskStatus;
-import by.kolenchik.core.task.dto.TaskAddDto;
-import by.kolenchik.core.task.dto.TaskFilterDto;
-import by.kolenchik.core.task.dto.TaskInfoDto;
-import by.kolenchik.core.task.dto.UpdateTaskDto;
+import by.kolenchik.core.task.dto.*;
 import by.kolenchik.core.task.exceptions.TaskNotFoundException;
 import by.kolenchik.core.task.exceptions.TaskTypeUndefinedException;
 import by.kolenchik.core.task.repository.TaskRepository;
@@ -73,6 +70,7 @@ class TaskServiceImpl implements TaskService {
         task.setTaskStatus(TaskStatus.TODO);
         task.setCreationDateTime(LocalDateTime.now());
 
+        task.setId(null);
         Task taskFromDB = taskRepository.save(task);
 
         TaskInfoDto taskInfoDto = modelMapper.map(taskFromDB, TaskInfoDto.class);
@@ -93,7 +91,7 @@ class TaskServiceImpl implements TaskService {
         if (!managerService.existsById(managerId)) {
             throw new UserNotFoundException("Manager with id=%d was not found", managerId);
         }
-        if (!employeeService.existsById(employeeId)) {
+        if (!employeeService.existsByIdAndDeleteDateIsNull(employeeId)) {
             throw new UserNotFoundException("Employee with id=%d was not found", employeeId);
         }
     }
@@ -124,18 +122,18 @@ class TaskServiceImpl implements TaskService {
         if (!managerService.existsById(managerId)) {
             throw new UserNotFoundException("Manager with id=%d was not found", managerId);
         }
-        if (!employeeService.existsById(employeeId)) {
+        if (!employeeService.existsByIdAndDeleteDateIsNull(employeeId)) {
             throw new UserNotFoundException("Employee with id=%d was not found", employeeId);
         }
     }
 
     @Override
     public void delete(Long id) {
-        validateDelete(id);
+        validateById(id);
         taskRepository.deleteById(id);
     }
 
-    private void validateDelete(Long id) {
+    private void validateById(Long id) {
         if (!taskRepository.existsById(id)) {
             throw new TaskNotFoundException("Task with id=%d doesn't exist", id);
         }
@@ -178,7 +176,7 @@ class TaskServiceImpl implements TaskService {
     @Override
     public void deleteAll(Long[] ids) {
         for (Long id : ids) {
-            validateDelete(id);
+            validateById(id);
 
             taskRepository.deleteById(id);
         }
@@ -192,5 +190,27 @@ class TaskServiceImpl implements TaskService {
 
         List<Task> allByTaskStatusAndAssignee = taskRepository.findAllByTaskStatusAndAssignee(taskStatuses, assignee);
         return !allByTaskStatusAndAssignee.isEmpty();
+    }
+
+    @Override
+    public Task getOneById(Long id) {
+        return taskRepository.getOne(id);
+    }
+
+    @Override
+    public Page<TaskInfoDto> findAll(TaskEmployeeDto taskEmployeeDto, Pageable pageable) {
+        User user = employeeService.getOne(taskEmployeeDto.getAssigneeId());
+
+        Page<Task> tasks = taskRepository.findAllByTaskStatusAndAssignee(
+                taskEmployeeDto.getStatuses(),
+                user,
+                pageable
+        );
+        return tasks.map(task -> modelMapper.map(task, TaskInfoDto.class));
+    }
+
+    @Override
+    public boolean existsById(Long id) {
+        return taskRepository.existsById(id);
     }
 }

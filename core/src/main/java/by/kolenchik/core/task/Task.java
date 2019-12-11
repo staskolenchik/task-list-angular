@@ -3,6 +3,7 @@ package by.kolenchik.core.task;
 import by.kolenchik.core.comment.Comment;
 import by.kolenchik.core.user.User;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -12,6 +13,7 @@ import java.util.Set;
 @Inheritance
 @DiscriminatorColumn(name = "task_type")
 @Data
+@NoArgsConstructor
 @Table(name = "task")
 public abstract class Task {
 

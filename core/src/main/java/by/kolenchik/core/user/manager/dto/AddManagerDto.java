@@ -5,6 +5,7 @@ import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 
 @Data
@@ -33,6 +34,6 @@ public class AddManagerDto {
     @Length(min = 5, max = 20, message = "User confirm password cannot be less than 5 and more than 20 characters")
     private String confirmPassword;
 
-    @NotBlank(message = "User birth date cannot be empty")
+    @NotNull(message = "User birth date cannot be null")
     private LocalDate birthDate;
 }

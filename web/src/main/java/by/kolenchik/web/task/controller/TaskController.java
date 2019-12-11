@@ -1,9 +1,6 @@
 package by.kolenchik.web.task.controller;
 
-import by.kolenchik.core.task.dto.TaskAddDto;
-import by.kolenchik.core.task.dto.TaskFilterDto;
-import by.kolenchik.core.task.dto.TaskInfoDto;
-import by.kolenchik.core.task.dto.UpdateTaskDto;
+import by.kolenchik.core.task.dto.*;
 import by.kolenchik.core.task.service.TaskService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -52,5 +49,13 @@ public class TaskController {
             @PageableDefault(sort = {"id"}, direction = Sort.Direction.DESC) Pageable pageable
     ) {
         return taskService.find(taskFilterDto, pageable);
+    }
+
+    @GetMapping("/employee")
+    public Page<TaskInfoDto> findAll(
+            TaskEmployeeDto taskEmployeeDto,
+            @PageableDefault(sort = {"id"}, direction = Sort.Direction.DESC) Pageable pageable
+    ) {
+        return taskService.findAll(taskEmployeeDto, pageable);
     }
 }

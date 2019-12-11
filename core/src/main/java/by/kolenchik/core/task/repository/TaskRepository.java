@@ -9,7 +9,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -31,4 +30,9 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
 
     @Query(value = "SELECT task FROM Task task WHERE task.taskStatus IN :statuses AND task.assignee = :assignee")
     List<Task> findAllByTaskStatusAndAssignee(Set<TaskStatus> statuses, @Param("assignee") User assignee);
+
+    @Query(value = "SELECT task FROM Task task " +
+            " WHERE ((:statuses) IS NULL OR task.taskStatus IN :statuses) " +
+            " AND task.assignee = :assignee")
+    Page<Task> findAllByTaskStatusAndAssignee(Set<TaskStatus> statuses, User assignee, Pageable pageable);
 }

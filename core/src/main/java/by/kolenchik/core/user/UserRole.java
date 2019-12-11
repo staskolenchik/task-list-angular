@@ -21,6 +21,6 @@ public class UserRole {
     @Column(name = "deactivation_date")
     private LocalDate deactivationDate;
 
-    @ManyToMany(mappedBy = "roles", fetch = FetchType.EAGER)
+    @ManyToMany(mappedBy = "roles", fetch = FetchType.LAZY)
     private Set<User> users;
 }
