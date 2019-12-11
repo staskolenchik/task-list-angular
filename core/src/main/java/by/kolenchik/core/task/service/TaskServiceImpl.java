@@ -1,5 +1,7 @@
 package by.kolenchik.core.task.service;
 
+import by.kolenchik.core.email.EmailMessage;
+import by.kolenchik.core.email.service.EmailService;
 import by.kolenchik.core.task.IssueTask;
 import by.kolenchik.core.task.StoryTask;
 import by.kolenchik.core.task.Task;
@@ -19,6 +21,7 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -30,17 +33,20 @@ class TaskServiceImpl implements TaskService {
     private EmployeeService employeeService;
     private ManagerService managerService;
     private ModelMapper modelMapper;
+    private EmailService emailService;
 
     public TaskServiceImpl(
             TaskRepository taskRepository,
             EmployeeService employeeService,
             ManagerService managerService,
-            ModelMapper modelMapper
+            ModelMapper modelMapper,
+            EmailService emailService
     ) {
         this.taskRepository = taskRepository;
         this.employeeService = employeeService;
         this.managerService = managerService;
         this.modelMapper = modelMapper;
+        this.emailService = emailService;
     }
 
     @PostConstruct
@@ -69,9 +75,16 @@ class TaskServiceImpl implements TaskService {
 
         task.setTaskStatus(TaskStatus.TODO);
         task.setCreationDateTime(LocalDateTime.now());
-
         task.setId(null);
         Task taskFromDB = taskRepository.save(task);
+
+        User assignee = employeeService.getOne(taskFromDB.getAssignee().getId());
+        taskFromDB.setAssignee(assignee);
+
+        User createdBy = managerService.findUserById(taskFromDB.getCreatedBy().getId());
+        taskFromDB.setCreatedBy(createdBy);
+
+        emailAboutNewTask(taskFromDB);
 
         TaskInfoDto taskInfoDto = modelMapper.map(taskFromDB, TaskInfoDto.class);
 
@@ -82,6 +95,23 @@ class TaskServiceImpl implements TaskService {
         }
 
         return taskInfoDto;
+    }
+
+    private void emailAboutNewTask(Task task) {
+        String text = String.format(
+                "Subject: %s.\nDesctiption: %s.\nCreated by: %s %s",
+                task.getSubject(),
+                task.getDescription(),
+                task.getCreatedBy().getName(),
+                task.getCreatedBy().getSurname()
+        );
+
+        EmailMessage message = new EmailMessage();
+        message.setRecipient(task.getAssignee().getEmail());
+        message.setSubject("You got a new task!");
+        message.setText(text);
+
+        emailService.sendEmail(message);
     }
 
     private void validateAdd(TaskAddDto taskAddDto) {
@@ -101,9 +131,21 @@ class TaskServiceImpl implements TaskService {
         validateUpdate(updateTaskDto);
 
         Task taskFromDb = taskRepository.getOne(id);
+        TaskStatus before = taskFromDb.getTaskStatus();
+
         modelMapper.map(updateTaskDto, taskFromDb);
         Task updatedTask = taskRepository.save(taskFromDb);
+        
+        if (comingToDone(before, updatedTask.getTaskStatus())) {
+            User assignee = employeeService.getOne(updatedTask.getAssignee().getId());
+            updatedTask.setAssignee(assignee);
 
+            User createdBy = managerService.findUserById(updatedTask.getCreatedBy().getId());
+            updatedTask.setCreatedBy(createdBy);
+
+            emailAboutTaskChangeStatus(taskFromDb);
+        }
+        
         TaskInfoDto taskInfoDto = modelMapper.map(updatedTask, TaskInfoDto.class);
 
         if (updatedTask instanceof IssueTask) {
@@ -113,6 +155,29 @@ class TaskServiceImpl implements TaskService {
         }
         
         return taskInfoDto;
+    }
+
+    private boolean comingToDone(TaskStatus before, TaskStatus after) {
+        return before.ordinal() < after.ordinal();
+    }
+
+    private void emailAboutTaskChangeStatus(Task task) {
+        EmailMessage message = new EmailMessage();
+        message.setRecipient(task.getCreatedBy().getEmail());
+        message.setSubject(String.format(
+                "Task status changed to %s by %s %s",
+                task.getTaskStatus().name(),
+                task.getAssignee().getName(),
+                task.getAssignee().getSurname()
+        ));
+        message.setText(String.format(
+                "Subject: %s.\nDesctiption: %s.\nRegistered at: %s",
+                task.getSubject(),
+                task.getDescription(),
+                LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss"))
+        ));
+
+        emailService.sendEmail(message);
     }
 
     private void validateUpdate(UpdateTaskDto updateTaskDto) {

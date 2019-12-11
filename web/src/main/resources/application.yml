@@ -33,6 +33,7 @@ spring:
                     starttls:
                         enable: true
 
+mail.debug: true
 
 logging:
     level:
