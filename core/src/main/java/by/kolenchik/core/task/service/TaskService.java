@@ -1,9 +1,7 @@
 package by.kolenchik.core.task.service;
 
-import by.kolenchik.core.task.dto.TaskAddDto;
-import by.kolenchik.core.task.dto.TaskFilterDto;
-import by.kolenchik.core.task.dto.TaskInfoDto;
-import by.kolenchik.core.task.dto.UpdateTaskDto;
+import by.kolenchik.core.task.Task;
+import by.kolenchik.core.task.dto.*;
 import by.kolenchik.core.user.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -21,4 +19,10 @@ public interface TaskService {
     void deleteAll(Long[] ids);
 
     boolean existsByTaskStatusAndAssignee(Long id, User assignee);
+
+    Task getOneById(Long id);
+
+    Page<TaskInfoDto> findAll(TaskEmployeeDto taskEmployeeDto, Pageable pageable);
+
+    boolean existsById(Long commentId);
 }

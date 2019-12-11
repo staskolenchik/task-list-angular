@@ -27,7 +27,7 @@ public interface EmployeeService {
 
     EmployeeInfoDto findById(Long id);
 
-    Boolean existsById(Long id);
+    Boolean existsByIdAndDeleteDateIsNull(Long id);
 
     List<EmployeeInfoDto> findByManagerId(Long id);
 
@@ -35,4 +35,6 @@ public interface EmployeeService {
     void deleteAll(Long[] ids);
 
     List<User> findAllByIds(Set<Long> employeeIds);
+
+    User getOne(Long id);
 }

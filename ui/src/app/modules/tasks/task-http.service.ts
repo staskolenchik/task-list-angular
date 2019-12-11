@@ -124,4 +124,33 @@ export class TaskHttpService{
                 }
             }))
     }
+
+    findAllForEmployee(page: Page, filter: TaskFilter): Observable<any> {
+        const url = `${this.url}/employee`;
+
+        let params = new HttpParams();
+        params = params.set('page', page.number.toString());
+        params = params.set('size', page.size.toString());
+        params = params.set('assigneeId', filter.assigneeId);
+
+        if (filter.statuses) {
+            params = params.set('statuses', filter.statuses.toString());
+        }
+
+        return this.http
+            .get(url, {params})
+            .pipe(map((response: any) => {
+                const tasks: Task[] = response.content;
+                const page: Page = {
+                    length: response.totalElements,
+                    number: response.number,
+                    size: response.size
+                };
+
+                return {
+                    content: tasks,
+                    page: page
+                }
+            }))
+    }
 }

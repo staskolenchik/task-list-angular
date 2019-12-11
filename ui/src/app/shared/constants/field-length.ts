@@ -10,4 +10,6 @@ export const FieldLength = {
     USER_MAX_PATRONYMIC: 25,
     USER_MIN_BIRTHDATE: 10,
     USER_MAX_BIRTHDATE: 10,
+
+    COMMENT_TEXT: 255,
 };

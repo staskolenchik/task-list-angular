@@ -133,8 +133,8 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public Boolean existsById(Long id) {
-        return userRepository.existsById(id);
+    public Boolean existsByIdAndDeleteDateIsNull(Long id) {
+        return userRepository.existsByIdAndDeleteDateIsNull(id);
     }
 
     @Override
@@ -164,6 +164,13 @@ public class EmployeeServiceImpl implements EmployeeService {
         }
 
         return userRepository.findByIdInAndDeleteDateNotNull(ids);
+    }
+
+    @Override
+    public User getOne(Long id) {
+        validateGet(id);
+
+        return userRepository.getOne(id);
     }
 
     private void validateGet(Long id) {
