@@ -12,7 +12,6 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 
 @ControllerAdvice
 public class TaskExceptionHandler extends ResponseEntityExceptionHandler {
-
     @ExceptionHandler(TaskNotFoundException.class)
     public ResponseEntity<Object> handleNotFoundException(RuntimeException e, WebRequest request) {
         String responseBody = e.getMessage();

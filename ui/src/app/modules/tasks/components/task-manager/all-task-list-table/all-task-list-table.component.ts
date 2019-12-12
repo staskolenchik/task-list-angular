@@ -5,7 +5,6 @@ import {DeletePermissionComponent} from "../../../../../shared/modal-dialogs/del
 import {DeleteAllPermissionComponent} from "../../../../../shared/modal-dialogs/delete-all-permission/delete-all-permission.component";
 import {Page} from "../../../../../shared/models/page";
 import {SelectionModel} from "@angular/cdk/collections";
-import {TaskDataService} from "../../../task-data.service";
 import {TaskHttpService} from "../../../task-http.service";
 import {Router} from "@angular/router";
 import {TaskStatus} from "../../../../../shared/models/task-status";
@@ -137,7 +136,7 @@ export class AllTaskListTableComponent {
     private page: Page = this.startPage;
 
     private filter: TaskFilter = {
-        createdBy: sessionStorage.getItem('uid'),
+        createdBy: localStorage.getItem('uid'),
     } as TaskFilter;
 
     private selection: SelectionModel<Task> = new SelectionModel<Task>(
@@ -149,7 +148,6 @@ export class AllTaskListTableComponent {
     @Output() transferShow: EventEmitter<Task> = new EventEmitter<Task>();
 
     constructor(
-        private taskDataService: TaskDataService,
         private taskHttpService: TaskHttpService,
         private router: Router,
         private dialog: MatDialog,

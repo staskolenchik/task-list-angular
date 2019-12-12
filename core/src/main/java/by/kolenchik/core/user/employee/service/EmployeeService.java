@@ -13,7 +13,6 @@ import java.util.List;
 import java.util.Set;
 
 public interface EmployeeService {
-
     void setTaskService(TaskService taskService);
 
     EmployeeInfoDto add(AddEmployeeDto addEmployeeDto);

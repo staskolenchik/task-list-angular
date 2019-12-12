@@ -72,18 +72,18 @@ export class AppComponent {
     ) {}
 
     onLogout() {
-        sessionStorage.removeItem('token');
-        sessionStorage.removeItem('sub');
-        sessionStorage.removeItem('roles');
-        sessionStorage.removeItem('uid');
-        sessionStorage.removeItem('exp');
+        localStorage.removeItem('token');
+        localStorage.removeItem('sub');
+        localStorage.removeItem('roles');
+        localStorage.removeItem('uid');
+        localStorage.removeItem('exp');
 
         this.loginService.redirectUrl = '/login';
         this.router.navigate(['/login']);
     }
 
     isSignedIn() {
-        return sessionStorage.getItem('token');
+        return localStorage.getItem('token');
     }
 
     checkAdminRole(): boolean {
@@ -102,7 +102,7 @@ export class AppComponent {
         let isAllowed: boolean = false;
 
         if (this.isSignedIn()) {
-            const roles: string[] = JSON.parse(sessionStorage.getItem('roles'));
+            const roles: string[] = JSON.parse(localStorage.getItem('roles'));
 
             roles.filter((element: string) => {
                 if (element === role) {

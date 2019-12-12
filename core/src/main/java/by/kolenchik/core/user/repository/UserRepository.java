@@ -12,16 +12,9 @@ import java.util.List;
 import java.util.Set;
 
 public interface UserRepository extends JpaRepository<User, Long> {
-
     List<User> findBySuperior(Long id);
 
-    List<User> findAllByRolesAndDeleteDateIsNull(Set<UserRole> roles);
-
     Page<User> findAllByRolesAndDeleteDateIsNull(Set<UserRole> roles, Pageable pageable);
-
-    List<User> findAllBySuperiorIsNull();
-
-    List<User> findAllBySuperiorNotNull();
 
     User findByEmail(String email);
 

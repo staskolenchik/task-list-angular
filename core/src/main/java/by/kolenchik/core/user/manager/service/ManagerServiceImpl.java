@@ -12,6 +12,7 @@ import by.kolenchik.core.user.repository.UserRepository;
 import by.kolenchik.core.user.repository.UserRoleRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -22,24 +23,25 @@ import java.util.Set;
 
 @Service
 public class ManagerServiceImpl implements ManagerService {
-
     private UserRepository userRepository;
-    private ModelMapper modelMapper;
     private UserRoleRepository userRoleRepository;
+    private ModelMapper modelMapper;
 
+    @Autowired
     public ManagerServiceImpl(
             UserRepository userRepository,
-            ModelMapper modelMapper,
-            UserRoleRepository userRoleRepository
-    ) {
+            UserRoleRepository userRoleRepository,
+            ModelMapper modelMapper
+            ) {
         this.userRepository = userRepository;
-        this.modelMapper = modelMapper;
         this.userRoleRepository = userRoleRepository;
+        this.modelMapper = modelMapper;
     }
 
     @Override
     public ManagerInfoDto add(AddManagerDto addManagerDto) {
         validateAdd(addManagerDto);
+
         User manager = modelMapper.map(addManagerDto, User.class);
 
         UserRole managerUserRole = userRoleRepository.findByDesignation(UserRoleEnum.MANAGER.name());
@@ -52,12 +54,6 @@ public class ManagerServiceImpl implements ManagerService {
         return modelMapper.map(managerFromDb, ManagerInfoDto.class);
     }
 
-    private void validateAdd(AddManagerDto addManagerDto) {
-        if (userRepository.existsByEmail(addManagerDto.getEmail())) {
-            throw new DuplicateEmailException("Email=%s already exists", addManagerDto.getEmail());
-        }
-    }
-
     @Override
     public Page<ManagerInfoDto> findAll(Pageable pageable) {
         UserRole managerRole = userRoleRepository.findByDesignation(UserRoleEnum.MANAGER.name());
@@ -66,10 +62,7 @@ public class ManagerServiceImpl implements ManagerService {
 
         Page<User> managers = userRepository.findAllByRolesAndDeleteDateIsNull(roles, pageable);
 
-        return managers.map(manager -> {
-            return modelMapper.map(manager, ManagerInfoDto.class);
-        });
-
+        return managers.map(manager ->  modelMapper.map(manager, ManagerInfoDto.class));
     }
 
     @Override
@@ -80,6 +73,7 @@ public class ManagerServiceImpl implements ManagerService {
     @Override
     public ManagerInfoDto update(Long id, UpdateManagerDto updateManagerDto) {
         validateUpdate(updateManagerDto);
+
         User managerFromDb = userRepository.findByIdAndDeleteDateIsNull(id);
 
         BeanUtils.copyProperties(updateManagerDto, managerFromDb);
@@ -89,29 +83,18 @@ public class ManagerServiceImpl implements ManagerService {
         return modelMapper.map(savedManager, ManagerInfoDto.class);
     }
 
-    private void validateUpdate(UpdateManagerDto updateManagerDto) {
-        if (!userRepository.existsByIdAndDeleteDateIsNull(updateManagerDto.getId())) {
-            throw new UserNotFoundException("Manager with id=%d was not found", updateManagerDto.getId());
-        }
-    }
-
     @Override
     public ManagerInfoDto findById(Long id) {
         validateGet(id);
+
         User managerFromDb = userRepository.findByIdAndDeleteDateIsNull(id);
 
         return modelMapper.map(managerFromDb, ManagerInfoDto.class);
     }
 
-    private void validateGet(Long id) {
-        if (!userRepository.existsByIdAndDeleteDateIsNull(id)) {
-            throw new UserNotFoundException("Manager with id=%d was not found", id);
-        }
-    }
-
     @Override
-    public Boolean existsById(Long id) {
-        return userRepository.existsById(id);
+    public Boolean existsByIdAndDeleteDateIsNull(Long id) {
+        return userRepository.existsByIdAndDeleteDateIsNull(id);
     }
 
     @Override
@@ -122,9 +105,27 @@ public class ManagerServiceImpl implements ManagerService {
     }
 
     @Override
-    public User findUserById(Long id) {
+    public User findUserByIdAndDeleteDateIsNull(Long id) {
         validateGet(id);
 
         return userRepository.findByIdAndDeleteDateIsNull(id);
+    }
+
+    private void validateGet(Long id) {
+        if (!userRepository.existsByIdAndDeleteDateIsNull(id)) {
+            throw new UserNotFoundException("Manager with id=%d was not found", id);
+        }
+    }
+
+    private void validateAdd(AddManagerDto addManagerDto) {
+        if (userRepository.existsByEmail(addManagerDto.getEmail())) {
+            throw new DuplicateEmailException("Email=%s already exists", addManagerDto.getEmail());
+        }
+    }
+
+    private void validateUpdate(UpdateManagerDto updateManagerDto) {
+        if (!userRepository.existsByIdAndDeleteDateIsNull(updateManagerDto.getId())) {
+            throw new UserNotFoundException("Manager with id=%d was not found", updateManagerDto.getId());
+        }
     }
 }

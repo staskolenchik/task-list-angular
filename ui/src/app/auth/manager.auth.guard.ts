@@ -24,7 +24,7 @@ export class ManagerAuthGuard implements CanActivate{
     }
 
     private checkManagerRole(): boolean {
-        const roles: string[] = JSON.parse(sessionStorage.getItem('roles'));
+        const roles: string[] = JSON.parse(localStorage.getItem('roles'));
         let isAllowed: boolean = false;
 
         roles.filter((element: string) => {

@@ -6,6 +6,7 @@ import by.kolenchik.core.user.repository.UserRepository;
 import by.kolenchik.web.security.Role;
 import by.kolenchik.web.security.dto.LoginDto;
 import by.kolenchik.web.security.jwt.JwtTokenProvider;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -25,6 +26,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     private AuthenticationManager authenticationManager;
     private UserRepository userRepository;
 
+    @Autowired
     public AuthenticationServiceImpl(
             JwtTokenProvider jwtTokenProvider,
             AuthenticationManager authenticationManager,

@@ -22,10 +22,10 @@ public interface ManagerService {
 
     ManagerInfoDto findById(Long id);
 
-    Boolean existsById(Long id);
+    Boolean existsByIdAndDeleteDateIsNull(Long id);
 
     @Transactional
     void deleteAll(Long[] ids);
 
-    User findUserById(Long id);
+    User findUserByIdAndDeleteDateIsNull(Long id);
 }

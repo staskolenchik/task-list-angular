@@ -6,7 +6,6 @@ import {Page} from "../../../../../shared/models/page";
 import {SelectionModel} from "@angular/cdk/collections";
 import {DeleteAllPermissionComponent} from "../../../../../shared/modal-dialogs/delete-all-permission/delete-all-permission.component";
 import {TaskHttpService} from "../../../task-http.service";
-import {TaskDataService} from "../../../task-data.service";
 import {Router} from "@angular/router";
 import {TaskStatus} from "../../../../../shared/models/task-status";
 import {TaskFilter} from "../../../../../shared/models/task-filter";
@@ -134,7 +133,7 @@ export class InReviewTaskListTableComponent implements OnInit {
     } as Page;
 
     private filter = {
-        createdBy: sessionStorage.getItem('uid'),
+        createdBy: localStorage.getItem('uid'),
         statuses: [TaskStatus.INREVIEW],
     } as TaskFilter;
 
@@ -147,7 +146,6 @@ export class InReviewTaskListTableComponent implements OnInit {
     @Output() transferShow: EventEmitter<Task> = new EventEmitter<Task>();
 
     constructor(
-        private taskDataService: TaskDataService,
         private taskHttpService: TaskHttpService,
         private router: Router,
         private dialog: MatDialog,

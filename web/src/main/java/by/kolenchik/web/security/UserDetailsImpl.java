@@ -12,7 +12,6 @@ import java.util.stream.Collectors;
 @Getter
 @Setter
 public class UserDetailsImpl extends User implements UserDetails {
-
     public UserDetailsImpl(User user) {
         super(user);
     }

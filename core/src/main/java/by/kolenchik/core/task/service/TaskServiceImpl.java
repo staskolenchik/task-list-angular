@@ -15,6 +15,7 @@ import by.kolenchik.core.user.employee.service.EmployeeService;
 import by.kolenchik.core.user.exception.UserNotFoundException;
 import by.kolenchik.core.user.manager.service.ManagerService;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -28,13 +29,13 @@ import java.util.Set;
 
 @Service
 class TaskServiceImpl implements TaskService {
-
     private TaskRepository taskRepository;
     private EmployeeService employeeService;
     private ManagerService managerService;
     private ModelMapper modelMapper;
     private EmailService emailService;
 
+    @Autowired
     public TaskServiceImpl(
             TaskRepository taskRepository,
             EmployeeService employeeService,
@@ -81,7 +82,7 @@ class TaskServiceImpl implements TaskService {
         User assignee = employeeService.getOne(taskFromDB.getAssignee().getId());
         taskFromDB.setAssignee(assignee);
 
-        User createdBy = managerService.findUserById(taskFromDB.getCreatedBy().getId());
+        User createdBy = managerService.findUserByIdAndDeleteDateIsNull(taskFromDB.getCreatedBy().getId());
         taskFromDB.setCreatedBy(createdBy);
 
         emailAboutNewTask(taskFromDB);
@@ -118,7 +119,7 @@ class TaskServiceImpl implements TaskService {
         Long managerId = taskAddDto.getCreatedById();
         Long employeeId = taskAddDto.getAssigneeId();
 
-        if (!managerService.existsById(managerId)) {
+        if (!managerService.existsByIdAndDeleteDateIsNull(managerId)) {
             throw new UserNotFoundException("Manager with id=%d was not found", managerId);
         }
         if (!employeeService.existsByIdAndDeleteDateIsNull(employeeId)) {
@@ -140,7 +141,7 @@ class TaskServiceImpl implements TaskService {
             User assignee = employeeService.getOne(updatedTask.getAssignee().getId());
             updatedTask.setAssignee(assignee);
 
-            User createdBy = managerService.findUserById(updatedTask.getCreatedBy().getId());
+            User createdBy = managerService.findUserByIdAndDeleteDateIsNull(updatedTask.getCreatedBy().getId());
             updatedTask.setCreatedBy(createdBy);
 
             emailAboutTaskChangeStatus(taskFromDb);
@@ -184,7 +185,7 @@ class TaskServiceImpl implements TaskService {
         Long managerId = updateTaskDto.getCreatedById();
         Long employeeId = updateTaskDto.getAssigneeId();
 
-        if (!managerService.existsById(managerId)) {
+        if (!managerService.existsByIdAndDeleteDateIsNull(managerId)) {
             throw new UserNotFoundException("Manager with id=%d was not found", managerId);
         }
         if (!employeeService.existsByIdAndDeleteDateIsNull(employeeId)) {
@@ -208,7 +209,7 @@ class TaskServiceImpl implements TaskService {
     public Page<TaskInfoDto> find(TaskFilterDto taskFilterDto, Pageable pageable) {
         User createdBy = null;
         if (taskFilterDto.getCreatedBy() != null) {
-            createdBy = managerService.findUserById(taskFilterDto.getCreatedBy());
+            createdBy = managerService.findUserByIdAndDeleteDateIsNull(taskFilterDto.getCreatedBy());
         }
 
         List<User> assignees = null;

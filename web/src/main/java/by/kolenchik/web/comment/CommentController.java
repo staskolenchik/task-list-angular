@@ -15,17 +15,11 @@ import javax.validation.Valid;
 @RestController
 @RequestMapping("/dev/comments")
 public class CommentController {
-
     private CommentService commentService;
 
     @Autowired
     public CommentController(CommentService commentService) {
         this.commentService = commentService;
-    }
-
-    @PostMapping
-    public CommentInfoDto add(@Valid @RequestBody AddCommentDto addCommentDto) {
-        return this.commentService.add(addCommentDto);
     }
 
     @GetMapping("/tasks/{id}")
@@ -38,5 +32,10 @@ public class CommentController {
             ) Pageable pageable
     ) {
         return commentService.findAllByTaskId(id, pageable);
+    }
+
+    @PostMapping
+    public CommentInfoDto add(@Valid @RequestBody AddCommentDto addCommentDto) {
+        return this.commentService.add(addCommentDto);
     }
 }

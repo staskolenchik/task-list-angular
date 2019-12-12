@@ -1,5 +1,5 @@
 import {NgModule} from "@angular/core";
-import {FullNamePipe} from "../../pipes/full-name.pipe";
+import {FullNamePipe} from "./full-name.pipe";
 
 @NgModule({
     imports: [],

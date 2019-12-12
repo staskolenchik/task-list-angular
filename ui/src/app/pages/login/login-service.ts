@@ -57,11 +57,11 @@ export class LoginService {
                     const token: string = response.token;
                     const payload: any = JSON.parse(window.atob(token.split('.')[1]));
 
-                    sessionStorage.setItem('token', token);
-                    sessionStorage.setItem('sub', JSON.stringify(payload.sub));
-                    sessionStorage.setItem('roles', JSON.stringify(payload.auth));
-                    sessionStorage.setItem('uid', JSON.stringify(payload.uid));
-                    sessionStorage.setItem('exp', JSON.stringify(payload.exp));
+                    localStorage.setItem('token', token);
+                    localStorage.setItem('sub', JSON.stringify(payload.sub));
+                    localStorage.setItem('roles', JSON.stringify(payload.auth));
+                    localStorage.setItem('uid', JSON.stringify(payload.uid));
+                    localStorage.setItem('exp', JSON.stringify(payload.exp));
 
                     this.router.navigate([this._redirectUrl]);
                 }),

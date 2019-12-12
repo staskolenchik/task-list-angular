@@ -18,7 +18,7 @@ export class TaskHttpService{
     constructor(
         private http: HttpClient,
         private snackBar: MatSnackBar
-    ){ }
+    ){}
 
     private handleError(error: HttpErrorResponse) {
         if (error.error instanceof ErrorEvent) {
@@ -72,16 +72,6 @@ export class TaskHttpService{
             )
     }
 
-    get(task: Task): Observable<Task> {
-        let url = `${this.url}/${task.id}`;
-
-        return this.http
-            .get<Task>(url)
-            .pipe(
-                catchError((error) => this.handleError(error))
-            );
-    }
-
     findAll(page: Page, filter: TaskFilter): Observable<any> {
         let params = new HttpParams();
         params = params.set('page', page.number.toString());
@@ -97,15 +87,11 @@ export class TaskHttpService{
         }
 
         if (filter.dateFrom) {
-            const tzOffSet: number = filter.dateFrom.getTimezoneOffset() * 60000;
-            const fromLocalISOTime = (new Date(filter.dateFrom.getTime() - tzOffSet)).toISOString();
-            params = params.set('after', fromLocalISOTime);
+            params = params.set('after', this.convertDateToLocalISOString(filter.dateTo));
         }
 
         if (filter.dateTo) {
-            const tzOffSet: number = filter.dateTo.getTimezoneOffset() * 60000;
-            const toLocalISOTime = (new Date(filter.dateTo.getTime() - tzOffSet)).toISOString();
-            params = params.set('before', toLocalISOTime);
+            params = params.set('before', this.convertDateToLocalISOString(filter.dateTo));
         }
 
         return this.http
@@ -152,5 +138,10 @@ export class TaskHttpService{
                     page: page
                 }
             }))
+    }
+
+    private convertDateToLocalISOString(date: Date): string {
+        const tzOffSet: number = date.getTimezoneOffset() * 60000;
+        return new Date(date.getTime() - tzOffSet).toISOString();
     }
 }

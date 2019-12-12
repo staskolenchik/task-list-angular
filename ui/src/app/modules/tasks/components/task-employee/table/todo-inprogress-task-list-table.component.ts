@@ -87,7 +87,7 @@ export class TodoInprogressTaskListTableComponent implements OnInit {
             TaskStatus.TODO,
             TaskStatus.INPROGRESS
         ],
-        assigneeId: sessionStorage.getItem('uid'),
+        assigneeId: localStorage.getItem('uid'),
     };
     private taskDataSource: MatTableDataSource<Task> = new MatTableDataSource([]);
 

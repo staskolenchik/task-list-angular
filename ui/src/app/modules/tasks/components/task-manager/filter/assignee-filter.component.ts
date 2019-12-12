@@ -44,7 +44,7 @@ import {Employee} from "../../../../../shared/models/employee";
     `]
 })
 export class AssigneeFilterComponent implements OnInit {
-    private managerId: string = sessionStorage.getItem('uid');
+    private managerId: string = localStorage.getItem('uid');
     private allValues: Employee[] = [];
     private values: Employee[] = [];
     private filteredValues: Observable<Employee[]>;

@@ -10,10 +10,11 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.Collection;
+import java.util.List;
+import java.util.Set;
 
 public interface TaskRepository extends JpaRepository<Task, Long> {
-
     @Query(value = "SELECT task FROM Task task WHERE task.createdBy = :createdBy" +
             " AND ((:statuses) IS NULL OR task.taskStatus IN :statuses) " +
             " AND ((:assignees) IS NULL OR task.assignee IN :assignees) " +

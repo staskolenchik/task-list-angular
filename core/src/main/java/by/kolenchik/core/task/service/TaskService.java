@@ -7,7 +7,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 public interface TaskService {
-
     TaskInfoDto add(TaskAddDto taskAddDto);
 
     TaskInfoDto update(Long id, UpdateTaskDto updateTaskDto);

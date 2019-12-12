@@ -8,7 +8,6 @@ import javax.validation.constraints.NotNull;
 
 @Data
 public class TaskAddDto {
-
     @NotBlank(message = "Subject cannot be empty")
     @Length(max = 45, message = "Subject cannot contain more than 45 characters")
     private String subject;

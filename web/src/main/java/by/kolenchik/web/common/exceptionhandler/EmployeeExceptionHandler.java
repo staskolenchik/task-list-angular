@@ -13,7 +13,6 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 
 @ControllerAdvice
 public class EmployeeExceptionHandler extends ResponseEntityExceptionHandler {
-
     @ExceptionHandler(UserNotFoundException.class)
     public ResponseEntity<Object> handleUserNotFoundException(RuntimeException e, WebRequest request) {
         String responseBody = e.getMessage();

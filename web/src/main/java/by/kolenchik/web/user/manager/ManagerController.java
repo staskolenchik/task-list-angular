@@ -5,6 +5,7 @@ import by.kolenchik.core.user.manager.dto.AddManagerDto;
 import by.kolenchik.core.user.manager.dto.ManagerInfoDto;
 import by.kolenchik.core.user.manager.dto.UpdateManagerDto;
 import by.kolenchik.core.user.manager.service.ManagerService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -16,22 +17,21 @@ import javax.validation.Valid;
 @RestController
 @RequestMapping("/dev/managers")
 public class ManagerController {
-
     private ManagerService managerService;
     private BCryptPasswordEncoder passwordEncoder;
 
-    public ManagerController(ManagerService managerService, BCryptPasswordEncoder passwordEncoder) {
+    @Autowired
+    public ManagerController(
+            ManagerService managerService,
+            BCryptPasswordEncoder passwordEncoder
+    ) {
         this.managerService = managerService;
         this.passwordEncoder = passwordEncoder;
     }
 
-    @PostMapping
-    public ManagerInfoDto add(@Valid @RequestBody AddManagerDto addManagerDto) {
-        validatePassword(addManagerDto.getPassword(), addManagerDto.getConfirmPassword());
-        String encodedPassword = passwordEncoder.encode(addManagerDto.getPassword());
-        addManagerDto.setPassword(encodedPassword);
-
-        return managerService.add(addManagerDto);
+    @GetMapping("/{id}")
+    public ManagerInfoDto findById(@PathVariable Long id) {
+        return managerService.findById(id);
     }
 
     @GetMapping
@@ -39,16 +39,15 @@ public class ManagerController {
         return managerService.findAll(pageable);
     }
 
-    @DeleteMapping("/{id}")
-    public void deleteById(@PathVariable Long id) {
-        managerService.deleteById(id);
-    }
+    @PostMapping
+    public ManagerInfoDto add(@Valid @RequestBody AddManagerDto addManagerDto) {
+        validatePassword(addManagerDto.getPassword(), addManagerDto.getConfirmPassword());
 
-    @DeleteMapping
-    public void deleteAll(Long... ids) {
-        managerService.deleteAll(ids);
-    }
+        String encodedPassword = passwordEncoder.encode(addManagerDto.getPassword());
+        addManagerDto.setPassword(encodedPassword);
 
+        return managerService.add(addManagerDto);
+    }
 
     @PutMapping("/{id}")
     public ManagerInfoDto update(
@@ -58,9 +57,14 @@ public class ManagerController {
         return managerService.update(id, updateManagerDto);
     }
 
-    @GetMapping("/{id}")
-    public ManagerInfoDto findById(@PathVariable Long id) {
-        return managerService.findById(id);
+    @DeleteMapping
+    public void deleteAll(Long... ids) {
+        managerService.deleteAll(ids);
+    }
+
+    @DeleteMapping("/{id}")
+    public void deleteById(@PathVariable Long id) {
+        managerService.deleteById(id);
     }
 
     private void validatePassword(String password, String confirmPassword) {

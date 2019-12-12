@@ -7,7 +7,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
 
 public interface CommentService {
-
     Page<CommentInfoDto> findAllByTaskId(Long id, Pageable pageable);
 
     @Transactional

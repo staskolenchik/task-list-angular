@@ -24,7 +24,7 @@ export class ManagerOrEmployeeAuthGuard implements CanActivate{
     }
 
     private checkManagerOrEmployeeRole(): boolean {
-        const roles: string[] = JSON.parse(sessionStorage.getItem('roles'));
+        const roles: string[] = JSON.parse(localStorage.getItem('roles'));
         let isAllowed: boolean = false;
 
         roles.filter((element: string) => {
