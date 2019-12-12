@@ -4,7 +4,6 @@ import {Employee} from "../../../../../shared/models/employee";
 import {Manager} from "../../../../../shared/models/manager";
 import {EmployeeHttpService} from "../../../../employees/employee-http.service";
 import {Router} from "@angular/router";
-import {TaskDataService} from "../../../task-data.service";
 import {TaskHttpService} from "../../../task-http.service";
 import {Location} from '@angular/common';
 
@@ -168,7 +167,6 @@ export class TaskFormComponent implements OnInit{
     @Output() expand: EventEmitter<boolean> = new EventEmitter<boolean>();
 
     constructor(
-        private taskDataService: TaskDataService,
         private tasksHttpService: TaskHttpService,
         private employeeService: EmployeeHttpService,
         private router: Router,

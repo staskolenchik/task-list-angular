@@ -3,33 +3,32 @@ import {CommonModule} from "@angular/common";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {TaskRoutingModule} from "./task-routing.module";
 import {
+    MatAutocompleteModule,
     MatButtonModule,
     MatCardModule,
     MatCheckboxModule,
+    MatChipsModule,
+    MatDatepickerModule,
     MatDialogModule,
+    MatExpansionModule,
     MatGridListModule,
     MatIconModule,
     MatInputModule,
+    MatListModule,
     MatPaginatorModule,
+    MatProgressBarModule,
     MatRadioModule,
     MatSelectModule,
     MatSortModule,
     MatTableModule,
-    MatToolbarModule,
-    MatProgressBarModule,
-    MatExpansionModule,
     MatTabsModule,
-    MatListModule,
-    MatChipsModule,
-    MatAutocompleteModule,
-    MatDatepickerModule
+    MatToolbarModule
 } from "@angular/material";
 import {TaskFormComponent} from "./components/task-manager/task-form/task-form.component";
 import {TaskEmployeeComponent} from "./components/task-employee/task-employee.component";
 import {TodoInprogressTaskListTableComponent} from "./components/task-employee/table/todo-inprogress-task-list-table.component";
 import {TaskManagerComponent} from "./components/task-manager/task-manager.component";
 import {InReviewTaskListTableComponent} from "./components/task-manager/in-review-task-list-table/in-review-task-list-table.component";
-import {TaskDataService} from "./task-data.service";
 import {TaskHttpService} from "./task-http.service";
 import {TaskInfoComponent} from "./components/task-info/task-info.component";
 import {RouterModule} from "@angular/router";
@@ -104,7 +103,6 @@ import {CommentModule} from "../comments/comment.module";
         DeleteAllPermissionComponent
     ],
     providers: [
-        TaskDataService,
         TaskHttpService
     ]
 })
