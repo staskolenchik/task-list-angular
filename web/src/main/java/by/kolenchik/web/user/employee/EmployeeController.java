@@ -5,6 +5,7 @@ import by.kolenchik.core.user.employee.dto.EmployeeInfoDto;
 import by.kolenchik.core.user.employee.dto.UpdateEmployeeDto;
 import by.kolenchik.core.user.employee.service.EmployeeService;
 import by.kolenchik.core.user.exception.PasswordsMismatchException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -21,6 +22,7 @@ public class EmployeeController {
     private EmployeeService employeeService;
     private BCryptPasswordEncoder passwordEncoder;
 
+    @Autowired
     public EmployeeController(EmployeeService employeeService, BCryptPasswordEncoder passwordEncoder) {
         this.employeeService = employeeService;
         this.passwordEncoder = passwordEncoder;

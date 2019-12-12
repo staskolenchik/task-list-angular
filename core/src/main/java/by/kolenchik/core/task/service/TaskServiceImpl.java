@@ -15,6 +15,7 @@ import by.kolenchik.core.user.employee.service.EmployeeService;
 import by.kolenchik.core.user.exception.UserNotFoundException;
 import by.kolenchik.core.user.manager.service.ManagerService;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -35,6 +36,7 @@ class TaskServiceImpl implements TaskService {
     private ModelMapper modelMapper;
     private EmailService emailService;
 
+    @Autowired
     public TaskServiceImpl(
             TaskRepository taskRepository,
             EmployeeService employeeService,

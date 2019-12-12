@@ -5,6 +5,7 @@ import by.kolenchik.core.user.manager.dto.AddManagerDto;
 import by.kolenchik.core.user.manager.dto.ManagerInfoDto;
 import by.kolenchik.core.user.manager.dto.UpdateManagerDto;
 import by.kolenchik.core.user.manager.service.ManagerService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -20,6 +21,7 @@ public class ManagerController {
     private ManagerService managerService;
     private BCryptPasswordEncoder passwordEncoder;
 
+    @Autowired
     public ManagerController(ManagerService managerService, BCryptPasswordEncoder passwordEncoder) {
         this.managerService = managerService;
         this.passwordEncoder = passwordEncoder;

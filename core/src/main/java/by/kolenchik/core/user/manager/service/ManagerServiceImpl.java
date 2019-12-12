@@ -12,6 +12,7 @@ import by.kolenchik.core.user.repository.UserRepository;
 import by.kolenchik.core.user.repository.UserRoleRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -27,6 +28,7 @@ public class ManagerServiceImpl implements ManagerService {
     private ModelMapper modelMapper;
     private UserRoleRepository userRoleRepository;
 
+    @Autowired
     public ManagerServiceImpl(
             UserRepository userRepository,
             ModelMapper modelMapper,
