@@ -134,7 +134,7 @@ export class InReviewTaskListTableComponent implements OnInit {
     } as Page;
 
     private filter = {
-        createdBy: sessionStorage.getItem('uid'),
+        createdBy: localStorage.getItem('uid'),
         statuses: [TaskStatus.INREVIEW],
     } as TaskFilter;
 

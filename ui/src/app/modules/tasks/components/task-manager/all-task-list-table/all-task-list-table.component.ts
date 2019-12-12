@@ -137,7 +137,7 @@ export class AllTaskListTableComponent {
     private page: Page = this.startPage;
 
     private filter: TaskFilter = {
-        createdBy: sessionStorage.getItem('uid'),
+        createdBy: localStorage.getItem('uid'),
     } as TaskFilter;
 
     private selection: SelectionModel<Task> = new SelectionModel<Task>(

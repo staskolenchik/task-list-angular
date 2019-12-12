@@ -20,20 +20,20 @@ export class AuthGuard implements CanActivate{
 
     private checkIsLogined(url: string) {
         this.loginService.redirectUrl = url;
-        const token: string = sessionStorage.getItem('token');
+        const token: string = localStorage.getItem('token');
 
         if (token) {
-            const expiredIn: number = JSON.parse(sessionStorage.getItem('exp') + '000');
+            const expiredIn: number = JSON.parse(localStorage.getItem('exp') + '000');
             if (this.isValid(expiredIn)) {
                 return true;
             }
         }
 
-        sessionStorage.removeItem('token');
-        sessionStorage.removeItem('sub');
-        sessionStorage.removeItem('roles');
-        sessionStorage.removeItem('uid');
-        sessionStorage.removeItem('exp');
+        localStorage.removeItem('token');
+        localStorage.removeItem('sub');
+        localStorage.removeItem('roles');
+        localStorage.removeItem('uid');
+        localStorage.removeItem('exp');
 
         this.router.navigate(['/login']);
 

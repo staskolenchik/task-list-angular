@@ -182,7 +182,7 @@ export class TaskFormComponent implements OnInit{
 
     save(task: Task) {
         this.sending = true;
-        this.task.createdById = Number(sessionStorage.getItem("uid"));
+        this.task.createdById = Number(localStorage.getItem("uid"));
         if (this.updating) {
             this.update(task);
         } else {
@@ -242,7 +242,7 @@ export class TaskFormComponent implements OnInit{
     }
 
     getEmployees() {
-        this.manager.id = JSON.parse(sessionStorage.getItem('uid'));
+        this.manager.id = JSON.parse(localStorage.getItem('uid'));
 
         this.employeeService
             .getEmployeesByManagerId(this.manager)
