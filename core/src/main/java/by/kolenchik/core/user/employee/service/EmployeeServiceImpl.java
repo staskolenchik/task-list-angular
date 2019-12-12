@@ -19,14 +19,13 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class EmployeeServiceImpl implements EmployeeService {
-
     private UserRepository userRepository;
     private ModelMapper modelMapper;
     private UserRoleRepository userRoleRepository;
@@ -142,14 +141,10 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Override
     public List<EmployeeInfoDto> findByManagerId(Long id) {
         List<User> employees = userRepository.findBySuperior(id);
-        List<EmployeeInfoDto> employeeInfoDtos = new ArrayList<>();
 
-        for (User employee :
-                employees) {
-            EmployeeInfoDto employeeInfoDto = modelMapper.map(employee, EmployeeInfoDto.class);
-            employeeInfoDtos.add(employeeInfoDto);
-        }
-        return employeeInfoDtos;
+        return employees.stream()
+                .map(employee -> modelMapper.map(employee, EmployeeInfoDto.class))
+                .collect(Collectors.toList());
     }
 
     @Override

@@ -7,7 +7,6 @@ import java.time.LocalDateTime;
 
 @Data
 public class TaskInfoDto {
-
     private Long id;
 
     private String subject;

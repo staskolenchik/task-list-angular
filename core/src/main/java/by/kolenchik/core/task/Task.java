@@ -16,7 +16,6 @@ import java.util.Set;
 @NoArgsConstructor
 @Table(name = "task")
 public abstract class Task {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/dev/about")
 public class AboutController {
-
     private final ApplicationProperties applicationProperties;
 
     @Autowired

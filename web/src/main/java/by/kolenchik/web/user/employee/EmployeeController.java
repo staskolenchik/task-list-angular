@@ -18,7 +18,6 @@ import java.util.List;
 @RestController
 @RequestMapping("/dev/employees")
 public class EmployeeController {
-
     private EmployeeService employeeService;
     private BCryptPasswordEncoder passwordEncoder;
 
@@ -26,6 +25,16 @@ public class EmployeeController {
     public EmployeeController(EmployeeService employeeService, BCryptPasswordEncoder passwordEncoder) {
         this.employeeService = employeeService;
         this.passwordEncoder = passwordEncoder;
+    }
+
+    @GetMapping
+    public Page<EmployeeInfoDto> findAll(@PageableDefault(sort = {"id"})Pageable pageable) {
+        return employeeService.findAll(pageable);
+    }
+
+    @GetMapping("/{id}")
+    public EmployeeInfoDto findById(@PathVariable Long id) {
+        return employeeService.findById(id);
     }
 
     @GetMapping("/managers/{id}")
@@ -41,11 +50,6 @@ public class EmployeeController {
         addEmployeeDto.setPassword(encodedPassword);
 
         return employeeService.add(addEmployeeDto);
-    }
-
-    @GetMapping
-    public Page<EmployeeInfoDto> findAll(@PageableDefault(sort = {"id"})Pageable pageable) {
-        return employeeService.findAll(pageable);
     }
 
     @PutMapping("/{id}")
@@ -64,11 +68,6 @@ public class EmployeeController {
     @DeleteMapping
     public void deleteAll(Long... ids) {
         employeeService.deleteAll(ids);
-    }
-
-    @GetMapping("/{id}")
-    public EmployeeInfoDto findById(@PathVariable Long id) {
-        return employeeService.findById(id);
     }
 
     private void validatePassword(String password, String confirmPassword) {

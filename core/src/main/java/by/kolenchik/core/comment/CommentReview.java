@@ -14,7 +14,6 @@ import javax.persistence.Entity;
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 public class CommentReview extends Comment {
-
     @Column(name = "comment_id", nullable = false, updatable = false)
     private Long commentId;
 }

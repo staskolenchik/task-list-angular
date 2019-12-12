@@ -1,6 +1,5 @@
 package by.kolenchik.core.user;
 
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
