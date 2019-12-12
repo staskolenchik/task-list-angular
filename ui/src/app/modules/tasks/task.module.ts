@@ -36,7 +36,7 @@ import {RouterModule} from "@angular/router";
 import {DeletePermissionComponent} from "../../shared/modal-dialogs/delete-permission/delete-permission.component";
 import {DeleteAllPermissionComponent} from "../../shared/modal-dialogs/delete-all-permission/delete-all-permission.component";
 import {AllTaskListTableComponent} from "./components/task-manager/all-task-list-table/all-task-list-table.component";
-import {ApplicationPipesModule} from "../../shared/module/application-pipes.module";
+import {ApplicationPipesModule} from "../../pipes/application-pipes.module";
 import {FilterComponent} from "./components/task-manager/filter/filter.component";
 import {StatusFilterComponent} from "./components/task-manager/filter/status-filter.component";
 import {AssigneeFilterComponent} from "./components/task-manager/filter/assignee-filter.component";

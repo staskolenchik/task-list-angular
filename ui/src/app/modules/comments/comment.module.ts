@@ -13,7 +13,7 @@ import {CommentListComponent} from "./components/comment-list.component";
 import {CommentHttpService} from "./comment-http.service";
 import {CommonModule} from "@angular/common";
 import {FormsModule} from "@angular/forms";
-import {ApplicationPipesModule} from "../../shared/module/application-pipes.module";
+import {ApplicationPipesModule} from "../../pipes/application-pipes.module";
 
 @NgModule({
     declarations: [

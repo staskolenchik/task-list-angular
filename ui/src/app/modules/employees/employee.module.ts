@@ -16,7 +16,7 @@ import {
     MatPaginatorModule, MatProgressBarModule, MatSortModule,
     MatTableModule
 } from "@angular/material";
-import {ApplicationPipesModule} from "../../shared/module/application-pipes.module";
+import {ApplicationPipesModule} from "../../pipes/application-pipes.module";
 import {ManagerSelectionComponent} from "./components/manager-selection/manager-selection.component";
 
 @NgModule({
