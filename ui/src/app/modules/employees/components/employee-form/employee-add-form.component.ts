@@ -274,7 +274,7 @@ export class EmployeeAddFormComponent {
 
     showMessage() {
         let snackBarRef = this.snackBar.open(
-            this.messages.MANAGER_SAVED,
+            this.messages.EMPLOYEE_SAVED,
             'Close',
             {duration: 2000}
         );
