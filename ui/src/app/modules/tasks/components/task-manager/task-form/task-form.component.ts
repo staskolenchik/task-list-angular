@@ -13,12 +13,13 @@ import {Errors} from "../../../../../shared/constants/errors";
 import {Hints} from "../../../../../shared/constants/hints";
 import {MatSnackBar} from "@angular/material";
 import {Messages} from "../../../../../shared/constants/messages";
+import {NgForm} from "@angular/forms";
 
 @Component({
     selector: 'task-form-component',
     template: `
         <div class="task-form">
-            <form #form="ngForm" (ngSubmit)="save(task)">
+            <form #form="ngForm" (ngSubmit)="save(form)">
                 <mat-card>
                     <mat-card-title>Task Form</mat-card-title>
                     <mat-card-content>
@@ -121,7 +122,7 @@ import {Messages} from "../../../../../shared/constants/messages";
                                     mat-raised-button
                                     class="task-add-form__reset-button"
                                     color="warn"
-                                    (click)="onReset()"
+                                    (click)="reset(form)"
                             >Clear
                             </button>
                         </div>
@@ -129,7 +130,7 @@ import {Messages} from "../../../../../shared/constants/messages";
                                 mat-stroked-button
                                 class="task-add-form__cancel-button"
                                 color="primary"
-                                (click)="onCancel()"
+                                (click)="onCancel(form)"
                         >Cancel
                         </button>
                         <button type="submit"
@@ -178,25 +179,25 @@ export class TaskFormComponent implements OnInit{
         this.getEmployees();
     }
 
-    save(task: Task) {
+    save(form: NgForm) {
         this.sending = true;
         this.task.createdById = Number(localStorage.getItem("uid"));
         if (this.updating) {
-            this.update(task);
+            this.update(this.task, form);
         } else {
-            this.add(task);
+            this.add(this.task, form);
         }
     }
 
-    add(task: Task) {
+    add(task: Task, form: NgForm) {
         this.tasksHttpService
             .add(task)
             .subscribe(() => {
-                this.showMessage();
+                this.showMessage(form);
             });
     }
 
-    showMessage() {
+    showMessage(form: NgForm) {
         this.sending = false;
 
         let snackBarRef = this.snackBar.open(
@@ -211,28 +212,24 @@ export class TaskFormComponent implements OnInit{
             .subscribe();
 
         this.closeForm();
-        this.clearForm();
+        this.reset(form);
     }
 
-    update(task: Task) {
+    update(task: Task, form: NgForm) {
         this.tasksHttpService
             .update(task)
             .subscribe(() => {
-                this.showMessage();
+                this.showMessage(form);
             });
     }
 
-    clearForm() {
-        this.task = {} as Task;
+    reset(form: NgForm) {
+        form.resetForm();
     }
 
-    onReset() {
-        this.clearForm();
-    }
-
-    onCancel() {
+    onCancel(form: NgForm) {
         this.closeForm();
-        this.clearForm();
+        this.reset(form)
     }
 
     closeForm() {
