@@ -9,12 +9,13 @@ import {MatDialog, MatSnackBar} from "@angular/material";
 import {ClearFormPermissionComponent} from "../../../../shared/modal-dialogs/clear-form/clear-form-permission.component";
 import {Employee} from "../../../../shared/models/employee";
 import {EmployeeHttpService} from "../../employee-http.service";
+import {NgForm} from "@angular/forms";
 
 @Component({
     selector: 'employee-add-form-component',
     template: `
         <div class="employee-add-form">
-            <form #form="ngForm" (ngSubmit)="save()">
+            <form #form="ngForm" (ngSubmit)="save(form)">
                 <mat-card class="mat-elevation-z8">
                     <div *ngIf="!selecting; else SelectManager">
                         <mat-card-title>New Employee</mat-card-title>
@@ -203,7 +204,7 @@ import {EmployeeHttpService} from "../../employee-http.service";
                                         class="employee-add-form__reset-button"
                                         type="button"
                                         color="warn"
-                                        (click)="askResetPermission()"
+                                        (click)="askResetPermission(form)"
                                 >Clear</button>
                             </div>
                             <button mat-stroked-button
@@ -254,12 +255,13 @@ export class EmployeeAddFormComponent {
         private snackBar: MatSnackBar
     ) {}
 
-    save() {
+    save(form: NgForm) {
         this.sending = true;
         this.employeeHttpService
             .add(this.employee)
             .subscribe(
                 () => {
+                    this.reset(form);
                     this.sent = true;
                     this.sending = false;
 
@@ -291,11 +293,12 @@ export class EmployeeAddFormComponent {
         this.location.back();
     }
 
-    reset() {
+    reset(form: NgForm) {
+        form.resetForm();
         this.employee = {} as Employee;
     }
 
-    askResetPermission(): void {
+    askResetPermission(form: NgForm): void {
         const matDialogRef = this.dialog.open(ClearFormPermissionComponent, {
             height: '210px',
             width: '480px',
@@ -303,7 +306,7 @@ export class EmployeeAddFormComponent {
 
         matDialogRef.afterClosed().subscribe(isApproved => {
             if (isApproved) {
-                this.reset();
+                this.reset(form);
             }
         })
     }

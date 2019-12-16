@@ -8,12 +8,13 @@ import {Hints} from "../../../../shared/constants/hints";
 import {Messages} from "../../../../shared/constants/messages";
 import {MatDialog, MatSnackBar} from "@angular/material";
 import {ClearFormPermissionComponent} from "../../../../shared/modal-dialogs/clear-form/clear-form-permission.component";
+import {NgForm} from "@angular/forms";
 
 @Component({
     selector: "manager-add-form-component",
     template: `
         <div class="manager-add-form">
-            <form #form="ngForm" (ngSubmit)="save()">
+            <form #form="ngForm" (ngSubmit)="save(form)">
                 <mat-card class="mat-elevation-z8">
                     <mat-card-title>New Manager</mat-card-title>
                     <mat-card-content>
@@ -191,7 +192,7 @@ import {ClearFormPermissionComponent} from "../../../../shared/modal-dialogs/cle
                                 class="manager-add-form__reset-button"
                                 type="button"
                                 color="warn"
-                                (click)="askResetPermission()"
+                                (click)="askResetPermission(form)"
                         >Clear</button>
                         </div>
                         <button mat-stroked-button
@@ -234,13 +235,13 @@ export class ManagerAddFormComponent {
         private snackBar: MatSnackBar
     ) {}
 
-    save() {
+    save(form: NgForm) {
         this.sending = true;
         this.managerService
             .add(this.manager)
             .subscribe(
                 () => {
-                    this.manager = {} as Manager;
+                    this.reset(form);
                     this.sent = true;
                     this.sending = false;
 
@@ -272,11 +273,11 @@ export class ManagerAddFormComponent {
         this.location.back();
     }
 
-    reset() {
-        this.manager = {} as Manager;
+    reset(form: NgForm) {
+        form.resetForm();
     }
 
-    askResetPermission(): void {
+    askResetPermission(form: NgForm): void {
         const matDialogRef = this.dialog.open(ClearFormPermissionComponent, {
             height: '210px',
             width: '480px',
@@ -284,7 +285,7 @@ export class ManagerAddFormComponent {
 
         matDialogRef.afterClosed().subscribe(isApproved => {
             if (isApproved) {
-                this.reset();
+                this.reset(form);
             }
         })
     }
