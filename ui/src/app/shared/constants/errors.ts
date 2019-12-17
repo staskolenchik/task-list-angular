@@ -4,7 +4,7 @@ export const Errors = {
     PASSWORD_REQUIRED_CHARACTERS: `Required characters: `,
     PASSWORD_MIN_LENGTH_REQUIRED: `Minimum 5 characters required`,
 
-    BIRTHDATE_FORMAT_REQUIRED: `Format dd/mm/yyyy`,
+    BIRTHDATE_FORMAT_REQUIRED: `dd/mm/yyyy format reqired`,
 
     INVALID_EMAIL: `Invalid email`,
 
