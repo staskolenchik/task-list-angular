@@ -86,6 +86,13 @@ export class AppComponent {
         return localStorage.getItem('token');
     }
 
+    isTokenValid() {
+        const expiredIn: number = JSON.parse(localStorage.getItem('exp') + '000');
+        const now: number = new Date().getTime();
+
+        return expiredIn > now;
+    }
+
     checkAdminRole(): boolean {
         return this.checkRole(Role.ADMIN);
     }
@@ -101,7 +108,7 @@ export class AppComponent {
     checkRole(role: Role): boolean {
         let isAllowed: boolean = false;
 
-        if (this.isSignedIn()) {
+        if (this.isSignedIn() && this.isTokenValid) {
             const roles: string[] = JSON.parse(localStorage.getItem('roles'));
 
             roles.filter((element: string) => {
