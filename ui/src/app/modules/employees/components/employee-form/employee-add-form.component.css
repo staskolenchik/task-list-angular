@@ -29,6 +29,7 @@
     color: green;
 }
 
-.employee-add-form__manager_input {
+.employee-add-form__manager_input,
+.employee-add-form__birthDate{
     cursor: pointer;
 }

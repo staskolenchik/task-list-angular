@@ -1,5 +1,6 @@
 import {AfterViewChecked, ChangeDetectorRef, Component, EventEmitter, Input, Output} from "@angular/core";
 import {Task} from "../../../../shared/models/task";
+import {DateFormat} from "../../../../shared/constants/date-format";
 
 @Component({
     selector: 'task-info-component',
@@ -28,7 +29,7 @@ import {Task} from "../../../../shared/models/task";
                         <mat-form-field class="task-form__form-field">
                             <input matInput placeholder="Created At"
                                    readonly
-                                   [value]="task.creationDateTime">
+                                   [value]="task.creationDateTime | date: dateFormat.timestamp">
                         </mat-form-field>
 
                         <mat-form-field class="task-form__form-field">
@@ -59,7 +60,7 @@ import {Task} from "../../../../shared/models/task";
     `]
 })
 export class TaskInfoComponent implements AfterViewChecked{
-
+    private dateFormat = DateFormat;
     private task: Task;
 
     @Input() set taskInfo(task: Task) {
@@ -78,7 +79,7 @@ export class TaskInfoComponent implements AfterViewChecked{
         this.task = {
             subject: '',
             description: '',
-            creationDateTime: '',
+            creationDateTime: null,
             assigneeName: '',
             assigneeSurname: ''
         } as Task;

@@ -106,7 +106,10 @@ import {ManagerHttpService} from "../../../managers/manager-http.service";
 
                             <mat-form-field class="employee-update-form__form-field">
                                 <input matInput
+                                       class="employee-update-form__birthDate"
+                                       readonly
                                        required
+                                       (click)="picker.open()"
                                        [matDatepicker]="picker"
                                        placeholder="Pick birthdate"
                                        name="birthDate"
@@ -116,8 +119,8 @@ import {ManagerHttpService} from "../../../managers/manager-http.service";
                                        minlength="{{fieldLength.USER_MIN_BIRTHDATE}}">
                                 <mat-datepicker-toggle matSuffix [for]="picker">
                                 </mat-datepicker-toggle>
-                                <mat-datepicker #picker></mat-datepicker>
-                                <mat-hint align="start">
+                                <mat-datepicker touchUi #picker></mat-datepicker>
+                                <mat-hint align="start" *ngIf="birthDate.valid && birthDate.dirty">
                                     {{hints.BIRTHDATE_FORMAT}}
                                 </mat-hint>
                                 <mat-error align="start">

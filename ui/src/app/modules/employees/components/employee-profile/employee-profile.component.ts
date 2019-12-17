@@ -19,7 +19,7 @@ import {ManagerHttpService} from "../../../managers/manager-http.service";
                                    type="email"
                                    placeholder="Email"
                                    name="email"
-                                   [(ngModel)]="employee.email"/>
+                                   [ngModel]="employee.email"/>
                         </mat-form-field>
 
                         <mat-form-field class="employee-profile-form__form-field">
@@ -27,7 +27,7 @@ import {ManagerHttpService} from "../../../managers/manager-http.service";
                                    readonly
                                    placeholder="Name"
                                    name="name"
-                                   [(ngModel)]="employee.name">
+                                   [ngModel]="employee.name">
                         </mat-form-field>
 
                         <mat-form-field class="employee-profile-form__form-field">
@@ -35,7 +35,7 @@ import {ManagerHttpService} from "../../../managers/manager-http.service";
                                    readonly
                                    placeholder="Surname"
                                    name="surname"
-                                   [(ngModel)]="employee.surname">
+                                   [ngModel]="employee.surname">
                         </mat-form-field>
 
                         <mat-form-field class="employee-profile-form__form-field" *ngIf="employee.patronymic != null">
@@ -43,7 +43,7 @@ import {ManagerHttpService} from "../../../managers/manager-http.service";
                                    readonly
                                    placeholder="Patronymic"
                                    name="patronymic"
-                                   [(ngModel)]="employee.patronymic">
+                                   [ngModel]="employee.patronymic">
                         </mat-form-field>
 
                         <mat-form-field class="employee-profile-form__form-field">
@@ -53,7 +53,7 @@ import {ManagerHttpService} from "../../../managers/manager-http.service";
                                    placeholder="Pick birthdate"
                                    name="birthDate"
                                    #birthDate="ngModel"
-                                   [(ngModel)]="employee.birthDate">
+                                   [ngModel]="employee.birthDate">
                             <mat-datepicker-toggle matSuffix [for]="picker" hidden></mat-datepicker-toggle>
                             <mat-datepicker #picker></mat-datepicker>
                         </mat-form-field>

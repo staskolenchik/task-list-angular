@@ -4,6 +4,7 @@ import {MatSort, MatTableDataSource, PageEvent} from "@angular/material";
 import {Page} from "../../../../../shared/models/page";
 import {TaskStatus} from "../../../../../shared/models/task-status";
 import {TaskHttpService} from "../../../task-http.service";
+import {DateFormat} from "../../../../../shared/constants/date-format";
 
 @Component({
     selector: 'todo-inprogress-task-list-table-component',
@@ -42,7 +43,7 @@ import {TaskHttpService} from "../../../task-http.service";
 
                     <ng-container matColumnDef="creationDateTime">
                         <th mat-header-cell *matHeaderCellDef mat-sort-header>Created at</th>
-                        <td mat-cell *matCellDef="let task">{{task.creationDateTime}}</td>
+                        <td mat-cell *matCellDef="let task">{{task.creationDateTime | date: dateFormat.timestamp}}</td>
                     </ng-container>
 
                     <ng-container matColumnDef="options">
@@ -76,6 +77,8 @@ import {TaskHttpService} from "../../../task-http.service";
     styleUrls: ['./todo-inprogress-task-list-table.component.css']
 })
 export class TodoInprogressTaskListTableComponent implements OnInit {
+    private dateFormat = DateFormat;
+
     private displayedColumns = ['subject', 'status', 'type', 'creationDateTime', 'options'];
     private page: Page = {
         length: 0,

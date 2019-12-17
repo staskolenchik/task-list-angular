@@ -17,7 +17,7 @@ import {Location} from "@angular/common";
                                    type="email"
                                    placeholder="Email"
                                    name="email" 
-                                   [(ngModel)]="manager.email"/>
+                                   [ngModel]="manager.email"/>
                         </mat-form-field>
 
                         <mat-form-field class=" manager-profile-form__form-field">
@@ -25,7 +25,7 @@ import {Location} from "@angular/common";
                                    readonly
                                    placeholder="Name"
                                    name="name"
-                                   [(ngModel)]="manager.name">
+                                   [ngModel]="manager.name">
                         </mat-form-field>
 
                         <mat-form-field class=" manager-profile-form__form-field">
@@ -33,7 +33,7 @@ import {Location} from "@angular/common";
                                    readonly
                                    placeholder="Surname"
                                    name="surname"
-                                   [(ngModel)]="manager.surname">
+                                   [ngModel]="manager.surname">
                         </mat-form-field>
 
                         <mat-form-field class=" manager-profile-form__form-field">
@@ -41,7 +41,7 @@ import {Location} from "@angular/common";
                                    readonly
                                    placeholder="Patronymic"
                                    name="patronymic"
-                                   [(ngModel)]="manager.patronymic">
+                                   [ngModel]="manager.patronymic">
                         </mat-form-field>
 
                         <mat-form-field class=" manager-profile-form__form-field">
@@ -51,7 +51,7 @@ import {Location} from "@angular/common";
                                    placeholder="Pick birthdate"
                                    name="birthDate"
                                    #birthDate="ngModel"
-                                   [(ngModel)]="manager.birthDate">
+                                   [ngModel]="manager.birthDate">
                             <mat-datepicker-toggle matSuffix [for]="picker" hidden></mat-datepicker-toggle>
                             <mat-datepicker #picker></mat-datepicker>
                         </mat-form-field>

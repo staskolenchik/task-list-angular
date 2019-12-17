@@ -74,17 +74,19 @@ import {NgForm} from "@angular/forms";
                             <input matInput
                                    type="password"
                                    placeholder="Confirm password"
-                                   required 
-                                   [maxLength]="manager.password ? manager.password.length : 0" [pattern]="manager.password"
+                                   required
+                                   [maxLength]="manager.password ? manager.password.length : 0"
+                                   [pattern]="manager.password"
                                    name="confirmPassword"
                                    [(ngModel)]="manager.confirmPassword"
                                    #confirmPassword="ngModel">
-                            <mat-hint class="manager-add-form__password-confirmed-hint" 
-                                      *ngIf="confirmPassword.valid && password.valid" 
+                            <mat-hint class="manager-add-form__password-confirmed-hint"
+                                      *ngIf="confirmPassword.valid && password.valid"
                                       align="start"
                             >{{hints.PASSWORD_CONFIRMED}}</mat-hint>
                             <mat-hint align="end">
-                                {{manager.confirmPassword ? manager.confirmPassword.length : 0}} / {{manager.password ? manager.password.length : 0}}
+                                {{manager.confirmPassword ? manager.confirmPassword.length : 0}}
+                                / {{manager.password ? manager.password.length : 0}}
                             </mat-hint>
                             <mat-error
                                     *ngIf="confirmPassword.invalid && (confirmPassword.touched || confirmPassword.dirty)">
@@ -165,9 +167,12 @@ import {NgForm} from "@angular/forms";
                             </mat-hint>
                         </mat-form-field>
 
-                        <mat-form-field class=" manager-add-form__form-field">
+                        <mat-form-field class="manager-add-form__form-field">
                             <input matInput
+                                   class="manager-add-form__birthDate"
+                                   readonly
                                    required
+                                   (click)="picker.open()"
                                    [matDatepicker]="picker"
                                    placeholder="Pick birthdate"
                                    name="birthDate"
@@ -177,8 +182,8 @@ import {NgForm} from "@angular/forms";
                                    minlength="{{fieldLength.USER_MIN_BIRTHDATE}}">
                             <mat-datepicker-toggle matSuffix [for]="picker">
                             </mat-datepicker-toggle>
-                            <mat-datepicker #picker></mat-datepicker>
-                            <mat-hint align="start">
+                            <mat-datepicker touchUi #picker></mat-datepicker>
+                            <mat-hint align="start" *ngIf="birthDate.valid && birthDate.dirty">
                                 {{hints.BIRTHDATE_FORMAT}}
                             </mat-hint>
                             <mat-error align="start">
@@ -215,7 +220,6 @@ import {NgForm} from "@angular/forms";
     `,
     styleUrls: ['./manager-add-form.component.css']
 })
-
 export class ManagerAddFormComponent {
     private fieldLength = FieldLength;
     private errors = Errors;

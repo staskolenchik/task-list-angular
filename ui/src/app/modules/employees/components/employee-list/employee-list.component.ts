@@ -7,6 +7,7 @@ import {Router} from "@angular/router";
 import {DeleteAllPermissionComponent} from "../../../../shared/modal-dialogs/delete-all-permission/delete-all-permission.component";
 import {DeletePermissionComponent} from "../../../../shared/modal-dialogs/delete-permission/delete-permission.component";
 import {EmployeeHttpService} from "../../employee-http.service";
+import {DateFormat} from "../../../../shared/constants/date-format";
 
 @Component({
     selector: 'employee-list-component',
@@ -48,7 +49,7 @@ import {EmployeeHttpService} from "../../employee-http.service";
                 </ng-container>
                 <ng-container matColumnDef="birthDate">
                     <th mat-header-cell *matHeaderCellDef mat-sort-header>Birth Date</th>
-                    <td mat-cell *matCellDef="let employee">{{employee.birthDate | date:"dd/MM/yyyy"}}</td>
+                    <td mat-cell *matCellDef="let employee">{{employee.birthDate | date: dateFormat.fullDate}}</td>
                 </ng-container>
                 <ng-container matColumnDef="options">
                     <th mat-header-cell *matHeaderCellDef>Update / Delete / Profile</th>
@@ -102,6 +103,8 @@ import {EmployeeHttpService} from "../../employee-http.service";
 })
 
 export class EmployeeListComponent implements OnInit{
+    private dateFormat = DateFormat;
+
     private columnsToDisplay = ['select', 'email', 'surname', 'birthDate', 'options'];
     private sending: boolean = false;
     private employeeDataSource: MatTableDataSource<Employee> = new MatTableDataSource([]);

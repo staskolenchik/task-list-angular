@@ -7,6 +7,7 @@ import {Page} from "../../../../shared/models/page";
 import {SelectionModel} from "@angular/cdk/collections";
 import {DeleteAllPermissionComponent} from "../../../../shared/modal-dialogs/delete-all-permission/delete-all-permission.component";
 import {DeletePermissionComponent} from "../../../../shared/modal-dialogs/delete-permission/delete-permission.component";
+import {DateFormat} from "../../../../shared/constants/date-format";
 
 @Component({
     selector: "manager-list-component",
@@ -48,7 +49,7 @@ import {DeletePermissionComponent} from "../../../../shared/modal-dialogs/delete
                 </ng-container>
                 <ng-container matColumnDef="birthDate">
                     <th mat-header-cell *matHeaderCellDef mat-sort-header>Birth Date</th>
-                    <td mat-cell *matCellDef="let manager">{{manager.birthDate}}</td>
+                    <td mat-cell *matCellDef="let manager">{{manager.birthDate | date: dateFormat.fullDate}}</td>
                 </ng-container>
                 <ng-container matColumnDef="options">
                     <th mat-header-cell *matHeaderCellDef>Update / Delete / Profile</th>
@@ -102,6 +103,8 @@ import {DeletePermissionComponent} from "../../../../shared/modal-dialogs/delete
 })
 
 export class ManagerListComponent implements OnInit{
+    private dateFormat = DateFormat;
+
     private columnsToDisplay = ['select', 'email', 'surname', 'birthDate', 'options'];
     private sending: boolean = false;
     private managerDataSource: MatTableDataSource<Manager> = new MatTableDataSource([]);

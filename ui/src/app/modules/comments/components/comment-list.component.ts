@@ -4,6 +4,7 @@ import {Page} from "../../../shared/models/page";
 import {CommentHttpService} from "../comment-http.service";
 import {Task} from "../../../shared/models/task";
 import {PageEvent} from "@angular/material";
+import {DateFormat} from "../../../shared/constants/date-format";
 
 @Component({
     selector: 'comment-list-component',
@@ -19,7 +20,7 @@ import {PageEvent} from "@angular/material";
                             <span>{{comment.commentAuthorName + ' ' + comment.commentAuthorSurname}}</span>
                         </span>
                     </div>
-                    <div>{{comment.creationTimestamp}}</div>
+                    <div>{{comment.creationTimestamp | date: dateFormat.timestamp}}</div>
                 </mat-card-subtitle>
                 <mat-card-content>
                     {{comment.text}}
@@ -63,6 +64,8 @@ import {PageEvent} from "@angular/material";
     `]
 })
 export class CommentListComponent {
+    private dateFormat = DateFormat;
+
     private task: Task;
     private comments: Comment[] = [];
     private startPage: Page = {

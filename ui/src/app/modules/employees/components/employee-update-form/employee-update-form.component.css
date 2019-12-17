@@ -25,6 +25,7 @@
     margin: 0 8px;
 }
 
-.employee-update-form__manager_input {
+.employee-update-form__manager_input,
+.employee-update-form__birthDate {
     cursor: pointer;
 }

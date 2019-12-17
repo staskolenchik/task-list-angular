@@ -28,3 +28,7 @@
 .manager-add-form__password-confirmed-hint {
     color: green;
 }
+
+.manager-add-form__birthDate {
+    cursor: pointer;
+}

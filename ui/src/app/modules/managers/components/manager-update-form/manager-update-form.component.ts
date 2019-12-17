@@ -92,7 +92,10 @@ import {ClearFormPermissionComponent} from "../../../../shared/modal-dialogs/cle
 
                         <mat-form-field class=" manager-update-form__form-field">
                             <input matInput
+                                   class="manager-update-form__birthDate"
+                                   readonly
                                    required
+                                   (click)="picker.open()"
                                    [matDatepicker]="picker"
                                    placeholder="Pick birthdate"
                                    name="birthDate"
@@ -103,7 +106,7 @@ import {ClearFormPermissionComponent} from "../../../../shared/modal-dialogs/cle
                             <mat-datepicker-toggle matSuffix [for]="picker">
                             </mat-datepicker-toggle>
                             <mat-datepicker #picker></mat-datepicker>
-                            <mat-hint align="start">
+                            <mat-hint align="start" *ngIf="birthDate.valid && birthDate.dirty">
                                 {{hints.BIRTHDATE_FORMAT}}
                             </mat-hint>
                             <mat-error align="start">

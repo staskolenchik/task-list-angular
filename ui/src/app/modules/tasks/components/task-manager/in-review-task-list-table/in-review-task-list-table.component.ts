@@ -9,6 +9,7 @@ import {TaskHttpService} from "../../../task-http.service";
 import {Router} from "@angular/router";
 import {TaskStatus} from "../../../../../shared/models/task-status";
 import {TaskFilter} from "../../../../../shared/models/task-filter";
+import {DateFormat} from "../../../../../shared/constants/date-format";
 
 @Component({
     selector: 'in-review-task-list-table-component',
@@ -69,7 +70,7 @@ import {TaskFilter} from "../../../../../shared/models/task-filter";
 
                     <ng-container matColumnDef="creationDateTime">
                         <th mat-header-cell *matHeaderCellDef mat-sort-header>Created at</th>
-                        <td mat-cell *matCellDef="let task">{{task.creationDateTime}}</td>
+                        <td mat-cell *matCellDef="let task">{{task.creationDateTime | date: dateFormat.timestamp}}</td>
                     </ng-container>
 
                     <ng-container matColumnDef="options">
@@ -123,6 +124,8 @@ import {TaskFilter} from "../../../../../shared/models/task-filter";
     styleUrls: ['./in-review-task-list-table.component.css']
 })
 export class InReviewTaskListTableComponent implements OnInit {
+    private dateFormat = DateFormat;
+
     private displayedColumns = ['select', 'subject', 'assigneeName', 'status', 'type', 'creationDateTime', 'options'];
     private taskDataSource: MatTableDataSource<Task> = new MatTableDataSource([]);
 

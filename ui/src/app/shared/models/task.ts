@@ -9,7 +9,7 @@ export interface Task {
     type: TaskType;
     createdById: number;
     assigneeId: number;
-    creationDateTime: string;
+    creationDateTime: Date;
     assigneeName: string;
     assigneeSurname: string;
 }
