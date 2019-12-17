@@ -37,9 +37,10 @@ import {DeleteAllPermissionComponent} from "../../shared/modal-dialogs/delete-al
 import {AllTaskListTableComponent} from "./components/task-manager/all-task-list-table/all-task-list-table.component";
 import {ApplicationPipesModule} from "../../pipes/application-pipes.module";
 import {FilterComponent} from "./components/task-manager/filter/filter.component";
-import {StatusFilterComponent} from "./components/task-manager/filter/status-filter.component";
-import {AssigneeFilterComponent} from "./components/task-manager/filter/assignee-filter.component";
+import {StatusFilterComponent} from "./components/task-manager/filter/status-filter.component/status-filter.component";
+import {AssigneeFilterComponent} from "./components/task-manager/filter/assignee-filter-component/assignee-filter.component";
 import {CommentModule} from "../comments/comment.module";
+import {DateFilterComponent} from "./components/task-manager/filter/date-filter-component/date-filter.component";
 
 @NgModule({
     declarations: [
@@ -55,6 +56,7 @@ import {CommentModule} from "../comments/comment.module";
         FilterComponent,
         StatusFilterComponent,
         AssigneeFilterComponent,
+        DateFilterComponent,
     ],
     imports: [
         RouterModule,
@@ -97,6 +99,7 @@ import {CommentModule} from "../comments/comment.module";
         DeleteAllPermissionComponent,
         FilterComponent,
         AssigneeFilterComponent,
+        DateFilterComponent,
     ],
     entryComponents: [
         DeletePermissionComponent,

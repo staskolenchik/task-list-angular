@@ -4,8 +4,8 @@ import {FormControl} from "@angular/forms";
 import {COMMA, ENTER} from "@angular/cdk/keycodes";
 import {MatAutocomplete, MatAutocompleteSelectedEvent, MatChipInputEvent} from "@angular/material";
 import {map, startWith} from "rxjs/operators";
-import {EmployeeHttpService} from "../../../../employees/employee-http.service";
-import {Employee} from "../../../../../shared/models/employee";
+import {EmployeeHttpService} from "../../../../../employees/employee-http.service";
+import {Employee} from "../../../../../../shared/models/employee";
 
 @Component({
     selector: 'assignee-filter-component',
