@@ -1,5 +1,5 @@
 import {Component, ElementRef, EventEmitter, Output, ViewChild} from "@angular/core";
-import {TaskStatus} from "../../../../../shared/models/task-status";
+import {TaskStatus} from "../../../../../../shared/models/task-status";
 import {Observable} from "rxjs";
 import {FormControl} from "@angular/forms";
 import {COMMA, ENTER} from "@angular/cdk/keycodes";

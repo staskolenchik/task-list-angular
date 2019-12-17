@@ -87,7 +87,7 @@ export class TaskHttpService{
         }
 
         if (filter.dateFrom) {
-            params = params.set('after', this.convertDateToLocalISOString(filter.dateTo));
+            params = params.set('after', this.convertDateToLocalISOString(filter.dateFrom));
         }
 
         if (filter.dateTo) {

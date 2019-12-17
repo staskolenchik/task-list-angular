@@ -276,7 +276,7 @@ export class AllTaskListTableComponent {
         this.loadTasksFromStartPage();
     }
 
-    filterByDateFrom(dateFrom: any) {
+    filterByDateFrom(dateFrom: Date) {
         if (dateFrom) {
             this.filter.dateFrom = dateFrom;
         } else {
@@ -286,7 +286,7 @@ export class AllTaskListTableComponent {
         this.loadTasksFromStartPage();
     }
 
-    filterByDateTo(dateTo: any) {
+    filterByDateTo(dateTo: Date) {
         if (dateTo) {
             this.filter.dateTo = dateTo;
         } else {
