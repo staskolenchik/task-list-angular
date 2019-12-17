@@ -10,6 +10,7 @@ import {Router} from "@angular/router";
 import {TaskStatus} from "../../../../../shared/models/task-status";
 import {Employee} from "../../../../../shared/models/employee";
 import {TaskFilter} from "../../../../../shared/models/task-filter";
+import {DateFormat} from "../../../../../shared/constants/date-format";
 
 @Component({
     selector: 'all-task-list-table-component',
@@ -69,7 +70,7 @@ import {TaskFilter} from "../../../../../shared/models/task-filter";
 
                     <ng-container matColumnDef="creationDateTime">
                         <th mat-header-cell *matHeaderCellDef mat-sort-header>Created at</th>
-                        <td mat-cell *matCellDef="let task">{{task.creationDateTime}}</td>
+                        <td mat-cell *matCellDef="let task">{{task.creationDateTime | date: dateFormat.timestamp}}</td>
                     </ng-container>
 
                     <ng-container matColumnDef="options">
@@ -124,6 +125,8 @@ import {TaskFilter} from "../../../../../shared/models/task-filter";
     styleUrls: ['./all-task-list-table.component.css']
 })
 export class AllTaskListTableComponent {
+    private dateFormat = DateFormat;
+
     private displayedColumns = ['select', 'subject', 'assigneeName', 'status', 'type', 'creationDateTime', 'options'];
     private taskDataSource: MatTableDataSource<Task> = new MatTableDataSource([]);
 
