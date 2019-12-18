@@ -39,7 +39,4 @@ public abstract class Task {
     @ManyToOne
     @JoinColumn(name = "assignee",nullable = false)
     private User assignee;
-
-    @OneToMany(mappedBy = "task")
-    private Set<Comment> comment;
 }
