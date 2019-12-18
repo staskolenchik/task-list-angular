@@ -69,7 +69,11 @@ export class AppComponent implements OnInit{
     constructor(
         private router: Router,
         private loginService: LoginService,
-    ) {}
+    ) {
+        const replacer = (key: any, value: any) => (typeof value === 'function') ? value.name : value;
+
+        console.log('Routes: ', JSON.stringify(router.config, replacer, 2));
+    }
 
     ngOnInit(): void {
         if (!(this.isSignedIn() && this.isTokenValid())) {

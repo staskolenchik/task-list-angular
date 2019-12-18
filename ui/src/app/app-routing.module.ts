@@ -5,9 +5,13 @@ import {LoginComponent} from "./pages/login/login.component";
 import {ForbiddenComponent} from "./pages/forbidden/forbidden.component";
 import {AuthGuard} from "./auth/auth.guard";
 import {AdminAuthGuard} from "./auth/admin.auth.guard";
+import {PageNotFoundComponent} from "./pages/page-not-found/page-not-found.component";
 
 const appRoutes: Routes = [
-    {path: '', component: AboutComponent},
+    {
+        path: '',
+        component: AboutComponent
+    },
     {
         path: 'managers',
         loadChildren: () => import('./modules/managers/manager.module')
@@ -20,8 +24,23 @@ const appRoutes: Routes = [
             .then(mod => mod.EmployeeModule),
         canActivate: [AuthGuard, AdminAuthGuard]
     },
-    {path: 'login', component: LoginComponent},
-    {path: 'forbidden', component: ForbiddenComponent},
+    {
+        path: 'tasks',
+        loadChildren: () => import('./modules/tasks/task.module')
+            .then(mod => mod.TaskModule)
+    },
+    {
+        path: 'login',
+        component: LoginComponent
+    },
+    {
+        path: 'forbidden',
+        component: ForbiddenComponent
+    },
+    {
+        path: '**',
+        component: PageNotFoundComponent
+    }
 ];
 
 @NgModule({

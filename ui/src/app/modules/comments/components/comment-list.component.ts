@@ -98,10 +98,8 @@ export class CommentListComponent {
     }
 
     findAllByTaskId(task: Task) {
-        console.log(task);
         this.commentHttpService.findAllByTaskId(task, this.page)
             .subscribe((data: any) => {
-                console.log(data);
                 this.comments = data.comments;
                 this.page = data.page;
             })
@@ -111,7 +109,6 @@ export class CommentListComponent {
         this.page.size = pageEvent.pageSize;
         this.page.number = pageEvent.pageIndex;
 
-        console.log(this.page);
         this.findAllByTaskId(this.task);
     }
 

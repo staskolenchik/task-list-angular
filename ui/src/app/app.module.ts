@@ -56,6 +56,7 @@ import {CdkTreeModule} from "@angular/cdk/tree";
 import {LoginComponent} from "./pages/login/login.component";
 import {ForbiddenComponent} from "./pages/forbidden/forbidden.component";
 import {HTTP_INTERCEPTOR_PROVIDERS} from "./http-interceptors";
+import {PageNotFoundComponent} from "./pages/page-not-found/page-not-found.component";
 
 @NgModule({
     imports:[
@@ -114,7 +115,8 @@ import {HTTP_INTERCEPTOR_PROVIDERS} from "./http-interceptors";
     declarations: [
         AppComponent,
         LoginComponent,
-        ForbiddenComponent
+        ForbiddenComponent,
+        PageNotFoundComponent,
     ],
     bootstrap: [
         AppComponent
