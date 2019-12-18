@@ -19,21 +19,21 @@ public interface EmployeeService {
 
     Page<EmployeeInfoDto> findAll(Pageable pageable);
 
+    List<EmployeeInfoDto> findByManagerId(Long id);
+
+    List<User> findAllByIds(Set<Long> employeeIds);
+
     EmployeeInfoDto update(Long id, UpdateEmployeeDto update);
+
+    EmployeeInfoDto findById(Long id);
 
     @Transactional
     void deleteById(Long id);
 
-    EmployeeInfoDto findById(Long id);
-
-    Boolean existsByIdAndDeleteDateIsNull(Long id);
-
-    List<EmployeeInfoDto> findByManagerId(Long id);
-
     @Transactional
     void deleteAll(Long[] ids);
 
-    List<User> findAllByIds(Set<Long> employeeIds);
+    Boolean existsByIdAndDeleteDateIsNull(Long id);
 
     User getOne(Long id);
 }
