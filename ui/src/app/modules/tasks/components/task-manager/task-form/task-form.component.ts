@@ -165,7 +165,8 @@ export class TaskFormComponent implements OnInit{
     @Input() private task: Task;
     @Input() private updating: boolean;
 
-    @Output() expand: EventEmitter<boolean> = new EventEmitter<boolean>();
+    @Output() expand: EventEmitter<boolean> = new EventEmitter();
+    @Output() notifySaved: EventEmitter<boolean> = new EventEmitter();
 
     constructor(
         private tasksHttpService: TaskHttpService,
@@ -210,6 +211,8 @@ export class TaskFormComponent implements OnInit{
             .subscribe();
         snackBarRef.onAction()
             .subscribe();
+
+        this.notifySaved.emit(true);
 
         this.closeForm();
         this.reset(form);

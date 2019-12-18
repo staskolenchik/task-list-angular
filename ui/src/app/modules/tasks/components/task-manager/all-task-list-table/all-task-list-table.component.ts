@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Output, ViewChild} from "@angular/core";
+import {Component, EventEmitter, Input, Output, ViewChild} from "@angular/core";
 import {MatDialog, MatSort, MatTableDataSource, PageEvent} from "@angular/material";
 import {Task} from "../../../../../shared/models/task";
 import {DeletePermissionComponent} from "../../../../../shared/modal-dialogs/delete-permission/delete-permission.component";
@@ -147,8 +147,15 @@ export class AllTaskListTableComponent {
         []
     );
 
+    @Input() set notifyUpdating(value: boolean) {
+        if (value) {
+            this.findAll(this.startPage, this.filter);
+        }
+    }
+
     @Output() transferUpdate: EventEmitter<Task> = new EventEmitter<Task>();
     @Output() transferShow: EventEmitter<Task> = new EventEmitter<Task>();
+    @Output() notifyUpdated: EventEmitter<boolean> = new EventEmitter();
 
     constructor(
         private taskHttpService: TaskHttpService,
@@ -167,6 +174,8 @@ export class AllTaskListTableComponent {
                 this.taskDataSource.sort = this.sort;
                 this.page = response.page;
                 this.selection.clear();
+
+                this.notifyUpdated.emit(false);
             });
     }
 
