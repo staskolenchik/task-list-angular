@@ -84,7 +84,6 @@ export class CommentFormComponent {
 
     save() {
         this.comment.taskId = this.task.id;
-        console.log(this.comment);
         this.comment.authorId = Number(localStorage.getItem("uid"));
         this.commentHttpService.save(this.comment)
             .subscribe(() => {
