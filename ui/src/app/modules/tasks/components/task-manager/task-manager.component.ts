@@ -15,6 +15,7 @@ import {EmployeeHttpService} from "../../../employees/employee-http.service";
                 </mat-expansion-panel-header>
 
                 <task-form-component (expand)="closePanelFromForm($event)"
+                                     (notifySaved)="notifySaved($event)"
                                      [task]="task"
                                      [updating]="updating">
                 </task-form-component>
@@ -24,6 +25,8 @@ import {EmployeeHttpService} from "../../../employees/employee-http.service";
         <mat-tab-group>
             <mat-tab label="All Tasks">
                 <all-task-list-table-component
+                        [notifyUpdating]="notifyUpdating"
+                        (notifyUpdated)="notifySaved($event)"
                         (transferUpdate)="transferUpdate($event)"
                         (transferShow)="transferShow($event)">
                 </all-task-list-table-component>
@@ -49,6 +52,7 @@ export class TaskManagerComponent {
     private showingInfo: boolean = false;
     private task: Task = {} as Task;
     private taskInfo: Task = {} as Task;
+    private notifyUpdating: boolean = false;
 
     openPanel() {
         this.openingForm = true;
@@ -77,6 +81,10 @@ export class TaskManagerComponent {
 
     showInfo(showingInfo: boolean) {
         this.showingInfo = showingInfo;
+    }
+
+    notifySaved(value: boolean) {
+        this.notifyUpdating = value;
     }
 }
 

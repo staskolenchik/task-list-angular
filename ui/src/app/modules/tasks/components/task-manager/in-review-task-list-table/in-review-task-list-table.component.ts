@@ -76,7 +76,7 @@ import {DateFormat} from "../../../../../shared/constants/date-format";
                     <ng-container matColumnDef="options">
                         <th mat-header-cell *matHeaderCellDef>Update / Delete / Info</th>
                         <td mat-cell *matCellDef="let task">
-                            <button mat-button
+                            <button mat-icon-button
                                     class="manager-list__option-button"
                                     color="accent"
                                     (click)="onUpdate(task)">
@@ -84,14 +84,14 @@ import {DateFormat} from "../../../../../shared/constants/date-format";
                                     update
                                 </mat-icon>
                             </button>
-                            <button mat-button
+                            <button mat-icon-button
                                     color="warn"
                                     (click)="askPermission(task)">
                                 <mat-icon aria-label="Delete icon">
                                     delete
                                 </mat-icon>
                             </button>
-                            <button mat-button
+                            <button mat-icon-button
                                     color="primary"
                                     (click)="onShowInfo(task)">
                                 <mat-icon aria-label="Info icon">

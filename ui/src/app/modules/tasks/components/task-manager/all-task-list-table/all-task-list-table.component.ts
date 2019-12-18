@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Output, ViewChild} from "@angular/core";
+import {Component, EventEmitter, Input, Output, ViewChild} from "@angular/core";
 import {MatDialog, MatSort, MatTableDataSource, PageEvent} from "@angular/material";
 import {Task} from "../../../../../shared/models/task";
 import {DeletePermissionComponent} from "../../../../../shared/modal-dialogs/delete-permission/delete-permission.component";
@@ -76,7 +76,7 @@ import {DateFormat} from "../../../../../shared/constants/date-format";
                     <ng-container matColumnDef="options">
                         <th mat-header-cell *matHeaderCellDef>Update / Delete / Info</th>
                         <td mat-cell *matCellDef="let task">
-                            <button mat-button
+                            <button mat-icon-button
                                     class="manager-list__option-button"
                                     color="accent"
                                     (click)="onUpdate(task)">
@@ -84,14 +84,14 @@ import {DateFormat} from "../../../../../shared/constants/date-format";
                                     update
                                 </mat-icon>
                             </button>
-                            <button mat-button
+                            <button mat-icon-button
                                     color="warn"
                                     (click)="askPermission(task)">
                                 <mat-icon aria-label="Delete icon">
                                     delete
                                 </mat-icon>
                             </button>
-                            <button mat-button
+                            <button mat-icon-button
                                     color="primary"
                                     (click)="onShowInfo(task)">
                                 <mat-icon aria-label="Info icon">
@@ -147,8 +147,15 @@ export class AllTaskListTableComponent {
         []
     );
 
+    @Input() set notifyUpdating(value: boolean) {
+        if (value) {
+            this.findAll(this.startPage, this.filter);
+        }
+    }
+
     @Output() transferUpdate: EventEmitter<Task> = new EventEmitter<Task>();
     @Output() transferShow: EventEmitter<Task> = new EventEmitter<Task>();
+    @Output() notifyUpdated: EventEmitter<boolean> = new EventEmitter();
 
     constructor(
         private taskHttpService: TaskHttpService,
@@ -167,6 +174,8 @@ export class AllTaskListTableComponent {
                 this.taskDataSource.sort = this.sort;
                 this.page = response.page;
                 this.selection.clear();
+
+                this.notifyUpdated.emit(false);
             });
     }
 

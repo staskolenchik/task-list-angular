@@ -49,7 +49,7 @@ import {DateFormat} from "../../../../../shared/constants/date-format";
                     <ng-container matColumnDef="options">
                         <th mat-header-cell *matHeaderCellDef>Options</th>
                         <td mat-cell *matCellDef="let task">
-                            <button mat-button
+                            <button mat-icon-button
                                     color="primary"
                                     (click)="onShowInfo(task)">
                                 <mat-icon aria-label="Info icon">
@@ -109,6 +109,7 @@ export class TodoInprogressTaskListTableComponent implements OnInit {
         this.taskHttpService.findAllForEmployee(page, filter)
             .subscribe((response) => {
                 this.taskDataSource = new MatTableDataSource(response.content);
+                this.taskDataSource.sort = this.sort;
                 this.page = response.page;
             });
     }
