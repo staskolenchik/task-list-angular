@@ -272,7 +272,18 @@ class TaskServiceImpl implements TaskService {
                 user,
                 pageable
         );
-        return tasks.map(task -> modelMapper.map(task, TaskInfoDto.class));
+
+        return tasks.map(task -> {
+            TaskInfoDto taskInfoDto = modelMapper.map(task, TaskInfoDto.class);
+
+            if (task instanceof IssueTask) {
+                taskInfoDto.setType("issue");
+            } else if (task instanceof StoryTask) {
+                taskInfoDto.setType("story");
+            }
+
+            return taskInfoDto;
+        });
     }
 
     @Override
