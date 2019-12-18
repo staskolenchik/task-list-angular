@@ -49,7 +49,7 @@ import {DateFormat} from "../../../../../shared/constants/date-format";
                     <ng-container matColumnDef="options">
                         <th mat-header-cell *matHeaderCellDef>Options</th>
                         <td mat-cell *matCellDef="let task">
-                            <button mat-button
+                            <button mat-icon-button
                                     color="primary"
                                     (click)="onShowInfo(task)">
                                 <mat-icon aria-label="Info icon">
