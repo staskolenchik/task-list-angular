@@ -8,7 +8,10 @@ import {AdminAuthGuard} from "./auth/admin.auth.guard";
 import {PageNotFoundComponent} from "./pages/page-not-found/page-not-found.component";
 
 const appRoutes: Routes = [
-    {path: '', component: AboutComponent},
+    {
+        path: '',
+        component: AboutComponent
+    },
     {
         path: 'managers',
         loadChildren: () => import('./modules/managers/manager.module')
@@ -20,6 +23,11 @@ const appRoutes: Routes = [
         loadChildren: () => import('./modules/employees/employee.module')
             .then(mod => mod.EmployeeModule),
         canActivate: [AuthGuard, AdminAuthGuard]
+    },
+    {
+        path: 'tasks',
+        loadChildren: () => import('./modules/tasks/task.module')
+            .then(mod => mod.TaskModule)
     },
     {
         path: 'login',
