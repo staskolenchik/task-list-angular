@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {Role} from "./shared/models/user-role-enum";
 import {Router} from "@angular/router";
 import {LoginService} from "./pages/login/login-service";
@@ -64,12 +64,18 @@ import {LoginService} from "./pages/login/login-service";
 
 })
 
-export class AppComponent {
+export class AppComponent implements OnInit{
 
     constructor(
         private router: Router,
         private loginService: LoginService,
     ) {}
+
+    ngOnInit(): void {
+        if (!(this.isSignedIn() && this.isTokenValid())) {
+            this.onLogout();
+        }
+    }
 
     onLogout() {
         localStorage.removeItem('token');
@@ -78,7 +84,7 @@ export class AppComponent {
         localStorage.removeItem('uid');
         localStorage.removeItem('exp');
 
-        this.loginService.redirectUrl = '/login';
+        this.loginService.redirectUrl = '/';
         this.router.navigate(['/login']);
     }
 
