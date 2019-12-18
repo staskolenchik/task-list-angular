@@ -109,6 +109,7 @@ export class TodoInprogressTaskListTableComponent implements OnInit {
         this.taskHttpService.findAllForEmployee(page, filter)
             .subscribe((response) => {
                 this.taskDataSource = new MatTableDataSource(response.content);
+                this.taskDataSource.sort = this.sort;
                 this.page = response.page;
             });
     }
