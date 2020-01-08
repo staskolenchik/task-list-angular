@@ -28,7 +28,7 @@
         <org.modelmapper.version>2.3.5</org.modelmapper.version>
         <hibernate-types.version>2.7.1</hibernate-types.version>
         <com.fasterxml.jackson.core.version>2.10.0</com.fasterxml.jackson.core.version>
-        <org.hibernate.validator.version>6.0.17.Final</org.hibernate.validator.version>
+        <org.hibernate.validator.version>6.1.0.Final</org.hibernate.validator.version>
         <io.jsonwebtoken.version>0.9.1</io.jsonwebtoken.version>
     </properties>
 
